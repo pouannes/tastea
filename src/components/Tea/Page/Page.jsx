@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Page({ image, name, title, description }) {
+function Page({ image, title, description }) {
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -29,7 +29,6 @@ function Page({ image, name, title, description }) {
 
 Page.propTypes = {
   image: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
 };

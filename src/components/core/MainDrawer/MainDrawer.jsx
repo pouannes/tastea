@@ -1,17 +1,17 @@
-import React from "react";
+import React, { memo } from "react";
 import clsx from "clsx";
+
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-
 import List from "@material-ui/core/List";
 import CssBaseline from "@material-ui/core/CssBaseline";
-
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-
 import EmojiFoodBeverageIcon from "@material-ui/icons/EmojiFoodBeverage";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+
+import PropTypes from "prop-types";
 
 import * as ROUTES from "../../../constants/routes";
 
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MainDrawer({ children }) {
+function MainDrawer({ children, handleOpenDialog }) {
   const classes = useStyles();
   const history = useHistory();
   return (
@@ -92,7 +92,11 @@ function MainDrawer({ children }) {
               primary="Tea list"
             />
           </ListItem>
-          <ListItem button className={classes.button}>
+          <ListItem
+            button
+            className={classes.button}
+            onClick={handleOpenDialog}
+          >
             <ListItemIcon>
               <AddCircleIcon style={{ margin: "auto" }} />
             </ListItemIcon>
@@ -111,4 +115,9 @@ function MainDrawer({ children }) {
   );
 }
 
-export default MainDrawer;
+MainDrawer.propTypes = {
+  children: PropTypes.object.isRequired,
+  handleOpenDialog: PropTypes.func.isRequired,
+};
+
+export default memo(MainDrawer);

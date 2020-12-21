@@ -25,7 +25,10 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "react/prop-types": "warn"
+    }
   },
   "browserslist": {
     "production": [

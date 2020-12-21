@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -12,6 +14,7 @@ import mockTeaData from "./images";
 import TeasPage from "./components/Teas/Page/Page";
 import TeaPage from "./components/Tea/Page/Page";
 import MainDrawer from "./components/core/MainDrawer/MainDrawer";
+import NewTeaDialog from "./components/core/NewTeaDialog/NewTeaDialog";
 
 const theme = createMuiTheme({
   palette: {
@@ -24,13 +27,23 @@ const theme = createMuiTheme({
 });
 
 function App() {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleClickDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
         <Router>
           <Switch>
             <Route exact path={ROUTES.TEAS}>
-              <MainDrawer>
+              <MainDrawer handleOpenDialog={handleClickDialogOpen}>
                 <TeasPage />
               </MainDrawer>
             </Route>
@@ -39,7 +52,7 @@ function App() {
               path={ROUTES.TEA}
               render={(routeProps) => {
                 return (
-                  <MainDrawer>
+                  <MainDrawer handleOpenDialog={handleClickDialogOpen}>
                     <TeaPage
                       {...mockTeaData.filter(
                         (tea) => tea.name === routeProps.match.params.tea
@@ -54,6 +67,7 @@ function App() {
             </Route>
           </Switch>
         </Router>
+        <NewTeaDialog open={dialogOpen} handleClose={handleDialogClose} />
       </ThemeProvider>
     </div>
   );
