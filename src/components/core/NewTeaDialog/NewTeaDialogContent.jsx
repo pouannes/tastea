@@ -6,6 +6,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  FormHelperText,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core";
@@ -59,6 +60,26 @@ function NewTeaDialogContent({
           <MenuItem value={"oolong"}>Oolong</MenuItem>
           <MenuItem value={"rooibos"}>Rooibos</MenuItem>
         </Select>
+      </FormControl>
+      <FormControl variant="outlined" className={classes.formControl}>
+        <InputLabel>Tea subtype</InputLabel>
+        <Select
+          label="Tea type"
+          value={type}
+          onChange={handleTypeChange}
+          disabled={type ? false : true}
+        >
+          <MenuItem value={"green"}>Green</MenuItem>
+          <MenuItem value={"black"}>Black</MenuItem>
+          <MenuItem value={"white"}>White</MenuItem>
+          <MenuItem value={"oolong"}>Oolong</MenuItem>
+          <MenuItem value={"rooibos"}>Rooibos</MenuItem>
+        </Select>
+        {type ? (
+          ""
+        ) : (
+          <FormHelperText>Please select the tea type first</FormHelperText>
+        )}
       </FormControl>
     </div>
   );

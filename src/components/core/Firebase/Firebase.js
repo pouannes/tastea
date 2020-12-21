@@ -27,6 +27,21 @@ class Firebase {
     this.storage = app.storage();
   }
 
+  // *** Tea API ***
+
+  addNewTea = (name, description, type) => {
+    return this.db
+      .collection("teaTypes")
+      .doc(type)
+      .collection("teas")
+      .doc(name)
+      .set({
+        name,
+        description,
+        type,
+      });
+  };
+
   // *** Auth API ***
 
   doCreateUserWithEmailAndPassword = (email, password) =>

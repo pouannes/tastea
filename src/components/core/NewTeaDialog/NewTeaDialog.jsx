@@ -5,16 +5,20 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Typography } from "@material-ui/core";
 
+import { useFirebase } from "../Firebase/Firebase";
 import Dropzone from "../Dropzone/Dropzone";
 import NewTeaDialogContent from "./NewTeaDialogContent";
+import NewTeaDialogHeader from "./NewTeaDialogHeader";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "800px",
     maxWidth: "800px",
-    height: "550px",
+    height: "680px",
+    borderRadius: "16px",
+    paddingBottom: "20px",
   },
   content: {
     display: "grid",
@@ -25,10 +29,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function NewTeaDialog({ open, handleClose }) {
+  const [activeStep, setActiveStep] = useState(0);
   const [image, setImage] = useState({});
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
+
+  const firebase = useFirebase();
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -40,35 +47,67 @@ function NewTeaDialog({ open, handleClose }) {
     setType(event.target.value);
   };
 
+  const handleNext = () => {
+    setActiveStep(1);
+  };
+
+  const handleCancel = () => {
+    handleClose();
+    setActiveStep(0);
+    setImage({});
+    setName("");
+    setDescription("");
+    setType("");
+  };
+
+  const handleSubmit = () => {
+    console.log("submiting... ");
+    firebase
+      .addNewTea(name, description, type)
+      .then(() => console.log("success!"))
+      .catch((e) => console.log("error: ", e));
+  };
+
   const classes = useStyles({ image });
 
   return (
     <div>
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={handleCancel}
         aria-labelledby="Add a new tea"
         aria-describedby="Form to add a new tea"
         classes={{ paper: classes.root }}
+        disableBackdropClick
       >
-        <DialogTitle>Add a new tea</DialogTitle>
+        <NewTeaDialogHeader activeStep={activeStep} />
         <DialogContent className={classes.content}>
-          <Dropzone image={image} setImage={setImage} />
-          <NewTeaDialogContent
-            name={name}
-            handleNameChange={handleNameChange}
-            description={description}
-            handleDescriptionChange={handleDescriptionChange}
-            type={type}
-            handleTypeChange={handleTypeChange}
-          />
+          {activeStep === 0 ? (
+            <>
+              <Dropzone image={image} setImage={setImage} />
+              <NewTeaDialogContent
+                name={name}
+                handleNameChange={handleNameChange}
+                description={description}
+                handleDescriptionChange={handleDescriptionChange}
+                type={type}
+                handleTypeChange={handleTypeChange}
+              />
+            </>
+          ) : (
+            <Typography color="inherit">Additionnal info haha</Typography>
+          )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary" variant="outlined">
+          <Button onClick={handleCancel} color="primary" variant="outlined">
             cancel
           </Button>
-          <Button onClick={handleClose} color="primary" variant="contained">
-            Add tea
+          <Button
+            onClick={activeStep === 0 ? handleNext : handleSubmit}
+            color="primary"
+            variant="contained"
+          >
+            {activeStep === 0 ? "Next" : "Finish"}
           </Button>
         </DialogActions>
       </Dialog>
