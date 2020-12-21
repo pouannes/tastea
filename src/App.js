@@ -19,6 +19,9 @@ import NewTeaDialog from "./components/core/NewTeaDialog/NewTeaDialog";
 const theme = createMuiTheme({
   palette: {
     type: "dark",
+    primary: {
+      main: "rgba(255, 255, 255, 0.6)",
+    },
     background: {
       default: "#121212",
       paper: "#303030",
@@ -27,7 +30,7 @@ const theme = createMuiTheme({
 });
 
 function App() {
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(true);
 
   const handleClickDialogOpen = () => {
     setDialogOpen(true);
