@@ -8,6 +8,8 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 import { DropzoneArea } from "material-ui-dropzone";
 
+// when image is dropped I don't want to have the text and borders
+// and pointers
 const useStyles = makeStyles((theme) => ({
   dropzone: {
     borderColor: (props) =>
@@ -61,6 +63,7 @@ const theme = createMuiTheme({
         maxHeight: "350px",
         filter: "brightness(0.8) contrast(1.15)",
       },
+      // might be better to position it relative to the image rather than absolute
       removeButton: {
         transition: ".5s ease",
         position: "absolute",
@@ -95,6 +98,7 @@ const theme = createMuiTheme({
   },
 });
 
+// blank icon to pass `Icon` validation in DropzoneArea
 const BlankIcon = () => {
   return <span></span>;
 };
@@ -108,6 +112,7 @@ function Dropzone({ image, setImage }) {
         filesLimit={1}
         dropzoneClass={classes.dropzone}
         dropzoneParagraphClass={classes.dropzoneText}
+        // when image is dropped I don't want click to open a window
         dropzoneProps={{ noClick: image ? true : false }}
         Icon={image ? BlankIcon : CloudUploadIcon}
         dropzoneText={"Drag and drop an image here or click"}

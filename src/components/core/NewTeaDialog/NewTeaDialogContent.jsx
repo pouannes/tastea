@@ -34,7 +34,6 @@ function NewTeaDialogContent({
         id="name"
         label="Tea name"
         type="text"
-        required
         fullWidth
         variant="outlined"
         style={{ marginBottom: "30px" }}
@@ -65,8 +64,8 @@ function NewTeaDialogContent({
         <InputLabel>Tea subtype</InputLabel>
         <Select
           label="Tea type"
-          value={type}
-          onChange={handleTypeChange}
+          // value={type}
+          // onChange={handleTypeChange}
           disabled={type ? false : true}
         >
           <MenuItem value={"green"}>Green</MenuItem>

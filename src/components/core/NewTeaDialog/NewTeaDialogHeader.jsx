@@ -6,8 +6,8 @@ import {
   Stepper,
   Step,
   StepLabel,
-  Typography,
 } from "@material-ui/core";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,5 +50,9 @@ function NewTeaDialogHeader({ activeStep }) {
     </div>
   );
 }
+
+NewTeaDialogHeader.propTypes = {
+  activeStep: PropTypes.number.isRequired,
+};
 
 export default NewTeaDialogHeader;
