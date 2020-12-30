@@ -12,6 +12,7 @@ import PropTypes from "prop-types";
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "110px",
+    width: "100%",
     backgroundColor: theme.palette.grey[800],
     marginBottom: "30px",
     color: theme.palette.getContrastText(theme.palette.grey[800]),

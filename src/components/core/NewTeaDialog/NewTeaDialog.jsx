@@ -8,7 +8,8 @@ import { makeStyles, Typography } from "@material-ui/core";
 
 import { useFirebase } from "../Firebase/Firebase";
 import Dropzone from "../Dropzone/Dropzone";
-import NewTeaDialogContent from "./NewTeaDialogContent";
+import NewTeaDialogContentFirstTab from "./NewTeaDialogContentFirstTab";
+import NewTeaDialogContentSecondTab from "./NewTeaDialogContentSecondTab";
 import NewTeaDialogHeader from "./NewTeaDialogHeader";
 
 const useStyles = makeStyles((theme) => ({
@@ -18,12 +19,32 @@ const useStyles = makeStyles((theme) => ({
     height: "680px",
     borderRadius: "16px",
     paddingBottom: "20px",
+    alignItems: "flex-end",
   },
   content: {
+    width: "100%",
     display: "grid",
     gridTemplateColumns: "450px 1fr",
     gridGap: "30px",
     paddingBottom: "30px",
+  },
+  actions: {
+    width: "100%",
+    paddingRight: "24px",
+    paddingLeft: "24px",
+  },
+  actionsButtonContainer: {
+    width: "100%",
+    display: "grid",
+    gridTemplateColumns: "450px 1fr",
+    gridGap: "30px",
+  },
+  buttonContainer: {
+    gridColumn: "2",
+    width: "100%",
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gridGap: "20px",
   },
 }));
 
@@ -33,6 +54,7 @@ function NewTeaDialog({ open, handleClose }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
+  const [subType, setSubType] = useState("");
 
   const firebase = useFirebase();
 
@@ -44,6 +66,9 @@ function NewTeaDialog({ open, handleClose }) {
   };
   const handleTypeChange = (event) => {
     setType(event.target.value);
+  };
+  const handleSubTypeChange = (event) => {
+    setSubType(event.target.value);
   };
 
   const handleNext = () => {
@@ -57,6 +82,7 @@ function NewTeaDialog({ open, handleClose }) {
     setName("");
     setDescription("");
     setType("");
+    setSubType("");
   };
 
   const handleSubmit = () => {
@@ -84,30 +110,36 @@ function NewTeaDialog({ open, handleClose }) {
           {activeStep === 0 ? (
             <>
               <Dropzone image={image} setImage={setImage} />
-              <NewTeaDialogContent
+              <NewTeaDialogContentFirstTab
                 name={name}
                 handleNameChange={handleNameChange}
                 description={description}
                 handleDescriptionChange={handleDescriptionChange}
                 type={type}
                 handleTypeChange={handleTypeChange}
+                subType={subType}
+                handleSubTypeChange={handleSubTypeChange}
               />
             </>
           ) : (
-            <Typography color="inherit">Additionnal info haha</Typography>
+            <NewTeaDialogContentSecondTab />
           )}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancel} color="primary" variant="outlined">
-            cancel
-          </Button>
-          <Button
-            onClick={activeStep === 0 ? handleNext : handleSubmit}
-            color="primary"
-            variant="contained"
-          >
-            {activeStep === 0 ? "Next" : "Finish"}
-          </Button>
+        <DialogActions className={classes.actions}>
+          <div className={classes.actionsButtonContainer}>
+            <div className={classes.buttonContainer}>
+              <Button onClick={handleCancel} color="primary" variant="outlined">
+                cancel
+              </Button>
+              <Button
+                onClick={activeStep === 0 ? handleNext : handleSubmit}
+                color="primary"
+                variant="contained"
+              >
+                {activeStep === 0 ? "Next" : "Finish"}
+              </Button>
+            </div>
+          </div>
         </DialogActions>
       </Dialog>
     </div>

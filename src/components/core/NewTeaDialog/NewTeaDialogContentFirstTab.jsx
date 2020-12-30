@@ -12,21 +12,28 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  formControl: { width: "100%", marginTop: "30px" },
+  contentRoot: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+  formControl: { width: "100%" },
 }));
 
-function NewTeaDialogContent({
+function NewTeaDialogContentFirstTab({
   name,
   handleNameChange,
   description,
   handleDescriptionChange,
   type,
   handleTypeChange,
+  subType,
+  handleSubTypeChange,
 }) {
   const classes = useStyles();
 
   return (
-    <div>
+    <div className={classes.contentRoot}>
       <TextField
         value={name}
         onChange={handleNameChange}
@@ -36,7 +43,6 @@ function NewTeaDialogContent({
         type="text"
         fullWidth
         variant="outlined"
-        style={{ marginBottom: "30px" }}
       />
       <TextField
         value={description}
@@ -61,11 +67,13 @@ function NewTeaDialogContent({
         </Select>
       </FormControl>
       <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel>Tea subtype</InputLabel>
+        <InputLabel>
+          {type ? "Tea subtype" : "Select the tea type first"}
+        </InputLabel>
         <Select
-          label="Tea type"
-          // value={type}
-          // onChange={handleTypeChange}
+          label="Tea subtype"
+          value={subType}
+          onChange={handleSubTypeChange}
           disabled={type ? false : true}
         >
           <MenuItem value={"green"}>Green</MenuItem>
@@ -74,23 +82,20 @@ function NewTeaDialogContent({
           <MenuItem value={"oolong"}>Oolong</MenuItem>
           <MenuItem value={"rooibos"}>Rooibos</MenuItem>
         </Select>
-        {type ? (
-          ""
-        ) : (
-          <FormHelperText>Please select the tea type first</FormHelperText>
-        )}
       </FormControl>
     </div>
   );
 }
 
-NewTeaDialogContent.propTypes = {
+NewTeaDialogContentFirstTab.propTypes = {
   name: PropTypes.string.isRequired,
   handleNameChange: PropTypes.func.isRequired,
   description: PropTypes.string.isRequired,
   handleDescriptionChange: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   handleTypeChange: PropTypes.func.isRequired,
+  subType: PropTypes.string.isRequired,
+  handleSubTypeChange: PropTypes.func.isRequired,
 };
 
-export default NewTeaDialogContent;
+export default NewTeaDialogContentFirstTab;
