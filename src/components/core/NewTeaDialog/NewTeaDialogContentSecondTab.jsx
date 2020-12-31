@@ -15,6 +15,11 @@ const useStyles = makeStyles((theme) => ({
   },
   sideBar: {
     width: "100%",
+    height: "100%",
+    overflow: "scroll",
+  },
+  sidebarTitle: {
+    marginBottom: "1.2rem",
   },
   checkboxesContainer: {
     display: "flex",
@@ -30,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-start",
     width: "100%",
     paddingLeft: "22px",
+    marginBottom: "0.5rem",
+  },
+  primaryCheckbox: {
+    marginBottom: "0.5rem",
   },
 }));
 
@@ -37,64 +46,85 @@ const checkboxes = [
   {
     name: "honey",
     label: "Honey",
-    hasSub: true,
-  },
-  {
-    name: "lavender",
-    label: "Lavender",
-    isSub: "honey",
-  },
-  {
-    name: "flowers",
-    label: "Flowers",
-    isSub: "honey",
+    type: "category",
+    sub: [
+      {
+        name: "lavender",
+        label: "Lavender",
+      },
+      {
+        name: "flowers",
+        label: "Flowers",
+      },
+      {
+        name: "chestnut",
+        label: "Chesnut",
+      },
+      {
+        name: "sweetChestnut",
+        label: "Sweet chesnut",
+      },
+    ],
   },
 
-  {
-    name: "tapiocaPearls",
-    label: "Tapioca pearls",
-  },
   {
     name: "sugar",
     label: "Sugar",
-    hasSub: true,
+    type: "category",
+    sub: [
+      {
+        name: "white",
+        label: "White",
+      },
+      {
+        name: "brown",
+        label: "Brown",
+      },
+    ],
   },
   {
-    name: "white",
-    label: "White",
-    isSub: "sugar",
+    name: "tapiocaPearls",
+    label: "Tapioca pearls",
+    type: "checkbox",
   },
   {
-    name: "brown",
-    label: "Brown",
-    isSub: "sugar",
+    name: "milk",
+    label: "Milk",
+    type: "checkbox",
+  },
+  {
+    name: "cream",
+    label: "Cream",
+    type: "checkbox",
   },
 ];
 
-function NewTeaDialogContentSecondTab() {
+function NewTeaDialogContentSecondTab({ checkboxStateTodo }) {
   const classes = useStyles();
 
+  // ok so that's definitly way too complicated than it should be but it's the best
+  // I could do with the current data format
+  // either change data format or find a better way to do this to refactor the horror below
+  // concat trick taken
+  // from https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays
   const [state, setState] = React.useState(
-    Object.fromEntries(checkboxes.map((checkbox) => [checkbox.name, false]))
+    Object.fromEntries(
+      [].concat.apply(
+        [],
+        checkboxes.map((checkbox) =>
+          checkbox.type === "checkbox"
+            ? [[checkbox.name, false]]
+            : [].concat.apply(
+                [],
+                [checkbox.sub.map((sub) => [sub.name, false])]
+              )
+        )
+      )
+    )
   );
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
-
-    const currCheckbox = checkboxes.reduce((acc, curr) =>
-      curr.name === event.target.name ? curr : acc
-    );
-
-    if (currCheckbox.hasSub && !event.target.checked) {
-      checkboxes
-        .filter((checkbox) => checkbox.isSub === currCheckbox.name)
-        .forEach((checkbox) =>
-          setState((state) => ({
-            ...state,
-            [checkbox.name]: event.target.checked,
-          }))
-        );
-    }
   };
   return (
     <>
@@ -102,12 +132,33 @@ function NewTeaDialogContentSecondTab() {
         <Typography>I'm the second tab main content</Typography>
       </div>
       <div className={classes.sideBar}>
-        <Typography>This tea goes well with...</Typography>
+        <Typography className={classes.sidebarTitle}>
+          This tea goes well with...
+        </Typography>
         <div className={classes.checkboxesContainer}>
-          {checkboxes
-            .filter((checkbox) => !checkbox.isSub)
-            .map((mainCheckbox) => (
-              <Fragment key={mainCheckbox.name}>
+          {checkboxes.map((mainCheckbox) => (
+            <Fragment key={mainCheckbox.name}>
+              {mainCheckbox.type === "category" ? (
+                <>
+                  <Typography>{mainCheckbox.label}</Typography>
+                  <FormControl className={classes.checkboxesSubContainer}>
+                    {mainCheckbox.sub.map((subCheckbox) => (
+                      <FormControlLabel
+                        key={subCheckbox.name}
+                        control={
+                          <Checkbox
+                            checked={state[subCheckbox.name]}
+                            onChange={handleChange}
+                            name={subCheckbox.name}
+                            color="primary"
+                          />
+                        }
+                        label={subCheckbox.label}
+                      />
+                    ))}
+                  </FormControl>
+                </>
+              ) : (
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -118,80 +169,19 @@ function NewTeaDialogContentSecondTab() {
                     />
                   }
                   label={mainCheckbox.label}
+                  className={classes.primaryCheckbox}
                 />
-                {mainCheckbox.hasSub ? (
-                  <FormControl
-                    disabled={!state[mainCheckbox.name]}
-                    className={classes.checkboxesSubContainer}
-                  >
-                    {checkboxes
-                      .filter(
-                        (checkbox) => checkbox.isSub === mainCheckbox.name
-                      )
-                      .map((subCheckbox) => (
-                        <FormControlLabel
-                          key={subCheckbox.name}
-                          control={
-                            <Checkbox
-                              checked={state[subCheckbox.name]}
-                              onChange={handleChange}
-                              name={subCheckbox.name}
-                              color="primary"
-                            />
-                          }
-                          label={subCheckbox.label}
-                        />
-                      ))}
-                  </FormControl>
-                ) : (
-                  ""
-                )}
-              </Fragment>
-            ))}
-          {/* <FormControlLabel
-            control={
-              <Checkbox
-                checked={state.honey}
-                onChange={handleChange}
-                name="honey"
-                color="primary"
-              />
-            }
-            label="Honey"
-          />
-          <FormControl
-            disabled={!state.honey}
-            className={classes.checkboxesSubContainer}
-          >
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={state.honeyLavender}
-                  onChange={handleChange}
-                  name="lavender"
-                  color="primary"
-                />
-              }
-              label="Lavender"
-            />
-          </FormControl>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={state.tapiocaPearls}
-                onChange={handleChange}
-                name="tapiocaPearls"
-                color="primary"
-              />
-            }
-            label="Tapioca pearls"
-          /> */}
+              )}
+            </Fragment>
+          ))}
         </div>
       </div>
     </>
   );
 }
 
-NewTeaDialogContentSecondTab.propTypes = {};
+NewTeaDialogContentSecondTab.propTypes = {
+  checkboxStateTodo: PropTypes.object,
+};
 
 export default NewTeaDialogContentSecondTab;
