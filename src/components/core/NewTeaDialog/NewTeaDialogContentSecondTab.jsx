@@ -3,6 +3,7 @@ import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import {
   makeStyles,
+  withStyles,
   Typography,
   FormControlLabel,
   Checkbox,
@@ -10,15 +11,13 @@ import {
   Button,
   TextField,
 } from "@material-ui/core";
+import Rating from "@material-ui/lab/Rating";
 
 const useStyles = makeStyles((theme) => ({
   sideBar: {
     width: "100%",
     height: "100%",
     overflow: "scroll",
-    // "&::-webkit-scrollbar": {
-    //   width: "11px",
-    // },
   },
   sidebarTitle: {
     marginBottom: "1.2rem",
@@ -66,6 +65,14 @@ const useStyles = makeStyles((theme) => ({
   newCommentStars: {
     width: "100%",
     height: "100px",
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gridTemplateRows: "1fr 1fr",
+  },
+  newCommentStarBlock: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   commentTextField: {
     width: "100%",
@@ -78,6 +85,15 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "20px",
   },
 }));
+
+const StyledRating = withStyles(({ palette }) => ({
+  iconFilled: {
+    color: palette.grey[400],
+  },
+  iconHover: {
+    color: palette.grey[300],
+  },
+}))(Rating);
 
 const checkboxes = [
   {
@@ -194,40 +210,80 @@ CheckboxSidebar.propTypes = {
 
 const MainContent = () => {
   const classes = useStyles();
+  const [addNewComment, setAddNewComment] = React.useState(false);
   return (
     <div className={classes.mainContent}>
-      <div className={classes.addNewComment} onClick={() => alert("todo")}>
-        <Typography>Add a new comment</Typography>
-      </div>
-      <div className={classes.newComment}>
-        <div className={classes.newCommentStars}>stars</div>
-        <div className={classes.commentTextField}>
-          <TextField
-            // value={description}
-            // onChange={handleDescriptionChange}
-            margin="none"
-            label="Enter your comment here"
-            type="text"
-            multiline
-            rows={6}
-            fullWidth
-            variant="outlined"
-          />
+      {addNewComment ? (
+        <div className={classes.newComment}>
+          <div className={classes.newCommentStars}>
+            <div className={classes.newCommentStarBlock}>
+              <Typography>Taste</Typography>
+              <StyledRating
+                name="half-rating"
+                defaultValue={2.5}
+                precision={0.5}
+              />
+            </div>
+            <div className={classes.newCommentStarBlock}>
+              <Typography>Bitterness</Typography>
+              <StyledRating
+                name="half-rating"
+                defaultValue={2.5}
+                precision={0.5}
+              />
+            </div>
+            <div className={classes.newCommentStarBlock}>
+              <Typography>Finesse</Typography>
+              <StyledRating
+                name="half-rating"
+                defaultValue={2.5}
+                precision={0.5}
+              />
+            </div>
+            <div className={classes.newCommentStarBlock}>
+              <Typography>Smell</Typography>
+              <StyledRating
+                name="half-rating"
+                defaultValue={2.5}
+                precision={0.5}
+              />
+            </div>
+          </div>
+          <div className={classes.commentTextField}>
+            <TextField
+              // value={description}
+              // onChange={handleDescriptionChange}
+              margin="none"
+              label="Enter your comment here"
+              type="text"
+              multiline
+              rows={4}
+              fullWidth
+              variant="outlined"
+            />
+          </div>
+          <div className={classes.newCommentButtons}>
+            <Button variant="outlined" color="primary" size="small">
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.submitButton}
+              size="small"
+            >
+              Save rating
+            </Button>
+          </div>
         </div>
-        <div className={classes.newCommentButtons}>
-          <Button variant="outlined" color="primary" size="small">
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.submitButton}
-            size="small"
-          >
-            Save comment
-          </Button>
+      ) : (
+        <div
+          className={classes.addNewComment}
+          onClick={() => setAddNewComment((prevState) => !prevState)}
+        >
+          <Typography>Add a new rating</Typography>
         </div>
-      </div>
+      )}
     </div>
   );
 };
