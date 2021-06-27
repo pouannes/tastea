@@ -9,12 +9,11 @@ export const Button: React.FC<ButtonProps> = ({
   className,
   ...otherProps
 }) => {
+  const backgroundColor = variant === 'accent' ? `bg-accent` : 'bg-bgPaper';
   return (
     <button
       {...otherProps}
-      className={`bg-${
-        variant ?? 'bgPaper'
-      } px-5 py-2  rounded-md text-textPrimary ${className}`}
+      className={`${backgroundColor} px-5 py-2  rounded-md text-textPrimary ${className}`}
     >
       {children}
     </button>
