@@ -1,14 +1,12 @@
-import Head from 'next/head'
-import Image from 'next/image'
+import Head from 'next/head';
 
 export default function Home() {
   return (
-    <div className='bg-bgDefault'>
+    <div className="h-screen bg-bgDefault">
       <Head>
-        <title>Tastea</title>
+        <title>Tastea</title> ===
       </Head>
-<p>Hello</p>
-
+      <p className="text-textPrimary">Hello</p>
     </div>
-  )
+  );
 }

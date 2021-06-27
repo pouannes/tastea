@@ -6,8 +6,8 @@ module.exports = {
       colors: {
         bgDefault: '#303030',
         bgPaper: '#424242',
-        txtPrimary: '#fff',
-        txtSecondary: 'rgba(255,255,255,0.7)',
+        textPrimary: '#fff',
+        textSecondary: 'rgba(255,255,255,0.7)',
         textDisabled: 'rgba(255,255,255,0.5)'
       }
     },
