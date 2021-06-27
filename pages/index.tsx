@@ -17,7 +17,8 @@ export default function Home() {
   useEffect(() => {
     const fetchTeas = async () => {
       try {
-        let { data, error, status } = await supabase.from('teas').select(`name, 
+        const { data, error, status } = await supabase.from('teas')
+          .select(`name, 
                    brand_time_s, 
                    brand_temperature,
                    brand:brand_id (name),
