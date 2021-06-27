@@ -1,6 +1,6 @@
 import { useRef, useReducer } from 'react';
 
-import { TextField, Drawer, DrawerProps } from '@/components/core';
+import { TextField, Drawer, Button } from '@/components/core';
 
 interface AddTeaDrawerProps {
   open: boolean;
@@ -39,12 +39,20 @@ const AddTeaDrawer: React.FC<AddTeaDrawerProps> = ({ open, setOpen }) => {
       payload: { field: e.target.name, value: e.target.value },
     });
 
+  const handleSave = (): void => {};
+
   return (
     <Drawer
       open={open}
       setOpen={setOpen}
       title="Add new tea"
       initialFocus={nameInputRef}
+      Footer={
+        <DrawerFooter
+          handleClose={() => setOpen(false)}
+          handleSave={handleSave}
+        />
+      }
     >
       <TextField
         value={state.name}
@@ -76,6 +84,27 @@ const AddTeaDrawer: React.FC<AddTeaDrawerProps> = ({ open, setOpen }) => {
         inputClassName="mb-5"
       />
     </Drawer>
+  );
+};
+
+interface DrawerFooterProps {
+  handleClose: () => void;
+  handleSave: () => void;
+}
+
+const DrawerFooter: React.FC<DrawerFooterProps> = ({
+  handleClose,
+  handleSave,
+}) => {
+  return (
+    <div className="flex items-center justify-end px-4 py-4 sm:px-6 bg-bgPaper">
+      <Button className="mr-4 text-textSecondary" onClick={handleClose}>
+        Cancel
+      </Button>
+      <Button variant="accent" onClick={handleSave}>
+        Save
+      </Button>
+    </div>
   );
 };
 

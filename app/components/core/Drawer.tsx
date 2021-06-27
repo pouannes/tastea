@@ -1,18 +1,21 @@
 import { Fragment, MutableRefObject } from 'react';
 import { Transition, Dialog } from '@headlessui/react';
 import CloseIcon from '@/public/close.svg';
+import { JsxElement } from 'typescript';
 
 export interface DrawerProps {
   open: boolean;
   setOpen: (value: boolean) => void;
-  initialFocus?: MutableRefObject<HTMLElement | null> | undefined;
   title: string;
+  Footer?: JSX.Element;
+  initialFocus?: MutableRefObject<HTMLElement | null> | undefined;
 }
 
 export const Drawer: React.FC<DrawerProps> = ({
   open,
   setOpen,
   title,
+  Footer,
   initialFocus,
   children,
 }) => {
@@ -65,6 +68,7 @@ export const Drawer: React.FC<DrawerProps> = ({
                   <div className="relative flex-1 px-4 mt-6 sm:px-6">
                     {children}
                   </div>
+                  {Footer ? Footer : null}
                 </div>
               </div>
             </Transition.Child>

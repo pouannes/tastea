@@ -38,7 +38,7 @@ export default function Home() {
       </Head>
       <div className="flex flex-col items-center justify-center w-5/6 h-full m-auto">
         <Button
-          className="self-end"
+          className="self-end mb-6"
           variant="accent"
           onClick={() => setEditTea((prev) => !prev)}
         >

@@ -1,6 +1,6 @@
 export interface ButtonProps extends React.ComponentPropsWithoutRef<'button'> {
   variant?: string | undefined;
-  className: string;
+  className?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -14,7 +14,7 @@ export const Button: React.FC<ButtonProps> = ({
       {...otherProps}
       className={`bg-${
         variant ?? 'bgPaper'
-      } px-5 py-2 mb-6 rounded-md text-textPrimary ${className}`}
+      } px-5 py-2  rounded-md text-textPrimary ${className}`}
     >
       {children}
     </button>
