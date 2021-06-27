@@ -12,6 +12,8 @@ const initialState = {
   brand: '',
   type: '',
   flavor: '',
+  time: '',
+  temperature: '',
 };
 
 type ACTION_TYPE =
@@ -59,29 +61,46 @@ const AddTeaDrawer: React.FC<AddTeaDrawerProps> = ({ open, setOpen }) => {
         onChange={handleChange}
         name="name"
         label="Name"
-        inputClassName="mb-5"
+        className="mb-5"
         inputRef={nameInputRef}
+        required
       />
       <TextField
         value={state.brand}
         onChange={handleChange}
         name="brand"
         label="Brand"
-        inputClassName="mb-5"
+        className="mb-5"
+        required
       />
       <TextField
         value={state.type}
         onChange={handleChange}
         name="type"
         label="Type"
-        inputClassName="mb-5"
+        className="mb-5"
+        required
       />
       <TextField
         value={state.flavor}
         onChange={handleChange}
         name="flavor"
         label="Flavor"
-        inputClassName="mb-5"
+        className="mb-5"
+      />
+      <TextField
+        value={state.time}
+        onChange={handleChange}
+        name="time"
+        label="Brand-advised brewing time"
+        className="mb-5"
+      />
+      <TextField
+        value={state.temperature}
+        onChange={handleChange}
+        name="temperature"
+        label="Brand-advised temperature (s)"
+        className="mb-5"
       />
     </Drawer>
   );
