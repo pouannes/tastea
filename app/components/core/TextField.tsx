@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, MutableRefObject } from 'react';
 
 interface TextFieldProps {
   value: string;
@@ -7,6 +7,7 @@ interface TextFieldProps {
   placeholder?: string;
   label?: string;
   inputClassName?: string;
+  inputRef?: MutableRefObject<HTMLInputElement | null> | undefined;
 }
 
 export const TextField: React.FC<TextFieldProps> = ({
@@ -16,6 +17,7 @@ export const TextField: React.FC<TextFieldProps> = ({
   placeholder,
   label,
   inputClassName,
+  inputRef,
 }) => {
   return (
     <div>
@@ -35,6 +37,7 @@ export const TextField: React.FC<TextFieldProps> = ({
           name={name}
           className={`block w-full pl-3 pr-3 border-gray-500 rounded-md focus:ring-accent focus:border-accent bg-bgPaper text-textPrimary sm:text-sm ${inputClassName}`}
           placeholder={placeholder}
+          ref={inputRef}
         />
       </div>
     </div>

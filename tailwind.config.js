@@ -13,8 +13,13 @@ module.exports = {
       },
     },
   },
+  // hover:ring-white hover:ring-2 hover:outline-none
   variants: {
-    extend: {},
+    extend: {
+      ringColor: ['hover'],
+      ringWidth: ['hover'],
+      outline: ['hover'],
+    },
   },
   plugins: [require('@tailwindcss/forms')],
 };
