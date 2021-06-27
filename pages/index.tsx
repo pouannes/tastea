@@ -1,27 +1,11 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import Image from 'next/image';
-import { supabase } from '../utils/supabaseClient';
-import TemperatureIcon from '../public/temperature.svg';
-import TeaIcon from '../public/tea.svg';
 
-interface brand {
-  name: string;
-}
-
-interface tea {
-  name: string;
-  brand_time_s: number;
-  brand_temperature: string;
-  brand: brand;
-}
-
-const formatTime = (time: number): string => {
-  if (time < 60) return `${time}s`;
-  if (time % 60 === 0) return `${time / 60}min`;
-  if (time % 60 < 30) return `${Math.floor(time / 60)}min`;
-  return `${Math.floor(time / 60)}min30`;
-};
+import { supabase } from '@/utils';
+import TemperatureIcon from '@/public/temperature.svg';
+import TeaIcon from '@/public/tea.svg';
+import TeaLine from '@/components/TeaLine';
+import { tea } from '@/types/api';
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -60,19 +44,3 @@ export default function Home() {
     </div>
   );
 }
-
-const TeaLine: React.FC<tea> = ({
-  name,
-  brand_time_s,
-  brand_temperature,
-  brand,
-}) => {
-  return (
-    <div className="grid w-full grid-cols-4 py-2 border-t">
-      <p className="text-textPrimary">{name}</p>
-      <p className="text-textPrimary">{brand.name}</p>
-      <p className="text-textPrimary">{formatTime(brand_time_s)}</p>
-      <p className="text-textPrimary">{brand_temperature}</p>
-    </div>
-  );
-};
