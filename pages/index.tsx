@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactElement } from 'react';
 import Head from 'next/head';
 
 import { supabase } from '@/utils';
@@ -9,16 +9,15 @@ import AddTeaDrawer from '@/components/AddTeaDrawer';
 import { Button } from '@/components/core';
 import { tea } from '@/types/api';
 
-export default function Home() {
-  const [loading, setLoading] = useState(true);
+const Home: React.FC = (): ReactElement => {
+  // const [loading, setLoading] = useState(true);
   const [teas, setTeas] = useState<tea[] | null>(null);
   const [editTea, setEditTea] = useState(false);
 
   useEffect(() => {
     const fetchTeas = async () => {
       try {
-        const { data, error, status } = await supabase.from('teas')
-          .select(`name, 
+        const { data } = await supabase.from('teas').select(`name, 
                    brand_time_s, 
                    brand_temperature,
                    brand:brand_id (name),
@@ -57,4 +56,6 @@ export default function Home() {
       <AddTeaDrawer open={editTea} setOpen={setEditTea} />
     </div>
   );
-}
+};
+
+export default Home;

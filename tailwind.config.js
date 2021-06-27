@@ -1,12 +1,16 @@
 module.exports = {
-  purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+  purge: [
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './app/**/*.{js,ts,jsx,tsx}',
+    './public/**/*.html',
+  ],
   darkMode: false, // or 'media' or 'class'
-  // jit is causing bugs for some reason
   // mode: 'jit',
   theme: {
     extend: {
       colors: {
-        accent: '#0991FFff',
+        accent: '#0991FF',
+        bgAccent: '#0991FF',
         bgDefault: '#202020',
         bgPaper: '#303030',
         bgPaperSecondary: '#3c3c3c',
@@ -17,7 +21,6 @@ module.exports = {
       },
     },
   },
-  // hover:ring-white hover:ring-2 hover:outline-none
   variants: {
     extend: {
       ringColor: ['hover'],
