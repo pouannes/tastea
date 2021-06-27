@@ -5,11 +5,13 @@ import { supabase } from '@/utils';
 import TemperatureIcon from '@/public/temperature.svg';
 import TeaIcon from '@/public/tea.svg';
 import TeaLine from '@/components/TeaLine';
+import { Drawer } from '@/components/core';
 import { tea } from '@/types/api';
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [teas, setTeas] = useState<tea[] | null>(null);
+  const [editTea, setEditTea] = useState(false);
 
   useEffect(() => {
     const fetchTeas = async () => {
@@ -17,7 +19,8 @@ export default function Home() {
         let { data, error, status } = await supabase.from('teas').select(`name, 
                    brand_time_s, 
                    brand_temperature,
-                   brand:brand_id (name)`);
+                   brand:brand_id (name),
+                   type:tea_type_id (type)`);
 
         console.log(data);
         setTeas(data);
@@ -36,11 +39,19 @@ export default function Home() {
         <div className="grid w-full grid-cols-4 mb-2">
           <p className="text-textPrimary">Tea</p>
           <p className="text-textPrimary">Brand</p>
-          <TemperatureIcon className="w-8 h-8 fill-current text-textPrimary" />
           <TeaIcon className="w-8 h-8 fill-current text-textPrimary" />
+          <TemperatureIcon className="w-8 h-8 fill-current text-textPrimary" />
         </div>
         {teas ? teas.map((tea) => <TeaLine key={tea.name} {...tea} />) : null}
+        <button
+          className="px-5 py-2 rounded-md text-textPrimary bg-bgPaper "
+          onClick={() => setEditTea((prev) => !prev)}
+        >
+          Add tea
+        </button>
       </div>
+
+      <Drawer open={editTea} setOpen={setEditTea} />
     </div>
   );
 }
