@@ -5,16 +5,27 @@ import { supabase } from '../utils/supabaseClient';
 import TemperatureIcon from '../public/temperature.svg';
 import TeaIcon from '../public/tea.svg';
 
+interface brand {
+  name: string;
+}
+
+interface tea {
+  name: string;
+  brand_time_s: number;
+  brand_temperature: string;
+  brand: brand;
+}
+
 const formatTime = (time: number): string => {
   if (time < 60) return `${time}s`;
   if (time % 60 === 0) return `${time / 60}min`;
-  if (time % 60 < 30) return `${parseInt(time / 60)}min`;
-  return `${parseInt(time / 60)}min30`;
+  if (time % 60 < 30) return `${Math.floor(time / 60)}min`;
+  return `${Math.floor(time / 60)}min30`;
 };
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
-  const [teas, setTeas] = useState(null);
+  const [teas, setTeas] = useState<tea[] | null>(null);
 
   useEffect(() => {
     const fetchTeas = async () => {
@@ -50,7 +61,12 @@ export default function Home() {
   );
 }
 
-const TeaLine = ({ name, brand_time_s, brand_temperature, brand }) => {
+const TeaLine: React.FC<tea> = ({
+  name,
+  brand_time_s,
+  brand_temperature,
+  brand,
+}) => {
   return (
     <div className="grid w-full grid-cols-4 py-2 border-t">
       <p className="text-textPrimary">{name}</p>
