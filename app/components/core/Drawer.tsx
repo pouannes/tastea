@@ -1,12 +1,12 @@
 import { Fragment } from 'react';
 import { Transition, Dialog } from '@headlessui/react';
 
-interface props {
+export interface DrawerProps {
   open: boolean;
   setOpen: (value: boolean) => void;
 }
 
-const Drawer: React.FC<props> = ({ open, setOpen }) => {
+export const Drawer: React.FC<DrawerProps> = ({ open, setOpen, children }) => {
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog
@@ -46,11 +46,7 @@ const Drawer: React.FC<props> = ({ open, setOpen }) => {
                     </Dialog.Title>
                   </div>
                   <div className="relative flex-1 px-4 mt-6 sm:px-6">
-                    {/* Replace with your content */}
-                    <div className="absolute inset-0 px-4 sm:px-6">
-                      <input type="text" />
-                    </div>
-                    {/* /End replace */}
+                    {children}
                   </div>
                 </div>
               </div>
@@ -61,5 +57,3 @@ const Drawer: React.FC<props> = ({ open, setOpen }) => {
     </Transition.Root>
   );
 };
-
-export default Drawer;

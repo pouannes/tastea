@@ -20,7 +20,8 @@
       "@/types/*": ["app/types/*"],
       "@/constants": ["app/constants"],
       "@/utils": ["app/utils"],
-      "@/public/*": ["public/*"]
+      "@/public/*": ["public/*"],
+      "tailwind.config.js": ["tailwind.config.js"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
