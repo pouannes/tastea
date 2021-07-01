@@ -1,5 +1,6 @@
-import { useState, useEffect, ReactElement } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import { GetStaticProps } from 'next';
 
 import { supabase } from '@/utils';
 import TemperatureIcon from '@/public/temperature.svg';
@@ -7,13 +8,16 @@ import TeaIcon from '@/public/tea.svg';
 import TeaLine from '@/components/TeaLine';
 import AddTeaDrawer from '@/components/AddTeaDrawer';
 import { Button } from '@/components/core';
-import { tea } from '@/types/api';
+import { tea, teaType } from '@/types/api';
 
-const Home: React.FC = (): ReactElement => {
+interface HomeProps {
+  teaTypes: teaType[];
+}
+
+const Home = ({ teaTypes }: HomeProps): JSX.Element => {
   // const [loading, setLoading] = useState(true);
   const [teas, setTeas] = useState<tea[] | null>(null);
   const [editTea, setEditTea] = useState(false);
-
   useEffect(() => {
     const fetchTeas = async () => {
       try {
@@ -23,7 +27,7 @@ const Home: React.FC = (): ReactElement => {
                    brand:brand_id (name),
                    type:tea_type_id (type)`);
 
-        console.log(data);
+        // console.log(data);
         setTeas(data);
       } catch (error) {}
     };
@@ -53,9 +57,20 @@ const Home: React.FC = (): ReactElement => {
         {teas ? teas.map((tea) => <TeaLine key={tea.name} {...tea} />) : null}
       </div>
 
-      <AddTeaDrawer open={editTea} setOpen={setEditTea} />
+      <AddTeaDrawer open={editTea} setOpen={setEditTea} teaTypes={teaTypes} />
     </div>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const { data: tea_types } = await supabase
+    .from('tea_types')
+    .select('id, type');
+  return {
+    props: {
+      teaTypes: tea_types,
+    },
+  };
 };
 
 export default Home;

@@ -1,10 +1,14 @@
-import { useRef, useReducer } from 'react';
+import { useRef, useReducer, useEffect } from 'react';
+
+import _ from 'lodash';
 
 import { TextField, Select, Drawer, Button } from '@/components/core';
+import { teaType } from '@/types/api';
 
 interface AddTeaDrawerProps {
   open: boolean;
   setOpen: (value: boolean) => void;
+  teaTypes: teaType[];
 }
 
 const initialState = {
@@ -32,8 +36,13 @@ const reducer = (state: typeof initialState, action: ACTION_TYPE) => {
   }
 };
 
-const AddTeaDrawer: React.FC<AddTeaDrawerProps> = ({ open, setOpen }) => {
+const AddTeaDrawer = ({
+  open,
+  setOpen,
+  teaTypes,
+}: AddTeaDrawerProps): JSX.Element => {
   const nameInputRef = useRef(null);
+
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -42,9 +51,26 @@ const AddTeaDrawer: React.FC<AddTeaDrawerProps> = ({ open, setOpen }) => {
       payload: { field: e.target.name, value: e.target.value },
     });
 
+  const handleSelectChange = (name: string, value: string) => {
+    dispatch({
+      type: 'SET_FIELD',
+      payload: { field: name, value: value },
+    });
+  };
+
   const handleSave = (): void => {
     console.log('this should save something');
   };
+
+  // initialize type with first option
+  useEffect(
+    () =>
+      dispatch({
+        type: 'SET_FIELD',
+        payload: { field: 'type', value: teaTypes[0].type },
+      }),
+    [teaTypes]
+  );
 
   return (
     <Drawer
@@ -76,15 +102,18 @@ const AddTeaDrawer: React.FC<AddTeaDrawerProps> = ({ open, setOpen }) => {
         className="mb-5"
         required
       />
-      <TextField
+      <Select
         value={state.type}
-        onChange={handleChange}
-        name="type"
+        onChange={(value) => handleSelectChange('type', value)}
         label="Type"
+        name="type"
         className="mb-5"
-        required
+        required={true}
+        options={teaTypes.map((tea) => ({
+          value: tea.type,
+          label: _.startCase(tea.type),
+        }))}
       />
-      <Select label="Type" className="mb-5" required={true} />
       <TextField
         value={state.flavor}
         onChange={handleChange}

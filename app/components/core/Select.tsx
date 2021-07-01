@@ -1,33 +1,35 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 
-interface SelectProps {
+type option<T> = {
+  value: T;
+  label: string;
+};
+
+interface SelectProps<T> {
+  options: option<T>[];
+  value: T;
+  onChange: (value: T) => void;
   label?: string;
+  name?: string;
   className?: string;
   required?: boolean;
   error?: boolean;
 }
 
-const people = [
-  { name: 'Wade Cooper' },
-  { name: 'Arlene Mccoy' },
-  { name: 'Devon Webb' },
-  { name: 'Tom Cook' },
-  { name: 'Tanya Fox' },
-  { name: 'Hellen Schmidt' },
-];
-
-const Select = ({
+const Select = <T,>({
+  options,
+  value,
+  onChange,
   label,
+  name,
   className = '',
   required = false,
   error = false,
-}: SelectProps): JSX.Element => {
-  const [selected, setSelected] = useState(people[0]);
-
+}: SelectProps<T>): JSX.Element => {
   return (
-    <Listbox value={selected} onChange={setSelected}>
+    <Listbox value={value} onChange={onChange}>
       <div className={`relative mt-1 ${className}`}>
         {label ? (
           <Listbox.Label className="block text-sm font-medium text-textSecondary">
@@ -35,11 +37,14 @@ const Select = ({
           </Listbox.Label>
         ) : null}
         <Listbox.Button
+          name={name}
           className={`relative w-full py-2 pl-3 pr-10 mt-1 text-left rounded-md shadow-sm cursor-pointer focus:ring-accent focus:border-accent bg-bgPaper sm:text-sm text-textPrimary border border-${
             error ? 'red-400' : 'gray-500'
           }`}
         >
-          <span className="block truncate">{selected.name}</span>
+          <span className="block truncate">
+            {options.find((item) => item.value === value)?.label}
+          </span>
           <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
             <SelectorIcon
               className="w-5 h-5 text-gray-400"
@@ -54,9 +59,9 @@ const Select = ({
           leaveTo="opacity-0"
         >
           <Listbox.Options className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base rounded-md shadow-lg bg-bgPaper max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-            {people.map((person, personIdx) => (
+            {options.map((option, optionIdx) => (
               <Listbox.Option
-                key={personIdx}
+                key={optionIdx}
                 className={({ active }) =>
                   `${
                     active
@@ -65,7 +70,7 @@ const Select = ({
                   }
                               cursor-pointer select-none relative py-2 pl-10 pr-4`
                 }
-                value={person}
+                value={option.value}
               >
                 {({ selected, active }) => (
                   <>
@@ -76,7 +81,7 @@ const Select = ({
                           : 'font-normal'
                       } block truncate`}
                     >
-                      {person.name}
+                      {option.label}
                     </span>
                     {selected ? (
                       <span
