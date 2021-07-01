@@ -38,7 +38,7 @@ const Select = <T,>({
         ) : null}
         <Listbox.Button
           name={name}
-          className={`relative w-full py-2 pl-3 pr-10 mt-1 text-left rounded-md shadow-sm cursor-pointer focus:ring-accent focus:border-accent bg-bgPaper sm:text-sm text-textPrimary border border-${
+          className={`relative w-full py-2 pl-3 pr-10 mt-1 text-left rounded-md shadow-sm cursor-pointer focus:ring-accent focus:border-accent bg-bgPaper sm:text-sm text-textPrimary border border-gray-500 border-${
             error ? 'red-400' : 'gray-500'
           }`}
         >
