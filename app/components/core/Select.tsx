@@ -17,6 +17,7 @@ const people = [
   { name: 'Tanya Fox' },
   { name: 'Hellen Schmidt' },
 ];
+
 const Select = ({
   label,
   className = '',
@@ -34,7 +35,7 @@ const Select = ({
           </Listbox.Label>
         ) : null}
         <Listbox.Button
-          className={`relative w-full py-2 pl-3 pr-10 mt-1 text-left rounded-md shadow-sm cursor-pointer focus:ring-accent focus:border-accent bg-bgPaper sm:text-sm text-textPrimary  border-${
+          className={`relative w-full py-2 pl-3 pr-10 mt-1 text-left rounded-md shadow-sm cursor-pointer focus:ring-accent focus:border-accent bg-bgPaper sm:text-sm text-textPrimary border border-${
             error ? 'red-400' : 'gray-500'
           }`}
         >
