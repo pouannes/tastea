@@ -1,6 +1,6 @@
 import { useRef, useReducer } from 'react';
 
-import { TextField, Drawer, Button } from '@/components/core';
+import { TextField, Select, Drawer, Button } from '@/components/core';
 
 interface AddTeaDrawerProps {
   open: boolean;
@@ -14,6 +14,7 @@ const initialState = {
   flavor: '',
   time: '',
   temperature: '',
+  drinkingConditions: '',
 };
 
 type ACTION_TYPE =
@@ -41,7 +42,9 @@ const AddTeaDrawer: React.FC<AddTeaDrawerProps> = ({ open, setOpen }) => {
       payload: { field: e.target.name, value: e.target.value },
     });
 
-  const handleSave = (): void => {};
+  const handleSave = (): void => {
+    console.log('this should save something');
+  };
 
   return (
     <Drawer
@@ -81,6 +84,7 @@ const AddTeaDrawer: React.FC<AddTeaDrawerProps> = ({ open, setOpen }) => {
         className="mb-5"
         required
       />
+      <Select label="Type" className="mb-5" required={true} />
       <TextField
         value={state.flavor}
         onChange={handleChange}
@@ -100,6 +104,13 @@ const AddTeaDrawer: React.FC<AddTeaDrawerProps> = ({ open, setOpen }) => {
         onChange={handleChange}
         name="temperature"
         label="Brand-advised temperature (s)"
+        className="mb-5"
+      />
+      <TextField
+        value={state.drinkingConditions}
+        onChange={handleChange}
+        name="drinkingConditions"
+        label="Drinking conditions"
         className="mb-5"
       />
     </Drawer>
