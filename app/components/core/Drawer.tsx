@@ -1,7 +1,6 @@
 import { Fragment, MutableRefObject } from 'react';
 import { Transition, Dialog } from '@headlessui/react';
 import CloseIcon from '@/public/close.svg';
-import { JsxElement } from 'typescript';
 
 export interface DrawerProps {
   open: boolean;
@@ -9,16 +8,17 @@ export interface DrawerProps {
   title: string;
   Footer?: JSX.Element;
   initialFocus?: MutableRefObject<HTMLElement | null> | undefined;
+  children: JSX.Element | JSX.Element[];
 }
 
-export const Drawer: React.FC<DrawerProps> = ({
+export const Drawer = ({
   open,
   setOpen,
   title,
   Footer,
   initialFocus,
   children,
-}) => {
+}: DrawerProps): JSX.Element => {
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog
@@ -58,7 +58,7 @@ export const Drawer: React.FC<DrawerProps> = ({
                       {title}
                     </Dialog.Title>
                     <button
-                      className="transition duration-200 ease-in-out rounded-md text-textSecondary hover:text-accent hover:ring-accent hover:ring-2 hover:outline-none"
+                      className="p-1 transition duration-200 ease-in-out rounded-md text-textSecondary hover:bg-bgPaperSecondary focus:text-accent focus:ring-accent focus:ring-2 focus:outline-none"
                       onClick={() => setOpen(false)}
                     >
                       <span className="sr-only">Close panel</span>
