@@ -3,7 +3,8 @@ import { useRef, useReducer, useEffect } from 'react';
 import _ from 'lodash';
 
 import { TextField, Select, Drawer, Button } from '@/components/core';
-import { teaType } from '@/types/api';
+import { tea, teaType } from '@/types/api';
+import { supabase } from '@/utils';
 
 interface AddTeaDrawerProps {
   open: boolean;
@@ -18,6 +19,7 @@ const initialState = {
   flavor: '',
   time: '',
   temperature: '',
+  country: '',
   drinkingConditions: '',
 };
 
@@ -58,8 +60,21 @@ const AddTeaDrawer = ({
     });
   };
 
-  const handleSave = (): void => {
+  const handleSave = async (): Promise<tea[] | null> => {
     console.log('this should save something');
+    const { data } = await supabase.from('teas').insert([
+      {
+        name: state.name,
+        // TODO: update that to a real brand id
+        brand_id: 1,
+        tea_type_id: teaTypes.find((type) => type.type === state.type)?.id,
+        brand_time_s: state.time,
+        brand_temperature: state.temperature,
+        country: state.country,
+      },
+    ]);
+    console.log(data);
+    return data;
   };
 
   // initialize type with first option
@@ -133,6 +148,13 @@ const AddTeaDrawer = ({
         onChange={handleChange}
         name="temperature"
         label="Brand-advised temperature (s)"
+        className="mb-5"
+      />
+      <TextField
+        value={state.country}
+        onChange={handleChange}
+        name="country"
+        label="Country of origin"
         className="mb-5"
       />
       <TextField
