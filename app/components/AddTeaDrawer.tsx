@@ -13,7 +13,7 @@ interface AddTeaDrawerProps {
   teaTypes: teaType[];
   teaBrands: brand[];
   setTeas: React.Dispatch<React.SetStateAction<tea[] | null>>;
-  mode: mode;
+  mode?: mode;
   editTea?: fullTea;
 }
 
@@ -34,6 +34,7 @@ type ACTION_TYPE =
   | { type: 'INITIALIZE'; payload: typeof initialState };
 
 const reducer = (state: typeof initialState, action: ACTION_TYPE) => {
+  console.log(action);
   switch (action.type) {
     case 'INITIALIZE':
       return { ...state, ...action.payload };
@@ -73,6 +74,7 @@ const AddTeaDrawer = ({
     });
   };
 
+  // handle submitting, either editing the tea or saving a new one
   const handleSave = async (): Promise<tea[] | null> => {
     setLoading(true);
     const newTea = {
@@ -120,7 +122,7 @@ const AddTeaDrawer = ({
         type: 'SET_FIELD',
         payload: { field: 'brand', value: teaBrands[0].name },
       });
-    } else {
+    } else if (mode === 'edit') {
       dispatch({
         type: 'INITIALIZE',
         payload: {
@@ -228,7 +230,7 @@ interface DrawerFooterProps {
   handleClose: () => void;
   handleSave: () => void;
   loading: boolean;
-  mode: mode;
+  mode?: mode;
 }
 
 const DrawerFooter: React.FC<DrawerFooterProps> = ({

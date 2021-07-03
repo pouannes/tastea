@@ -85,7 +85,7 @@ const Home = ({ teaTypes, teaBrands }: HomeProps): JSX.Element => {
         teaTypes={teaTypes}
         teaBrands={teaBrands}
         setTeas={setTeas}
-        mode={editTea === true ? 'add' : 'edit'}
+        mode={!!editTea ? (editTea === true ? 'add' : 'edit') : undefined}
         editTea={typeof editTea === 'boolean' ? undefined : editTea}
       />
     </div>
