@@ -34,6 +34,15 @@ const Home = ({ teaTypes, teaBrands }: HomeProps): JSX.Element => {
     fetchTeas();
   }, []);
 
+  const handleDeleteTea = async (tea: tea) => {
+    const { error } = await supabase.from('teas').delete().eq('id', tea.id);
+    if (!error) {
+      setTeas((prevTeas) =>
+        prevTeas ? prevTeas?.filter((item) => item.id !== tea.id) : []
+      );
+    }
+  };
+
   const handleOpenEditDrawer = useCallback((tea) => {
     setEditTea(tea);
   }, []);
@@ -64,6 +73,7 @@ const Home = ({ teaTypes, teaBrands }: HomeProps): JSX.Element => {
                 key={uuidv4()}
                 tea={tea}
                 handleOpenEditDrawer={handleOpenEditDrawer}
+                handleDeleteTea={handleDeleteTea}
               />
             ))
           : null}
