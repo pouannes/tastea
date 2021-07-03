@@ -6,12 +6,15 @@ import { TextField, Select, Drawer, Button } from '@/components/core';
 import { tea, teaType, brand } from '@/types/api';
 import { supabase } from '@/utils';
 
+type mode = 'edit' | 'add';
 interface AddTeaDrawerProps {
   open: boolean;
   setOpen: (value: boolean) => void;
   teaTypes: teaType[];
   teaBrands: brand[];
   setTeas: React.Dispatch<React.SetStateAction<tea[] | null>>;
+  mode: mode;
+  editTea?: tea;
 }
 
 const initialState = {
@@ -27,10 +30,13 @@ const initialState = {
 
 type ACTION_TYPE =
   | { type: 'SET_FIELD'; payload: { field: string; value: string } }
-  | { type: 'RESET' };
+  | { type: 'RESET' }
+  | { type: 'INITIALIZE'; payload: typeof initialState };
 
 const reducer = (state: typeof initialState, action: ACTION_TYPE) => {
   switch (action.type) {
+    case 'INITIALIZE':
+      return { ...state, ...action.payload };
     case 'SET_FIELD':
       return { ...state, [action.payload.field]: action.payload.value };
     case 'RESET':
@@ -46,6 +52,8 @@ const AddTeaDrawer = ({
   teaTypes,
   teaBrands,
   setTeas,
+  mode,
+  editTea,
 }: AddTeaDrawerProps): JSX.Element => {
   const nameInputRef = useRef(null);
 
