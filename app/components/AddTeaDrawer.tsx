@@ -3,7 +3,7 @@ import { useRef, useReducer, useEffect, useState } from 'react';
 import _ from 'lodash';
 
 import { TextField, Select, Drawer, Button } from '@/components/core';
-import { tea, teaType, brand } from '@/types/api';
+import { tea, teaType, brand, fullTea } from '@/types/api';
 import { supabase } from '@/utils';
 
 type mode = 'edit' | 'add';
@@ -14,7 +14,7 @@ interface AddTeaDrawerProps {
   teaBrands: brand[];
   setTeas: React.Dispatch<React.SetStateAction<tea[] | null>>;
   mode: mode;
-  editTea?: tea;
+  editTea?: fullTea;
 }
 
 const initialState = {
@@ -60,6 +60,9 @@ const AddTeaDrawer = ({
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  console.log(mode);
+  console.log(editTea);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     dispatch({
       type: 'SET_FIELD',
@@ -75,18 +78,20 @@ const AddTeaDrawer = ({
 
   const handleSave = async (): Promise<tea[] | null> => {
     setLoading(true);
-    const { data, error } = await supabase.from('teas').insert([
-      {
-        name: state.name,
-        brand_id: teaBrands.find((brand) => brand.name === state.brand)?.id,
-        tea_type_id: teaTypes.find((type) => type.type === state.type)?.id,
-        brand_time_s: state.time,
-        brand_temperature: state.temperature,
-        country: state.country,
-        drinking_conditions: state.drinkingConditions,
-        flavor: state.flavor,
-      },
-    ]);
+    const newTea = {
+      name: state.name,
+      brand_id: teaBrands.find((brand) => brand.name === state.brand)?.id,
+      tea_type_id: teaTypes.find((type) => type.type === state.type)?.id,
+      brand_time_s: state.time,
+      brand_temperature: state.temperature,
+      country: state.country,
+      drinking_conditions: state.drinkingConditions,
+      flavor: state.flavor,
+    };
+    const { data, error } =
+      mode === 'add'
+        ? await supabase.from('teas').insert([newTea])
+        : await supabase.from('teas').update(newTea).eq('id', editTea?.id);
     setLoading(false);
     if (!error && !!data && data.length > 0) {
       const tea = {
@@ -94,7 +99,13 @@ const AddTeaDrawer = ({
         type: { type: state.type },
         brand: { name: state.brand },
       };
-      setTeas((teas) => (teas !== null ? [...teas, tea] : [tea]));
+      setTeas((teas) =>
+        mode === 'add'
+          ? teas !== null
+            ? [...teas, tea]
+            : [tea]
+          : teas?.map((item) => (item.id === editTea?.id ? tea : item)) ?? []
+      );
       setOpen(false);
       dispatch({ type: 'RESET' });
     }
@@ -103,27 +114,44 @@ const AddTeaDrawer = ({
 
   // initialize type with first option
   useEffect(() => {
-    dispatch({
-      type: 'SET_FIELD',
-      payload: { field: 'type', value: teaTypes[0].type },
-    });
-    dispatch({
-      type: 'SET_FIELD',
-      payload: { field: 'brand', value: teaBrands[0].name },
-    });
-  }, [teaTypes, teaBrands]);
+    if (mode === 'add') {
+      dispatch({
+        type: 'SET_FIELD',
+        payload: { field: 'type', value: teaTypes[0].type },
+      });
+      dispatch({
+        type: 'SET_FIELD',
+        payload: { field: 'brand', value: teaBrands[0].name },
+      });
+    } else {
+      dispatch({
+        type: 'INITIALIZE',
+        payload: {
+          name: editTea?.name ?? '',
+          brand: editTea?.brand.name ?? 'Autre',
+          type: editTea?.type.type,
+          time: String(editTea?.brand_time_s) ?? '',
+          temperature: editTea?.brand_temperature ?? '',
+          country: editTea?.country ?? '',
+          drinkingConditions: editTea?.drinking_conditions ?? '',
+          flavor: editTea?.flavor ?? '',
+        },
+      });
+    }
+  }, [teaTypes, teaBrands, editTea, mode]);
 
   return (
     <Drawer
       open={open}
       setOpen={setOpen}
-      title="Add new tea"
+      title={mode === 'add' ? 'Add new tea' : `Edit tea "${editTea?.name}"`}
       initialFocus={nameInputRef}
       Footer={
         <DrawerFooter
           handleClose={() => setOpen(false)}
           handleSave={handleSave}
           loading={loading}
+          mode={mode}
         />
       }
     >
@@ -203,12 +231,14 @@ interface DrawerFooterProps {
   handleClose: () => void;
   handleSave: () => void;
   loading: boolean;
+  mode: mode;
 }
 
 const DrawerFooter: React.FC<DrawerFooterProps> = ({
   handleClose,
   handleSave,
   loading,
+  mode,
 }) => {
   return (
     <div className="flex items-center justify-end px-4 py-4 sm:px-6 bg-bgPaper">
@@ -216,7 +246,7 @@ const DrawerFooter: React.FC<DrawerFooterProps> = ({
         Cancel
       </Button>
       <Button variant="accent" onClick={handleSave} loading={loading}>
-        Save
+        {mode === 'add' ? 'Save' : 'Update'}
       </Button>
     </div>
   );

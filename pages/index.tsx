@@ -9,7 +9,7 @@ import TeaIcon from '@/public/tea.svg';
 import TeaLine from '@/components/TeaLine';
 import AddTeaDrawer from '@/components/AddTeaDrawer';
 import { Button } from '@/components/core';
-import { tea, teaType, brand } from '@/types/api';
+import { tea, teaType, brand, fullTea } from '@/types/api';
 
 interface HomeProps {
   teaTypes: teaType[];
@@ -19,15 +19,13 @@ interface HomeProps {
 const Home = ({ teaTypes, teaBrands }: HomeProps): JSX.Element => {
   // const [loading, setLoading] = useState(true);
   const [teas, setTeas] = useState<tea[] | null>([]);
-  const [editTea, setEditTea] = useState<tea | boolean>(false);
+  const [editTea, setEditTea] = useState<fullTea | boolean>(false);
   useEffect(() => {
     const fetchTeas = async () => {
       try {
-        const { data } = await supabase.from('teas').select(`name, 
-                   brand_time_s, 
-                   brand_temperature,
-                   brand:brand_id (name),
-                   type:tea_type_id (type)`);
+        const { data } = await supabase.from('teas').select(`*,
+                   brand:brand_id (id, name),
+                   type:tea_type_id (id, type)`);
 
         setTeas(data);
       } catch (error) {}
@@ -36,8 +34,8 @@ const Home = ({ teaTypes, teaBrands }: HomeProps): JSX.Element => {
     fetchTeas();
   }, []);
 
-  const handleOpenEditDrawer = useCallback(() => {
-    setEditTea(true);
+  const handleOpenEditDrawer = useCallback((tea) => {
+    setEditTea(tea);
   }, []);
 
   return (
