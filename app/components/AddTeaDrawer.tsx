@@ -65,10 +65,6 @@ const AddTeaDrawer = ({
   };
 
   const handleSave = async (): Promise<tea[] | null> => {
-    console.log('this should save something');
-    console.log(teaBrands);
-    console.log(state.brand);
-    console.log(teaBrands.find((brand) => brand.name === state.brand)?.id);
     const { data, error } = await supabase.from('teas').insert([
       {
         name: state.name,

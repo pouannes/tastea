@@ -37,8 +37,6 @@ const Home = ({ teaTypes, teaBrands }: HomeProps): JSX.Element => {
     fetchTeas();
   }, []);
 
-  console.log(teas);
-
   return (
     <div className="h-screen bg-bgDefault">
       <Head>
