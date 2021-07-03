@@ -16,10 +16,13 @@ const TeaLine = ({ tea, handleOpenEditDrawer }: TeaLineProps): JSX.Element => {
       <p className="text-textPrimary">{brand.name}</p>
       <p className="text-textPrimary">{formatTime(brand_time_s)}</p>
       <p className="text-textPrimary">{brand_temperature}</p>
-      <PencilAltIcon
-        className="p-1 rounded-md cursor-pointer w-7 h-7 text-textSecondary hover:text-textPrimary hover:bg-bgPaperSecondary"
+      <button
+        className="p-1 transition duration-200 ease-in-out rounded-md cursor-pointer w-7 h-7 text-textSecondary hover:text-textPrimary hover:bg-bgPaperSecondary focus:text-accent focus:ring-accent focus:ring-2 focus:outline-none "
         onClick={() => handleOpenEditDrawer(tea)}
-      />
+      >
+        <span className="sr-only">Edit tea</span>
+        <PencilAltIcon />
+      </button>
     </div>
   );
 };

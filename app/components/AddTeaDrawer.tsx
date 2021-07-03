@@ -60,9 +60,6 @@ const AddTeaDrawer = ({
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  console.log(mode);
-  console.log(editTea);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     dispatch({
       type: 'SET_FIELD',
