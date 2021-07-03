@@ -34,7 +34,6 @@ type ACTION_TYPE =
   | { type: 'INITIALIZE'; payload: typeof initialState };
 
 const reducer = (state: typeof initialState, action: ACTION_TYPE) => {
-  console.log(action);
   switch (action.type) {
     case 'INITIALIZE':
       return { ...state, ...action.payload };
