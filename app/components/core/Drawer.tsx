@@ -1,6 +1,7 @@
 import { Fragment, MutableRefObject } from 'react';
 import { Transition, Dialog } from '@headlessui/react';
 import CloseIcon from '@/public/close.svg';
+import { IconButton } from './IconButton';
 
 export interface DrawerProps {
   open: boolean;
@@ -57,13 +58,12 @@ export const Drawer = ({
                     <Dialog.Title className="text-lg font-medium text-textPrimary ">
                       {title}
                     </Dialog.Title>
-                    <button
-                      className="p-1 transition duration-200 ease-in-out rounded-md text-textSecondary hover:bg-bgPaperSecondary focus:text-accent focus:ring-accent focus:ring-2 focus:outline-none"
+                    <IconButton
                       onClick={() => setOpen(false)}
+                      srName="Close panel"
                     >
-                      <span className="sr-only">Close panel</span>
-                      <CloseIcon className="w-6 h-6" />
-                    </button>
+                      <CloseIcon />
+                    </IconButton>
                   </div>
                   <div className="relative flex-1 px-4 mt-6 sm:px-6">
                     {children}

@@ -2,6 +2,7 @@ import { PencilAltIcon } from '@heroicons/react/solid';
 
 import { tea } from '@/types/api';
 import { formatTime } from '@/utils';
+import { IconButton } from '@/components/core';
 
 interface TeaLineProps {
   tea: tea;
@@ -16,13 +17,9 @@ const TeaLine = ({ tea, handleOpenEditDrawer }: TeaLineProps): JSX.Element => {
       <p className="text-textPrimary">{brand.name}</p>
       <p className="text-textPrimary">{formatTime(brand_time_s)}</p>
       <p className="text-textPrimary">{brand_temperature}</p>
-      <button
-        className="p-1 transition duration-200 ease-in-out rounded-md cursor-pointer w-7 h-7 text-textSecondary hover:text-textPrimary hover:bg-bgPaperSecondary focus:text-accent focus:ring-accent focus:ring-2 focus:outline-none "
-        onClick={() => handleOpenEditDrawer(tea)}
-      >
-        <span className="sr-only">Edit tea</span>
+      <IconButton srName="Edit tea" onClick={() => handleOpenEditDrawer(tea)}>
         <PencilAltIcon />
-      </button>
+      </IconButton>
     </div>
   );
 };
