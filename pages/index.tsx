@@ -9,15 +9,16 @@ import TeaIcon from '@/public/tea.svg';
 import TeaLine from '@/components/TeaLine';
 import AddTeaDrawer from '@/components/AddTeaDrawer';
 import { Button } from '@/components/core';
-import { tea, teaType } from '@/types/api';
+import { tea, teaType, brand } from '@/types/api';
 
 interface HomeProps {
   teaTypes: teaType[];
+  teaBrands: brand[];
 }
 
-const Home = ({ teaTypes }: HomeProps): JSX.Element => {
+const Home = ({ teaTypes, teaBrands }: HomeProps): JSX.Element => {
   // const [loading, setLoading] = useState(true);
-  const [teas, setTeas] = useState<tea[] | null>(null);
+  const [teas, setTeas] = useState<tea[] | null>([]);
   const [editTea, setEditTea] = useState(false);
   useEffect(() => {
     const fetchTeas = async () => {
@@ -35,6 +36,8 @@ const Home = ({ teaTypes }: HomeProps): JSX.Element => {
 
     fetchTeas();
   }, []);
+
+  console.log(teas);
 
   return (
     <div className="h-screen bg-bgDefault">
@@ -58,7 +61,13 @@ const Home = ({ teaTypes }: HomeProps): JSX.Element => {
         {teas ? teas.map((tea) => <TeaLine key={uuidv4()} {...tea} />) : null}
       </div>
 
-      <AddTeaDrawer open={editTea} setOpen={setEditTea} teaTypes={teaTypes} />
+      <AddTeaDrawer
+        open={editTea}
+        setOpen={setEditTea}
+        teaTypes={teaTypes}
+        teaBrands={teaBrands}
+        setTeas={setTeas}
+      />
     </div>
   );
 };
@@ -67,9 +76,13 @@ export const getStaticProps: GetStaticProps = async () => {
   const { data: tea_types } = await supabase
     .from('tea_types')
     .select('id, type');
+
+  const { data: brands } = await supabase.from('brands').select('id, name');
+
   return {
     props: {
       teaTypes: tea_types,
+      teaBrands: brands,
     },
   };
 };
