@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { GetStaticProps } from 'next';
+import { v4 as uuidv4 } from 'uuid';
 
 import { supabase } from '@/utils';
 import TemperatureIcon from '@/public/temperature.svg';
@@ -54,7 +55,7 @@ const Home = ({ teaTypes }: HomeProps): JSX.Element => {
           <TeaIcon className="w-8 h-8 fill-current text-textPrimary" />
           <TemperatureIcon className="w-8 h-8 fill-current text-textPrimary" />
         </div>
-        {teas ? teas.map((tea) => <TeaLine key={tea.name} {...tea} />) : null}
+        {teas ? teas.map((tea) => <TeaLine key={uuidv4()} {...tea} />) : null}
       </div>
 
       <AddTeaDrawer open={editTea} setOpen={setEditTea} teaTypes={teaTypes} />
