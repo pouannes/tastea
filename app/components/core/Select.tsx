@@ -16,6 +16,7 @@ interface SelectProps<T> {
   className?: string;
   required?: boolean;
   error?: boolean;
+  helperText?: string;
 }
 
 const Select = <T,>({
@@ -27,6 +28,7 @@ const Select = <T,>({
   className = '',
   required = false,
   error = false,
+  helperText,
 }: SelectProps<T>): JSX.Element => {
   return (
     <Listbox value={value} onChange={onChange}>
@@ -52,6 +54,15 @@ const Select = <T,>({
             />
           </span>
         </Listbox.Button>
+        {helperText ? (
+          <p
+            className={`mt-1 ml-3 text-xs ${
+              error ? 'text-red-400' : 'text-textSecondary'
+            }`}
+          >
+            {helperText}
+          </p>
+        ) : null}
         <Transition
           as={Fragment}
           leave="transition ease-in duration-100"

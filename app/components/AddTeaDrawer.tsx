@@ -1,11 +1,12 @@
 import { useRef, useEffect, useState, useMemo } from 'react';
 
 import _ from 'lodash';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
 import { TextField, Select, Drawer, Button } from '@/components/core';
 import { tea, teaType, brand, fullTea } from '@/types/api';
 import { supabase } from '@/utils';
-import { useFormik } from 'formik';
 
 type mode = 'edit' | 'add';
 interface AddTeaDrawerProps {
@@ -17,6 +18,25 @@ interface AddTeaDrawerProps {
   mode?: mode;
   editTea?: fullTea;
 }
+
+const validationSchema = yup.object({
+  name: yup.string().required('Tea name is required'),
+  brand: yup.string().required('Tea brand is required'),
+  type: yup.string().required('Tea type is required'),
+  flavor: yup.string(),
+  temperature: yup
+    .number()
+    .min(0, 'Temperature can not be below 0 degrees')
+    .max(100, 'Temperature can not be above 100 degrees')
+    .required('Tea brewing temperature is required'),
+  time: yup
+    .number()
+    .min(30, 'Time can not be below 30 seconds')
+    .max(600, 'Time can not be above 10 minutes')
+    .required('Tea brewing time is required'),
+  country: yup.string(),
+  drinkingConditions: yup.string(),
+});
 
 const AddTeaDrawer = ({
   open,
@@ -93,12 +113,19 @@ const AddTeaDrawer = ({
     return data;
   };
 
-  const { resetForm, values, handleSubmit, handleChange, setFieldValue } =
-    useFormik({
-      initialValues: initialValues,
-
-      onSubmit: handleSave,
-    });
+  const {
+    resetForm,
+    values,
+    handleSubmit,
+    handleChange,
+    setFieldValue,
+    touched,
+    errors,
+  } = useFormik({
+    initialValues: initialValues,
+    validationSchema: validationSchema,
+    onSubmit: handleSave,
+  });
 
   // initialize type with first option
   const hasInitialized = useRef(false);
@@ -133,6 +160,8 @@ const AddTeaDrawer = ({
       <TextField
         value={values.name}
         onChange={handleChange}
+        error={touched.name && Boolean(errors.name)}
+        helperText={touched.name ? errors.name : undefined}
         name="name"
         label="Name"
         className="mb-5"
@@ -142,6 +171,8 @@ const AddTeaDrawer = ({
       <Select
         value={values.brand}
         onChange={(value) => setFieldValue('brand', value)}
+        error={touched.brand && Boolean(errors.brand)}
+        helperText={touched.brand ? errors.brand : undefined}
         label="Brand"
         name="brand"
         className="mb-5"
@@ -154,6 +185,8 @@ const AddTeaDrawer = ({
       <Select
         value={values.type}
         onChange={(value) => setFieldValue('type', value)}
+        error={touched.type && Boolean(errors.type)}
+        helperText={touched.type ? String(errors.type) : undefined}
         label="Type"
         name="type"
         className="mb-5"
@@ -166,6 +199,8 @@ const AddTeaDrawer = ({
       <TextField
         value={values.flavor}
         onChange={handleChange}
+        error={touched.flavor && Boolean(errors.flavor)}
+        helperText={touched.flavor ? errors.flavor : undefined}
         name="flavor"
         label="Flavor"
         className="mb-5"
@@ -173,6 +208,8 @@ const AddTeaDrawer = ({
       <TextField
         value={values.time}
         onChange={handleChange}
+        error={touched.time && Boolean(errors.time)}
+        helperText={touched.time ? errors.time : undefined}
         name="time"
         label="Brand-advised brewing time (in seconds)"
         className="mb-5"
@@ -180,6 +217,8 @@ const AddTeaDrawer = ({
       <TextField
         value={values.temperature}
         onChange={handleChange}
+        error={touched.temperature && Boolean(errors.temperature)}
+        helperText={touched.temperature ? errors.temperature : undefined}
         name="temperature"
         label="Brand-advised temperature"
         className="mb-5"
@@ -187,6 +226,8 @@ const AddTeaDrawer = ({
       <TextField
         value={values.country}
         onChange={handleChange}
+        error={touched.country && Boolean(errors.country)}
+        helperText={touched.country ? errors.country : undefined}
         name="country"
         label="Country of origin"
         className="mb-5"
@@ -194,6 +235,10 @@ const AddTeaDrawer = ({
       <TextField
         value={values.drinkingConditions}
         onChange={handleChange}
+        error={touched.drinkingConditions && Boolean(errors.drinkingConditions)}
+        helperText={
+          touched.drinkingConditions ? errors.drinkingConditions : undefined
+        }
         name="drinkingConditions"
         label="Drinking conditions"
         className="mb-5"
