@@ -26,11 +26,13 @@ const validationSchema = yup.object({
   flavor: yup.string(),
   temperature: yup
     .number()
+    .typeError('Temperature must be a number')
     .min(0, 'Temperature can not be below 0 degrees')
     .max(100, 'Temperature can not be above 100 degrees')
     .required('Tea brewing temperature is required'),
   time: yup
     .number()
+    .typeError('Time must be a number')
     .min(30, 'Time can not be below 30 seconds')
     .max(600, 'Time can not be above 10 minutes')
     .required('Tea brewing time is required'),
