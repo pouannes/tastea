@@ -1,10 +1,11 @@
-import { useRef, useReducer, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 
 import _ from 'lodash';
 
 import { TextField, Select, Drawer, Button } from '@/components/core';
 import { tea, teaType, brand, fullTea } from '@/types/api';
 import { supabase } from '@/utils';
+import { useFormik } from 'formik';
 
 type mode = 'edit' | 'add';
 interface AddTeaDrawerProps {
@@ -16,35 +17,6 @@ interface AddTeaDrawerProps {
   mode?: mode;
   editTea?: fullTea;
 }
-
-const initialState = {
-  name: '',
-  brand: '',
-  type: '',
-  flavor: '',
-  time: '',
-  temperature: '',
-  country: '',
-  drinkingConditions: '',
-};
-
-type ACTION_TYPE =
-  | { type: 'SET_FIELD'; payload: { field: string; value: string } }
-  | { type: 'RESET' }
-  | { type: 'INITIALIZE'; payload: typeof initialState };
-
-const reducer = (state: typeof initialState, action: ACTION_TYPE) => {
-  switch (action.type) {
-    case 'INITIALIZE':
-      return { ...state, ...action.payload };
-    case 'SET_FIELD':
-      return { ...state, [action.payload.field]: action.payload.value };
-    case 'RESET':
-      return initialState;
-    default:
-      throw new Error();
-  }
-};
 
 const AddTeaDrawer = ({
   open,
@@ -58,33 +30,44 @@ const AddTeaDrawer = ({
   const nameInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
 
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    dispatch({
-      type: 'SET_FIELD',
-      payload: { field: e.target.name, value: e.target.value },
-    });
-
-  const handleSelectChange = (name: string, value: string) => {
-    dispatch({
-      type: 'SET_FIELD',
-      payload: { field: name, value: value },
-    });
-  };
+  const initialValues = useMemo(() => {
+    return mode === 'add'
+      ? {
+          name: '',
+          brand: teaBrands[0].name,
+          type: teaTypes[0].type,
+          flavor: '',
+          time: '',
+          temperature: '',
+          country: '',
+          drinkingConditions: '',
+        }
+      : {
+          name: editTea?.name ?? '',
+          brand: editTea?.brand.name ?? 'Autre',
+          type: editTea?.type.type,
+          time: String(editTea?.brand_time_s) ?? '',
+          temperature: editTea?.brand_temperature ?? '',
+          country: editTea?.country ?? '',
+          drinkingConditions: editTea?.drinking_conditions ?? '',
+          flavor: editTea?.flavor ?? '',
+        };
+  }, [editTea, teaBrands, teaTypes, mode]);
 
   // handle submitting, either editing the tea or saving a new one
-  const handleSave = async (): Promise<tea[] | null> => {
+  const handleSave = async (
+    values: typeof initialValues
+  ): Promise<tea[] | null> => {
     setLoading(true);
     const newTea = {
-      name: state.name,
-      brand_id: teaBrands.find((brand) => brand.name === state.brand)?.id,
-      tea_type_id: teaTypes.find((type) => type.type === state.type)?.id,
-      brand_time_s: state.time,
-      brand_temperature: state.temperature,
-      country: state.country,
-      drinking_conditions: state.drinkingConditions,
-      flavor: state.flavor,
+      name: values.name,
+      brand_id: teaBrands.find((brand) => brand.name === values.brand)?.id,
+      tea_type_id: teaTypes.find((type) => type.type === values.type)?.id,
+      brand_time_s: values.time,
+      brand_temperature: values.temperature,
+      country: values.country,
+      drinking_conditions: values.drinkingConditions,
+      flavor: values.flavor,
     };
     const { data, error } =
       mode === 'add'
@@ -94,8 +77,8 @@ const AddTeaDrawer = ({
     if (!error && !!data && data.length > 0) {
       const tea = {
         ...data[0],
-        type: { type: state.type },
-        brand: { name: state.brand },
+        type: { type: values.type },
+        brand: { name: values.brand },
       };
       setTeas((teas) =>
         mode === 'add'
@@ -105,38 +88,23 @@ const AddTeaDrawer = ({
           : teas?.map((item) => (item.id === editTea?.id ? tea : item)) ?? []
       );
       setOpen(false);
-      dispatch({ type: 'RESET' });
+      formik.resetForm({ values: initialValues });
     }
     return data;
   };
 
+  const formik = useFormik({
+    initialValues: initialValues,
+
+    onSubmit: handleSave,
+  });
+
   // initialize type with first option
   useEffect(() => {
-    if (mode === 'add') {
-      dispatch({
-        type: 'SET_FIELD',
-        payload: { field: 'type', value: teaTypes[0].type },
-      });
-      dispatch({
-        type: 'SET_FIELD',
-        payload: { field: 'brand', value: teaBrands[0].name },
-      });
-    } else if (mode === 'edit') {
-      dispatch({
-        type: 'INITIALIZE',
-        payload: {
-          name: editTea?.name ?? '',
-          brand: editTea?.brand.name ?? 'Autre',
-          type: editTea?.type.type,
-          time: String(editTea?.brand_time_s) ?? '',
-          temperature: editTea?.brand_temperature ?? '',
-          country: editTea?.country ?? '',
-          drinkingConditions: editTea?.drinking_conditions ?? '',
-          flavor: editTea?.flavor ?? '',
-        },
-      });
+    if (!_.isEqual(formik.values, initialValues)) {
+      formik.resetForm({ values: initialValues });
     }
-  }, [teaTypes, teaBrands, editTea, mode]);
+  }, [formik, initialValues]);
 
   return (
     <Drawer
@@ -147,15 +115,15 @@ const AddTeaDrawer = ({
       Footer={
         <DrawerFooter
           handleClose={() => setOpen(false)}
-          handleSave={handleSave}
+          handleSave={formik.handleSubmit}
           loading={loading}
           mode={mode}
         />
       }
     >
       <TextField
-        value={state.name}
-        onChange={handleChange}
+        value={formik.values.name}
+        onChange={formik.handleChange}
         name="name"
         label="Name"
         className="mb-5"
@@ -163,8 +131,8 @@ const AddTeaDrawer = ({
         required
       />
       <Select
-        value={state.brand}
-        onChange={(value) => handleSelectChange('brand', value)}
+        value={formik.values.brand}
+        onChange={(value) => formik.setFieldValue('brand', value)}
         label="Brand"
         name="brand"
         className="mb-5"
@@ -175,8 +143,8 @@ const AddTeaDrawer = ({
         }))}
       />
       <Select
-        value={state.type}
-        onChange={(value) => handleSelectChange('type', value)}
+        value={formik.values.type}
+        onChange={(value) => formik.setFieldValue('type', value)}
         label="Type"
         name="type"
         className="mb-5"
@@ -187,36 +155,36 @@ const AddTeaDrawer = ({
         }))}
       />
       <TextField
-        value={state.flavor}
-        onChange={handleChange}
+        value={formik.values.flavor}
+        onChange={formik.handleChange}
         name="flavor"
         label="Flavor"
         className="mb-5"
       />
       <TextField
-        value={state.time}
-        onChange={handleChange}
+        value={formik.values.time}
+        onChange={formik.handleChange}
         name="time"
         label="Brand-advised brewing time (in seconds)"
         className="mb-5"
       />
       <TextField
-        value={state.temperature}
-        onChange={handleChange}
+        value={formik.values.temperature}
+        onChange={formik.handleChange}
         name="temperature"
         label="Brand-advised temperature"
         className="mb-5"
       />
       <TextField
-        value={state.country}
-        onChange={handleChange}
+        value={formik.values.country}
+        onChange={formik.handleChange}
         name="country"
         label="Country of origin"
         className="mb-5"
       />
       <TextField
-        value={state.drinkingConditions}
-        onChange={handleChange}
+        value={formik.values.drinkingConditions}
+        onChange={formik.handleChange}
         name="drinkingConditions"
         label="Drinking conditions"
         className="mb-5"

@@ -78,7 +78,6 @@ const Home = ({ teaTypes, teaBrands }: HomeProps): JSX.Element => {
             ))
           : null}
       </div>
-
       <AddTeaDrawer
         open={!!editTea}
         setOpen={setEditTea}
