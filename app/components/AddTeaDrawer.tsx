@@ -88,23 +88,32 @@ const AddTeaDrawer = ({
           : teas?.map((item) => (item.id === editTea?.id ? tea : item)) ?? []
       );
       setOpen(false);
-      formik.resetForm({ values: initialValues });
+      resetForm({ values: initialValues });
     }
     return data;
   };
 
-  const formik = useFormik({
-    initialValues: initialValues,
+  const { resetForm, values, handleSubmit, handleChange, setFieldValue } =
+    useFormik({
+      initialValues: initialValues,
 
-    onSubmit: handleSave,
-  });
+      onSubmit: handleSave,
+    });
 
   // initialize type with first option
+  const hasInitialized = useRef(false);
   useEffect(() => {
-    if (!_.isEqual(formik.values, initialValues)) {
-      formik.resetForm({ values: initialValues });
+    if (!_.isEqual(values, initialValues) && !hasInitialized.current && open) {
+      hasInitialized.current = true;
+      resetForm({ values: initialValues });
     }
-  }, [formik, initialValues]);
+  }, [resetForm, initialValues, values, open]);
+
+  useEffect(() => {
+    if (!open) {
+      hasInitialized.current = false;
+    }
+  }, [open]);
 
   return (
     <Drawer
@@ -115,15 +124,15 @@ const AddTeaDrawer = ({
       Footer={
         <DrawerFooter
           handleClose={() => setOpen(false)}
-          handleSave={formik.handleSubmit}
+          handleSave={handleSubmit}
           loading={loading}
           mode={mode}
         />
       }
     >
       <TextField
-        value={formik.values.name}
-        onChange={formik.handleChange}
+        value={values.name}
+        onChange={handleChange}
         name="name"
         label="Name"
         className="mb-5"
@@ -131,8 +140,8 @@ const AddTeaDrawer = ({
         required
       />
       <Select
-        value={formik.values.brand}
-        onChange={(value) => formik.setFieldValue('brand', value)}
+        value={values.brand}
+        onChange={(value) => setFieldValue('brand', value)}
         label="Brand"
         name="brand"
         className="mb-5"
@@ -143,8 +152,8 @@ const AddTeaDrawer = ({
         }))}
       />
       <Select
-        value={formik.values.type}
-        onChange={(value) => formik.setFieldValue('type', value)}
+        value={values.type}
+        onChange={(value) => setFieldValue('type', value)}
         label="Type"
         name="type"
         className="mb-5"
@@ -155,36 +164,36 @@ const AddTeaDrawer = ({
         }))}
       />
       <TextField
-        value={formik.values.flavor}
-        onChange={formik.handleChange}
+        value={values.flavor}
+        onChange={handleChange}
         name="flavor"
         label="Flavor"
         className="mb-5"
       />
       <TextField
-        value={formik.values.time}
-        onChange={formik.handleChange}
+        value={values.time}
+        onChange={handleChange}
         name="time"
         label="Brand-advised brewing time (in seconds)"
         className="mb-5"
       />
       <TextField
-        value={formik.values.temperature}
-        onChange={formik.handleChange}
+        value={values.temperature}
+        onChange={handleChange}
         name="temperature"
         label="Brand-advised temperature"
         className="mb-5"
       />
       <TextField
-        value={formik.values.country}
-        onChange={formik.handleChange}
+        value={values.country}
+        onChange={handleChange}
         name="country"
         label="Country of origin"
         className="mb-5"
       />
       <TextField
-        value={formik.values.drinkingConditions}
-        onChange={formik.handleChange}
+        value={values.drinkingConditions}
+        onChange={handleChange}
         name="drinkingConditions"
         label="Drinking conditions"
         className="mb-5"
@@ -211,7 +220,12 @@ const DrawerFooter: React.FC<DrawerFooterProps> = ({
       <Button className="mr-4 text-textSecondary" onClick={handleClose}>
         Cancel
       </Button>
-      <Button variant="accent" onClick={handleSave} loading={loading}>
+      <Button
+        variant="accent"
+        onClick={handleSave}
+        loading={loading}
+        type="submit"
+      >
         {mode === 'add' ? 'Save' : 'Update'}
       </Button>
     </div>
