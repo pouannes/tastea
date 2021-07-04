@@ -33,6 +33,7 @@ const TeaLine = ({
         <IconButton
           srName="Delete tea"
           onClick={() => setConfirmationDialogOpen(true)}
+          className="ml-3"
         >
           <TrashIcon />
         </IconButton>
