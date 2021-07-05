@@ -10,7 +10,7 @@ import {
 
 import { tea } from '@/types/api';
 import { formatTime } from '@/utils';
-import { IconButton, ConfirmationDialog } from '@/components/core';
+import { IconButton, ConfirmationDialog, Tag } from '@/components/core';
 import TemperatureIcon from '@/public/temperature.svg';
 
 interface TeaLineProps {
@@ -47,7 +47,7 @@ const TeaLine = ({
             </p>
           </div>
           {!!country || !!flavor ? (
-            <div className="flex items-baseline w-full mt-1">
+            <div className="flex items-baseline w-full mt-2">
               <p className="flex items-center justify-start w-full text-textPrimary">
                 {!!country ? (
                   <span className="flex items-center mr-5">
@@ -66,9 +66,9 @@ const TeaLine = ({
           ) : null}
 
           {drinking_conditions ? (
-            <span className="flex items-center mt-2 mr-5 text-sm text-textPrimary">
+            <span className="flex items-center mt-3 mr-5 text-sm text-textPrimary">
               <TagIcon className="w-5 h-5 mr-2 text-textSecondary" />
-              {drinking_conditions}
+              <Tag>{drinking_conditions}</Tag>
             </span>
           ) : null}
         </div>
