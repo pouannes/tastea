@@ -4,8 +4,6 @@ import { GetStaticProps } from 'next';
 import { v4 as uuidv4 } from 'uuid';
 
 import { supabase } from '@/utils';
-import TemperatureIcon from '@/public/temperature.svg';
-import TeaIcon from '@/public/tea.svg';
 import TeaLine from '@/components/TeaLine';
 import AddTeaDrawer from '@/components/AddTeaDrawer';
 import { Button } from '@/components/core';
@@ -60,13 +58,7 @@ const Home = ({ teaTypes, teaBrands }: HomeProps): JSX.Element => {
         >
           Add tea
         </Button>
-        <div className="grid w-full grid-cols-5 mb-2">
-          <p className="text-textPrimary">Tea</p>
-          <p className="text-textPrimary">Brand</p>
-          <TeaIcon className="w-8 h-8 fill-current text-textPrimary" />
-          <TemperatureIcon className="w-8 h-8 fill-current text-textPrimary" />
-          <p className="text-textPrimary">Actions</p>
-        </div>
+
         {teas
           ? teas.map((tea) => (
               <TeaLine

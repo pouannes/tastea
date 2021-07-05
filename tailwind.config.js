@@ -19,6 +19,12 @@ module.exports = {
         textSecondary: 'rgba(255,255,255,0.7)',
         textDisabled: 'rgba(255,255,255,0.5)',
       },
+      gridTemplateColumns: {
+        teaLineLayout: '1fr repeat(3, minmax(0, 1fr))',
+      },
+      fontFamily: {
+        display: ['Open Sans'],
+      },
     },
   },
   variants: {
