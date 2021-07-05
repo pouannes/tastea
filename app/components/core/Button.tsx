@@ -1,7 +1,8 @@
 import LoadingSpinner from '@/public/loading-spinner.svg';
 
+type variant = 'accent';
 export interface ButtonProps extends React.ComponentPropsWithoutRef<'button'> {
-  variant?: string | undefined;
+  variant?: variant;
   className?: string;
   loading?: boolean;
 }
