@@ -46,11 +46,11 @@ const Home = ({ teaTypes, teaBrands }: HomeProps): JSX.Element => {
   }, []);
 
   return (
-    <div className="h-screen bg-bgDefault">
+    <div className="pt-10 overflow-auto bg-bgDefault">
       <Head>
         <title>Tastea</title> ===
       </Head>
-      <div className="flex flex-col items-center justify-center w-5/6 h-full m-auto">
+      <div className="flex flex-col items-center justify-center w-5/6 h-auto m-auto ">
         <Button
           className="self-end mb-6"
           variant="accent"

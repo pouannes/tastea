@@ -38,17 +38,17 @@ const TeaLine = ({
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   return (
     <>
-      <div className="grid w-full px-2 py-3 my-3 rounded-md grid-cols-teaLineLayout hover:bg-bgPaper">
-        <div className="flex flex-col w-full">
-          <div className="flex items-baseline w-full">
+      <div className="grid w-full px-2 py-3 my-3 rounded-md grid-cols-teaLineLayout sm:grid-cols-teaLineLayoutMd hover:bg-bgPaper">
+        <div className="flex flex-col w-full mb-3">
+          <div className="flex items-baseline justify-center w-full sm:justify-start">
             <p className="text-lg text-center text-accent">{name}</p>
             <p className="ml-2 text-base text-center text-textSecondary">
               {brand.name}
             </p>
           </div>
           {!!country || !!flavor ? (
-            <div className="flex items-baseline w-full mt-2">
-              <p className="flex items-center justify-start w-full text-textPrimary">
+            <div className="flex items-baseline justify-center w-full mt-2 sm:justify-start">
+              <p className="flex items-center justify-center w-full sm:justify-start text-textPrimary">
                 {!!country ? (
                   <span className="flex items-center mr-5">
                     <GlobeIcon className="w-5 h-5 mr-2 text-textSecondary" />
@@ -66,7 +66,7 @@ const TeaLine = ({
           ) : null}
 
           {drinking_conditions ? (
-            <span className="flex items-center mt-3 mr-5 text-sm text-textPrimary">
+            <span className="flex items-center justify-center mt-3 mr-5 text-sm sm:justify-start text-textPrimary">
               <TagIcon className="w-5 h-5 mr-2 text-textSecondary" />
               <Tag>{drinking_conditions}</Tag>
             </span>
@@ -83,7 +83,7 @@ const TeaLine = ({
           <p className="text-textPrimary">{brand_temperature}°</p>
         </div>
 
-        <div className="flex items-center justify-end w-full h-full">
+        <div className="flex items-center justify-center w-full h-full sm:justify-end">
           <IconButton
             srName="Edit tea"
             onClick={() => handleOpenEditDrawer(tea)}
