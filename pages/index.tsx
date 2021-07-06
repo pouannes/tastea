@@ -77,6 +77,7 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
                 tea={tea}
                 handleOpenEditDrawer={handleOpenEditDrawer}
                 handleDeleteTea={handleDeleteTea}
+                mode={!!loggedUser ? 'user' : 'brand'}
               />
             ))
           : null}

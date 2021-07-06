@@ -13,10 +13,13 @@ import { formatTime } from '@/utils';
 import { IconButton, ConfirmationDialog, Tag } from '@/components/core';
 import TemperatureIcon from '@/public/temperature.svg';
 
+type mode = 'brand' | 'user';
+
 interface TeaLineProps {
   tea: tea;
   handleOpenEditDrawer: (tea: tea) => void;
   handleDeleteTea: (tea: tea) => void;
+  mode: mode;
 }
 
 const TeaLine = ({
