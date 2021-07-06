@@ -18,7 +18,7 @@ interface HomeProps {
 
 const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
   // const [loading, setLoading] = useState(true);
-  const [loggedUser, setLoggedUser] = useState<user | null>(users[0]);
+  const [loggedUser, setLoggedUser] = useState<user | null>(null);
 
   const [teas, setTeas] = useState<tea[] | null>([]);
   const [editTea, setEditTea] = useState<fullTea | boolean>(false);

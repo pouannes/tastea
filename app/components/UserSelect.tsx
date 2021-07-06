@@ -4,7 +4,7 @@ import { Button } from '@/components/core/Button';
 interface UserSelectProps {
   users: user[];
   loggedUser: user | null;
-  setLoggedUser: (user: user) => void;
+  setLoggedUser: (user: user | null) => void;
 }
 
 const UserSelect = ({
@@ -18,9 +18,13 @@ const UserSelect = ({
       {users?.map((user) => (
         <Button
           key={user.id}
-          className="mr-2"
+          className="mr-2 transition duration-300 ease-in-out"
           variant={loggedUser?.id === user.id ? 'accent' : undefined}
-          onClick={() => setLoggedUser(user)}
+          onClick={() =>
+            loggedUser?.id === user.id
+              ? setLoggedUser(null)
+              : setLoggedUser(user)
+          }
         >
           {user.first_name}
         </Button>
