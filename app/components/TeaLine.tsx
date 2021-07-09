@@ -20,7 +20,7 @@ interface TeaLineProps {
   handleOpenEditDrawer: (tea: tea) => void;
   handleDeleteTea: (tea: tea) => void;
   mode: mode;
-  userPreference: preference | null | undefined;
+  userPreference: preference | undefined;
 }
 
 const TeaLine = ({

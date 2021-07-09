@@ -102,7 +102,7 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
                     ? userPreferences.find(
                         (preference) => preference.tea_id === tea.id
                       )
-                    : null
+                    : undefined
                 }
               />
             ))

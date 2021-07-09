@@ -6,7 +6,7 @@ import { IconButton } from './IconButton';
 export interface DrawerProps {
   open: boolean;
   setOpen: (value: boolean) => void;
-  title: string;
+  title: string | JSX.Element;
   Footer?: JSX.Element;
   initialFocus?: MutableRefObject<HTMLElement | null> | undefined;
   children: JSX.Element | JSX.Element[];

@@ -148,7 +148,18 @@ const AddTeaDrawer = ({
     <Drawer
       open={open}
       setOpen={setOpen}
-      title={mode === 'add' ? 'Add new tea' : `Edit tea "${editTea?.name}"`}
+      title={
+        mode === 'add' ? (
+          'Add new tea'
+        ) : (
+          <div>
+            <p>
+              Edit tea <span className="text-accent">{editTea?.name}</span>
+            </p>
+            <p className="text-textSecondary">{editTea?.brand.name}</p>
+          </div>
+        )
+      }
       initialFocus={nameInputRef}
       Footer={
         <DrawerFooter
