@@ -9,13 +9,12 @@ import { tea, teaType, brand, fullTea } from '@/types/api';
 import { supabase } from '@/utils';
 
 type mode = 'edit' | 'add';
-interface AddTeaDrawerProps {
+interface AddTeaPreferenceProps {
   open: boolean;
   setOpen: (value: boolean) => void;
   teaTypes: teaType[];
   teaBrands: brand[];
   setTeas: React.Dispatch<React.SetStateAction<tea[] | null>>;
-  mode?: mode;
   editTea?: fullTea;
 }
 
@@ -40,41 +39,30 @@ const validationSchema = yup.object({
   drinkingConditions: yup.string(),
 });
 
-const AddTeaDrawer = ({
+// TODO: I removed "mode" but maybe it's simpler to keep it and infer it from the existence of an existing userPreference
+const AddTeaPreference = ({
   open,
   setOpen,
   teaTypes,
   teaBrands,
   setTeas,
-  mode,
   editTea,
-}: AddTeaDrawerProps): JSX.Element => {
+}: AddTeaPreferenceProps): JSX.Element => {
   const nameInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
 
   const initialValues = useMemo(() => {
-    return mode === 'add'
-      ? {
-          name: '',
-          brand: teaBrands[0].name,
-          type: teaTypes[0].type,
-          flavor: '',
-          time: '',
-          temperature: '',
-          country: '',
-          drinkingConditions: '',
-        }
-      : {
-          name: editTea?.name ?? '',
-          brand: editTea?.brand.name ?? 'Autre',
-          type: editTea?.type.type,
-          time: String(editTea?.brand_time_s) ?? '',
-          temperature: editTea?.brand_temperature ?? '',
-          country: editTea?.country ?? '',
-          drinkingConditions: editTea?.drinking_conditions ?? '',
-          flavor: editTea?.flavor ?? '',
-        };
-  }, [editTea, teaBrands, teaTypes, mode]);
+    return {
+      name: '',
+      brand: teaBrands[0].name,
+      type: teaTypes[0].type,
+      flavor: '',
+      time: '',
+      temperature: '',
+      country: '',
+      drinkingConditions: '',
+    };
+  }, [teaBrands, teaTypes]);
 
   // handle submitting, either editing the tea or saving a new one
   const handleSave = async (
@@ -91,10 +79,10 @@ const AddTeaDrawer = ({
       drinking_conditions: values.drinkingConditions,
       flavor: values.flavor,
     };
-    const { data, error } =
-      mode === 'add'
-        ? await supabase.from('teas').insert([newTea])
-        : await supabase.from('teas').update(newTea).eq('id', editTea?.id);
+    const { data, error } = await supabase
+      .from('teas')
+      .upsert(newTea)
+      .eq('id', editTea?.id);
     setLoading(false);
     if (!error && !!data && data.length > 0) {
       const tea = {
@@ -102,13 +90,14 @@ const AddTeaDrawer = ({
         type: { type: values.type },
         brand: { name: values.brand },
       };
-      setTeas((teas) =>
-        mode === 'add'
-          ? teas !== null
-            ? [...teas, tea]
-            : [tea]
-          : teas?.map((item) => (item.id === editTea?.id ? tea : item)) ?? []
-      );
+      // TODO modify this to work on mode in some way
+      //   setTeas((teas) =>
+      //     mode === 'add'
+      //       ? teas !== null
+      //         ? [...teas, tea]
+      //         : [tea]
+      //       : teas?.map((item) => (item.id === editTea?.id ? tea : item)) ?? []
+      //   );
       setOpen(false);
       resetForm({ values: initialValues });
     }
@@ -149,18 +138,12 @@ const AddTeaDrawer = ({
       open={open}
       setOpen={setOpen}
       title={
-        // TODO: this is changing when closing / opening the drawer and causing a brief layout shift
-        // Can be solved by only changing relevant `mode` state when necessary, not linked to opened state of drawer
-        mode === 'add' ? (
-          'Add new tea'
-        ) : (
-          <div>
-            <p>
-              Edit tea <span className="text-accent">{editTea?.name}</span>
-            </p>
-            <p className="text-textSecondary">{editTea?.brand.name}</p>
-          </div>
-        )
+        <div>
+          <p>
+            Edit tea <span className="text-accent">{editTea?.name}</span>
+          </p>
+          <p className="text-textSecondary">{editTea?.brand.name}</p>
+        </div>
       }
       initialFocus={nameInputRef}
       Footer={
@@ -168,7 +151,8 @@ const AddTeaDrawer = ({
           handleClose={() => setOpen(false)}
           handleSave={handleSubmit}
           loading={loading}
-          mode={mode}
+          // TODO
+          //   mode={mode}
         />
       }
     >
@@ -292,4 +276,4 @@ const DrawerFooter: React.FC<DrawerFooterProps> = ({
   );
 };
 
-export default AddTeaDrawer;
+export default AddTeaPreference;
