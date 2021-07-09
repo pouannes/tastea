@@ -8,7 +8,7 @@ import {
   TagIcon,
 } from '@heroicons/react/outline';
 
-import { tea } from '@/types/api';
+import { tea, preference } from '@/types/api';
 import { formatTime } from '@/utils';
 import { IconButton, ConfirmationDialog, Tag } from '@/components/core';
 import TemperatureIcon from '@/public/temperature.svg';
@@ -20,14 +20,17 @@ interface TeaLineProps {
   handleOpenEditDrawer: (tea: tea) => void;
   handleDeleteTea: (tea: tea) => void;
   mode: mode;
+  userPreference: preference | null | undefined;
 }
 
 const TeaLine = ({
   tea,
   handleOpenEditDrawer,
   handleDeleteTea,
+  mode,
+  userPreference,
 }: TeaLineProps): JSX.Element => {
-  console.log(tea);
+  console.log(userPreference);
   const {
     name,
     brand_time_s,
@@ -75,16 +78,52 @@ const TeaLine = ({
             </span>
           ) : null}
         </div>
+        {mode === 'brand' ? (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center justify-center w-full h-full">
+              <ClockIcon className="w-5 h-5 mr-1 text-textSecondary" />
+              <p className="text-textPrimary"> {formatTime(brand_time_s)}</p>
+            </div>
 
-        <div className="flex items-center justify-center w-full h-full">
-          <ClockIcon className="w-5 h-5 mr-1 text-textSecondary" />
-          <p className="text-textPrimary"> {formatTime(brand_time_s)}</p>
-        </div>
+            <div className="flex items-center justify-center w-full h-full">
+              <TemperatureIcon className="w-5 h-5 mr-1 fill-current text-textSecondary" />
+              <p className="text-textPrimary">{brand_temperature}°</p>
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center justify-center w-full h-full">
+              <p
+                className={
+                  userPreference?.rating
+                    ? 'text-textPrimary'
+                    : 'text-textSecondary italic'
+                }
+              >
+                {userPreference?.rating ? userPreference.rating : 'No Rating'}
+              </p>
+            </div>
+            <div className="flex items-center justify-center w-full h-full">
+              <ClockIcon className="w-5 h-5 mr-1 text-textSecondary" />
+              {
+                <p className="text-textPrimary">
+                  {userPreference?.time_s
+                    ? formatTime(userPreference.time_s)
+                    : '-'}
+                </p>
+              }
+            </div>
 
-        <div className="flex items-center justify-center w-full h-full">
-          <TemperatureIcon className="w-5 h-5 mr-1 fill-current text-textSecondary" />
-          <p className="text-textPrimary">{brand_temperature}°</p>
-        </div>
+            <div className="flex items-center justify-center w-full h-full">
+              <TemperatureIcon className="w-5 h-5 mr-1 fill-current text-textSecondary" />
+              <p className="text-textPrimary">
+                {userPreference?.temperature
+                  ? `${formatTime(userPreference.temperature)}°`
+                  : '-'}
+              </p>
+            </div>
+          </div>
+        )}
 
         <div className="flex items-center justify-center w-full h-full sm:justify-end">
           <IconButton

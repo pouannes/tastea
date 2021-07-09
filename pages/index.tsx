@@ -8,7 +8,7 @@ import TeaLine from '@/components/TeaLine';
 import AddTeaDrawer from '@/components/AddTeaDrawer';
 import UserSelect from '@/components/UserSelect';
 import { Button } from '@/components/core';
-import { tea, teaType, brand, fullTea, user } from '@/types/api';
+import { tea, teaType, brand, fullTea, user, preference } from '@/types/api';
 
 interface HomeProps {
   teaTypes: teaType[];
@@ -22,6 +22,9 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
 
   const [teas, setTeas] = useState<tea[] | null>([]);
   const [editTea, setEditTea] = useState<fullTea | boolean>(false);
+  const [userPreferences, setUserPreferences] = useState<preference[] | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchTeas = async () => {
@@ -36,6 +39,22 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
 
     fetchTeas();
   }, []);
+
+  useEffect(() => {
+    const fetchPreferences = async () => {
+      const { data } = await supabase
+        .from('preferences')
+        .select(`tea_id, time_s, temperature, rating`)
+        .eq('user_id', loggedUser?.id);
+      console.log(data);
+      setUserPreferences(data);
+    };
+    if (loggedUser) {
+      fetchPreferences();
+    } else {
+      setUserPreferences(null);
+    }
+  }, [loggedUser]);
 
   const handleDeleteTea = async (tea: tea) => {
     const { error } = await supabase.from('teas').delete().eq('id', tea.id);
@@ -78,6 +97,13 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
                 handleOpenEditDrawer={handleOpenEditDrawer}
                 handleDeleteTea={handleDeleteTea}
                 mode={!!loggedUser ? 'user' : 'brand'}
+                userPreference={
+                  userPreferences
+                    ? userPreferences.find(
+                        (preference) => preference.tea_id === tea.id
+                      )
+                    : null
+                }
               />
             ))
           : null}
