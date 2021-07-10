@@ -161,7 +161,7 @@ const AddTeaPreference = ({
         label={`${loggedUser?.first_name}'s temperature`}
         className="mb-5"
       />
-      <TeaRating value={3} />
+      <TeaRating value={3.1} />
     </Drawer>
   );
 };
