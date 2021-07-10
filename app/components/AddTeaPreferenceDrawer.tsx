@@ -23,14 +23,12 @@ const validationSchema = yup.object({
     .number()
     .typeError('Temperature must be a number')
     .min(0, 'Temperature can not be below 0 degrees')
-    .max(100, 'Temperature can not be above 100 degrees')
-    .required('Tea brewing temperature is required'),
+    .max(100, 'Temperature can not be above 100 degrees'),
   time: yup
     .number()
     .typeError('Time must be a number')
     .min(30, 'Time can not be below 30 seconds')
-    .max(600, 'Time can not be above 10 minutes')
-    .required('Tea brewing time is required'),
+    .max(600, 'Time can not be above 10 minutes'),
   rating: yup
     .number()
     .min(0, 'Rating can not be below 0')
@@ -52,11 +50,13 @@ const AddTeaPreference = ({
 
   const initialValues = useMemo(() => {
     return {
-      time: '',
-      temperature: '',
-      rating: 3,
+      time: !!userPreference?.time_s ? String(userPreference?.time_s) : '',
+      temperature: !!userPreference?.temperature
+        ? String(userPreference?.temperature)
+        : '',
+      rating: userPreference?.rating ?? 3,
     };
-  }, []);
+  }, [userPreference]);
 
   const mode = useMemo(
     () => (userPreference ? 'edit' : 'add'),
@@ -69,8 +69,9 @@ const AddTeaPreference = ({
   ): Promise<tea[] | null> => {
     setLoading(true);
     const newPreference = {
-      time_s: values.time,
-      temperature: values.temperature,
+      time_s: values.time.length > 0 ? values.time : undefined,
+      temperature:
+        values.temperature.length > 0 ? values.temperature : undefined,
       rating: values.rating,
       tea_id: editTea?.id,
       user_id: loggedUser?.id,
@@ -82,7 +83,7 @@ const AddTeaPreference = ({
         : await supabase
             .from('preferences')
             .update(newPreference)
-            .eq('id', editTea?.id);
+            .eq('id', userPreference?.id);
     setLoading(false);
     console.log(data);
     if (!error && !!data && data.length > 0) {
@@ -92,7 +93,7 @@ const AddTeaPreference = ({
             ? [...preferences, data[0]]
             : [data[0]]
           : preferences?.map((item) =>
-              item.id === editTea?.id ? data[0] : item
+              item.id === userPreference?.id ? data[0] : item
             ) ?? []
       );
       handleClose();
