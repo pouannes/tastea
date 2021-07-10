@@ -5,7 +5,7 @@ import { IconButton } from './IconButton';
 
 export interface DrawerProps {
   open: boolean;
-  setOpen: (value: boolean) => void;
+  handleClose: () => void;
   title: string | JSX.Element;
   Footer?: JSX.Element;
   initialFocus?: MutableRefObject<HTMLElement | null> | undefined;
@@ -14,7 +14,7 @@ export interface DrawerProps {
 
 export const Drawer = ({
   open,
-  setOpen,
+  handleClose,
   title,
   Footer,
   initialFocus,
@@ -28,7 +28,7 @@ export const Drawer = ({
         static
         className="fixed inset-0 overflow-hidden"
         open={open}
-        onClose={setOpen}
+        onClose={handleClose}
       >
         <div className="absolute inset-0 overflow-hidden">
           <Transition.Child
@@ -58,10 +58,7 @@ export const Drawer = ({
                     <Dialog.Title className="text-lg font-medium text-textPrimary ">
                       {title}
                     </Dialog.Title>
-                    <IconButton
-                      onClick={() => setOpen(false)}
-                      srName="Close panel"
-                    >
+                    <IconButton onClick={handleClose} srName="Close panel">
                       <CloseIcon />
                     </IconButton>
                   </div>

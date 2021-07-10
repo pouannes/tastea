@@ -5,24 +5,19 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 import { TextField, Select, Drawer, Button } from '@/components/core';
-import { tea, teaType, brand, fullTea } from '@/types/api';
+import { tea, teaType, brand, fullTea, preference } from '@/types/api';
 import { supabase } from '@/utils';
 
 type mode = 'edit' | 'add';
 interface AddTeaPreferenceProps {
   open: boolean;
-  setOpen: (value: boolean) => void;
-  teaTypes: teaType[];
-  teaBrands: brand[];
-  setTeas: React.Dispatch<React.SetStateAction<tea[] | null>>;
+  handleClose: () => void;
+  setUserPreferences: React.Dispatch<React.SetStateAction<preference[] | null>>;
+  userPreference: preference | undefined;
   editTea?: fullTea;
 }
 
 const validationSchema = yup.object({
-  name: yup.string().required('Tea name is required'),
-  brand: yup.string().required('Tea brand is required'),
-  type: yup.string().required('Tea type is required'),
-  flavor: yup.string(),
   temperature: yup
     .number()
     .typeError('Temperature must be a number')
@@ -35,17 +30,19 @@ const validationSchema = yup.object({
     .min(30, 'Time can not be below 30 seconds')
     .max(600, 'Time can not be above 10 minutes')
     .required('Tea brewing time is required'),
-  country: yup.string(),
-  drinkingConditions: yup.string(),
+  rating: yup
+    .number()
+    .min(0, 'Rating can not be below 0')
+    .max(5, 'Rating can not be above 5')
+    .required('Rating is required'),
 });
 
 // TODO: I removed "mode" but maybe it's simpler to keep it and infer it from the existence of an existing userPreference
 const AddTeaPreference = ({
   open,
-  setOpen,
-  teaTypes,
-  teaBrands,
-  setTeas,
+  handleClose,
+  setUserPreferences,
+  userPreference,
   editTea,
 }: AddTeaPreferenceProps): JSX.Element => {
   const nameInputRef = useRef(null);
@@ -53,43 +50,29 @@ const AddTeaPreference = ({
 
   const initialValues = useMemo(() => {
     return {
-      name: '',
-      brand: teaBrands[0].name,
-      type: teaTypes[0].type,
-      flavor: '',
       time: '',
       temperature: '',
-      country: '',
-      drinkingConditions: '',
+      rating: '',
     };
-  }, [teaBrands, teaTypes]);
+  }, []);
 
   // handle submitting, either editing the tea or saving a new one
   const handleSave = async (
     values: typeof initialValues
   ): Promise<tea[] | null> => {
     setLoading(true);
-    const newTea = {
-      name: values.name,
-      brand_id: teaBrands.find((brand) => brand.name === values.brand)?.id,
-      tea_type_id: teaTypes.find((type) => type.type === values.type)?.id,
-      brand_time_s: values.time,
-      brand_temperature: values.temperature,
-      country: values.country,
-      drinking_conditions: values.drinkingConditions,
-      flavor: values.flavor,
+    const newPreference = {
+      time_s: values.time,
+      temperature: values.temperature,
+      rating: values.rating,
     };
     const { data, error } = await supabase
       .from('teas')
-      .upsert(newTea)
+      .upsert(newPreference)
       .eq('id', editTea?.id);
     setLoading(false);
     if (!error && !!data && data.length > 0) {
-      const tea = {
-        ...data[0],
-        type: { type: values.type },
-        brand: { name: values.brand },
-      };
+      const newPreference = {};
       // TODO modify this to work on mode in some way
       //   setTeas((teas) =>
       //     mode === 'add'
@@ -98,7 +81,7 @@ const AddTeaPreference = ({
       //         : [tea]
       //       : teas?.map((item) => (item.id === editTea?.id ? tea : item)) ?? []
       //   );
-      setOpen(false);
+      handleClose();
       resetForm({ values: initialValues });
     }
     return data;
@@ -136,7 +119,7 @@ const AddTeaPreference = ({
   return (
     <Drawer
       open={open}
-      setOpen={setOpen}
+      handleClose={handleClose}
       title={
         <div>
           <p>
@@ -148,7 +131,7 @@ const AddTeaPreference = ({
       initialFocus={nameInputRef}
       Footer={
         <DrawerFooter
-          handleClose={() => setOpen(false)}
+          handleClose={handleClose}
           handleSave={handleSubmit}
           loading={loading}
           // TODO
@@ -156,54 +139,6 @@ const AddTeaPreference = ({
         />
       }
     >
-      <TextField
-        value={values.name}
-        onChange={handleChange}
-        error={touched.name && Boolean(errors.name)}
-        helperText={touched.name ? errors.name : undefined}
-        name="name"
-        label="Name"
-        className="mb-5"
-        inputRef={nameInputRef}
-        required
-      />
-      <Select
-        value={values.brand}
-        onChange={(value) => setFieldValue('brand', value)}
-        error={touched.brand && Boolean(errors.brand)}
-        helperText={touched.brand ? errors.brand : undefined}
-        label="Brand"
-        name="brand"
-        className="mb-5"
-        required={true}
-        options={teaBrands.map((brand) => ({
-          value: brand.name,
-          label: _.startCase(brand.name),
-        }))}
-      />
-      <Select
-        value={values.type}
-        onChange={(value) => setFieldValue('type', value)}
-        error={touched.type && Boolean(errors.type)}
-        helperText={touched.type ? String(errors.type) : undefined}
-        label="Type"
-        name="type"
-        className="mb-5"
-        required={true}
-        options={teaTypes.map((tea) => ({
-          value: tea.type,
-          label: _.startCase(tea.type),
-        }))}
-      />
-      <TextField
-        value={values.flavor}
-        onChange={handleChange}
-        error={touched.flavor && Boolean(errors.flavor)}
-        helperText={touched.flavor ? errors.flavor : undefined}
-        name="flavor"
-        label="Flavor"
-        className="mb-5"
-      />
       <TextField
         value={values.time}
         onChange={handleChange}
@@ -220,26 +155,6 @@ const AddTeaPreference = ({
         helperText={touched.temperature ? errors.temperature : undefined}
         name="temperature"
         label="Brand-advised temperature"
-        className="mb-5"
-      />
-      <TextField
-        value={values.country}
-        onChange={handleChange}
-        error={touched.country && Boolean(errors.country)}
-        helperText={touched.country ? errors.country : undefined}
-        name="country"
-        label="Country of origin"
-        className="mb-5"
-      />
-      <TextField
-        value={values.drinkingConditions}
-        onChange={handleChange}
-        error={touched.drinkingConditions && Boolean(errors.drinkingConditions)}
-        helperText={
-          touched.drinkingConditions ? errors.drinkingConditions : undefined
-        }
-        name="drinkingConditions"
-        label="Drinking conditions"
         className="mb-5"
       />
     </Drawer>

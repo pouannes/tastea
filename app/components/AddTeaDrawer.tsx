@@ -11,7 +11,7 @@ import { supabase } from '@/utils';
 type mode = 'edit' | 'add';
 interface AddTeaDrawerProps {
   open: boolean;
-  setOpen: (value: boolean) => void;
+  handleClose: () => void;
   teaTypes: teaType[];
   teaBrands: brand[];
   setTeas: React.Dispatch<React.SetStateAction<tea[] | null>>;
@@ -42,7 +42,7 @@ const validationSchema = yup.object({
 
 const AddTeaDrawer = ({
   open,
-  setOpen,
+  handleClose,
   teaTypes,
   teaBrands,
   setTeas,
@@ -109,7 +109,7 @@ const AddTeaDrawer = ({
             : [tea]
           : teas?.map((item) => (item.id === editTea?.id ? tea : item)) ?? []
       );
-      setOpen(false);
+      handleClose();
       resetForm({ values: initialValues });
     }
     return data;
@@ -144,28 +144,28 @@ const AddTeaDrawer = ({
     }
   }, [open]);
 
+  console.log(open);
+
   return (
     <Drawer
       open={open}
-      setOpen={setOpen}
+      handleClose={handleClose}
       title={
-        // TODO: this is changing when closing / opening the drawer and causing a brief layout shift
-        // Can be solved by only changing relevant `mode` state when necessary, not linked to opened state of drawer
         mode === 'add' ? (
           'Add new tea'
         ) : (
           <div>
             <p>
-              Edit tea <span className="text-accent">{editTea?.name}</span>
+              Edit tea <span className="text-accent">{values?.name}</span>
             </p>
-            <p className="text-textSecondary">{editTea?.brand.name}</p>
+            <p className="text-textSecondary">{values?.brand}</p>
           </div>
         )
       }
       initialFocus={nameInputRef}
       Footer={
         <DrawerFooter
-          handleClose={() => setOpen(false)}
+          handleClose={handleClose}
           handleSave={handleSubmit}
           loading={loading}
           mode={mode}

@@ -6,6 +6,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/utils';
 import TeaLine from '@/components/TeaLine';
 import AddTeaDrawer from '@/components/AddTeaDrawer';
+import AddTeaPreferenceDrawer from '@/components/AddTeaPreferenceDrawer';
+
 import UserSelect from '@/components/UserSelect';
 import { Button } from '@/components/core';
 import { tea, teaType, brand, fullTea, user, preference } from '@/types/api';
@@ -16,15 +18,46 @@ interface HomeProps {
   users: user[];
 }
 
+type editTeaClose = {
+  open: false;
+};
+
+type editTeaOpenAdd = {
+  open: true;
+  mode: 'add';
+};
+
+type editTeaOpenEdit = {
+  open: true;
+  mode: 'edit';
+  editTea: fullTea;
+};
+
+type editTea = editTeaClose | editTeaOpenAdd | editTeaOpenEdit;
+
+type editUserPreferenceClose = {
+  open: false;
+};
+
+type editUserPreferenceOpen = {
+  open: true;
+  userPreference: preference | undefined;
+  editTea: fullTea;
+};
+
+type editUserPreference = editUserPreferenceClose | editUserPreferenceOpen;
+
 const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
   // const [loading, setLoading] = useState(true);
   const [loggedUser, setLoggedUser] = useState<user | null>(null);
 
   const [teas, setTeas] = useState<tea[] | null>([]);
-  const [editTea, setEditTea] = useState<fullTea | boolean>(false);
+  const [editTea, setEditTea] = useState<editTea>({ open: false });
   const [userPreferences, setUserPreferences] = useState<preference[] | null>(
     null
   );
+  const [editUserPreference, setEditUserPreference] =
+    useState<editUserPreference>({ open: false });
 
   useEffect(() => {
     const fetchTeas = async () => {
@@ -66,7 +99,7 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
   };
 
   const handleOpenEditDrawer = useCallback((tea) => {
-    setEditTea(tea);
+    setEditTea({ open: true, mode: 'edit', editTea: tea });
   }, []);
 
   return (
@@ -84,7 +117,7 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
           <Button
             className="self-end"
             variant="accent"
-            onClick={() => setEditTea((prev) => !prev)}
+            onClick={() => setEditTea({ open: true, mode: 'add' })}
           >
             Add tea
           </Button>
@@ -109,13 +142,32 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
           : null}
       </div>
       <AddTeaDrawer
-        open={!!editTea}
-        setOpen={setEditTea}
+        open={editTea.open}
+        handleClose={() => setEditTea({ open: false })}
         teaTypes={teaTypes}
         teaBrands={teaBrands}
         setTeas={setTeas}
-        mode={!!editTea ? (editTea === true ? 'add' : 'edit') : undefined}
-        editTea={typeof editTea === 'boolean' ? undefined : editTea}
+        mode={editTea.open ? editTea.mode : undefined}
+        editTea={
+          editTea.open && editTea.mode === 'edit' ? editTea.editTea : undefined
+        }
+      />
+      <AddTeaPreferenceDrawer
+        open={editUserPreference.open}
+        handleClose={() => setEditUserPreference({ open: false })}
+        setUserPreferences={setUserPreferences}
+        userPreference={
+          editUserPreference.open
+            ? userPreferences?.find(
+                (preference) =>
+                  preference.tea_id === editUserPreference.editTea.id
+              )
+            : undefined
+        }
+        // mode={!!editTea ? (editTea === true ? 'add' : 'edit') : undefined}
+        editTea={
+          editUserPreference.open ? editUserPreference.editTea : undefined
+        }
       />
     </div>
   );
