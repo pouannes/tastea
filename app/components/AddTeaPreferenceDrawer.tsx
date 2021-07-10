@@ -54,7 +54,7 @@ const AddTeaPreference = ({
     return {
       time: '',
       temperature: '',
-      rating: '',
+      rating: 3,
     };
   }, []);
 
@@ -161,7 +161,10 @@ const AddTeaPreference = ({
         label={`${loggedUser?.first_name}'s temperature`}
         className="mb-5"
       />
-      <TeaRating value={3.1} />
+      <TeaRating
+        value={values.rating}
+        setValue={(value) => setFieldValue('rating', value)}
+      />
     </Drawer>
   );
 };
