@@ -102,6 +102,19 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
     setEditTea({ open: true, mode: 'edit', editTea: tea });
   }, []);
 
+  const handleOpenPreferenceDrawer = useCallback(
+    (tea) => {
+      setEditUserPreference({
+        open: true,
+        userPreference: userPreferences?.find(
+          (preference) => preference.user_id === loggedUser?.id
+        ),
+        editTea: tea,
+      });
+    },
+    [loggedUser?.id, userPreferences]
+  );
+
   return (
     <div className="pt-10 overflow-auto bg-bgDefault">
       <Head>
@@ -127,7 +140,11 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
               <TeaLine
                 key={uuidv4()}
                 tea={tea}
-                handleOpenEditDrawer={handleOpenEditDrawer}
+                handleOpenEditDrawer={
+                  !loggedUser || userPreferences === null
+                    ? handleOpenEditDrawer
+                    : handleOpenPreferenceDrawer
+                }
                 handleDeleteTea={handleDeleteTea}
                 mode={!!loggedUser ? 'user' : 'brand'}
                 userPreference={
@@ -154,6 +171,7 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
       />
       <AddTeaPreferenceDrawer
         open={editUserPreference.open}
+        loggedUser={loggedUser}
         handleClose={() => setEditUserPreference({ open: false })}
         setUserPreferences={setUserPreferences}
         userPreference={

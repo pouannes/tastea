@@ -4,8 +4,8 @@ import _ from 'lodash';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-import { TextField, Select, Drawer, Button } from '@/components/core';
-import { tea, teaType, brand, fullTea, preference } from '@/types/api';
+import { TextField, Drawer, Button, TeaRating } from '@/components/core';
+import { tea, user, fullTea, preference } from '@/types/api';
 import { supabase } from '@/utils';
 
 type mode = 'edit' | 'add';
@@ -15,6 +15,7 @@ interface AddTeaPreferenceProps {
   setUserPreferences: React.Dispatch<React.SetStateAction<preference[] | null>>;
   userPreference: preference | undefined;
   editTea?: fullTea;
+  loggedUser: user | null;
 }
 
 const validationSchema = yup.object({
@@ -43,6 +44,7 @@ const AddTeaPreference = ({
   handleClose,
   setUserPreferences,
   userPreference,
+  loggedUser,
   editTea,
 }: AddTeaPreferenceProps): JSX.Element => {
   const nameInputRef = useRef(null);
@@ -123,7 +125,8 @@ const AddTeaPreference = ({
       title={
         <div>
           <p>
-            Edit tea <span className="text-accent">{editTea?.name}</span>
+            Edit {`${loggedUser?.first_name}'s`} preference:{' '}
+            <span className="text-accent">{editTea?.name}</span>
           </p>
           <p className="text-textSecondary">{editTea?.brand.name}</p>
         </div>
@@ -145,8 +148,9 @@ const AddTeaPreference = ({
         error={touched.time && Boolean(errors.time)}
         helperText={touched.time ? errors.time : undefined}
         name="time"
-        label="Brand-advised brewing time (in seconds)"
+        label={`${loggedUser?.first_name}'s brewing time (in seconds)`}
         className="mb-5"
+        inputRef={nameInputRef}
       />
       <TextField
         value={values.temperature}
@@ -154,9 +158,10 @@ const AddTeaPreference = ({
         error={touched.temperature && Boolean(errors.temperature)}
         helperText={touched.temperature ? errors.temperature : undefined}
         name="temperature"
-        label="Brand-advised temperature"
+        label={`${loggedUser?.first_name}'s temperature`}
         className="mb-5"
       />
+      <TeaRating value={3} />
     </Drawer>
   );
 };
