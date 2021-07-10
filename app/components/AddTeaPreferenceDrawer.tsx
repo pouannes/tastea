@@ -176,6 +176,7 @@ const AddTeaPreference = ({
       <TeaRating
         value={values.rating}
         setValue={(value) => setFieldValue('rating', value)}
+        size="lg"
       />
     </Drawer>
   );

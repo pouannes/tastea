@@ -10,7 +10,12 @@ import {
 
 import { tea, preference } from '@/types/api';
 import { formatTime } from '@/utils';
-import { IconButton, ConfirmationDialog, Tag } from '@/components/core';
+import {
+  IconButton,
+  ConfirmationDialog,
+  Tag,
+  TeaRating,
+} from '@/components/core';
 import TemperatureIcon from '@/public/temperature.svg';
 
 type mode = 'brand' | 'user';
@@ -92,15 +97,11 @@ const TeaLine = ({
         ) : (
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-center w-full h-full">
-              <p
-                className={
-                  userPreference?.rating
-                    ? 'text-textPrimary'
-                    : 'text-textSecondary italic'
-                }
-              >
-                {userPreference?.rating ? userPreference.rating : 'No Rating'}
-              </p>
+              {userPreference?.rating ? (
+                <TeaRating value={userPreference.rating} size="sm" readOnly />
+              ) : (
+                <p className={'text-textSecondary italic'}>No Rating</p>
+              )}
             </div>
             <div className="flex items-center justify-center w-full h-full">
               <ClockIcon className="w-5 h-5 mr-1 text-textSecondary" />

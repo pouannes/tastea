@@ -7,19 +7,24 @@ export interface TeaRatingProps {
   value: number;
   setValue?: (value: number) => void;
   readOnly?: boolean;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export const TeaRating = ({
   value,
   setValue,
   readOnly,
+  size = 'md',
 }: TeaRatingProps): JSX.Element => {
+  const dimensions =
+    size === 'sm' ? 'w-6 h-6' : size === 'md' ? 'w-8 h-8' : 'w-10 h-10';
+
   return (
     <div className="flex items-center">
       {new Array(5).fill(null).map((el, i) => (
         <button
           key={i}
-          className={`w-10 h-10 flex items-center relative m-1 ${
+          className={`${dimensions} flex items-center relative mr-1 ${
             i < value ? 'text-accent' : 'text-textDisabled'
           } ${readOnly ? 'pointer-events-none' : ''}`}
           onClick={() => setValue && setValue(i + 1)}
