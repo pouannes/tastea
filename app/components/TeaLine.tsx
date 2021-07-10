@@ -30,7 +30,6 @@ const TeaLine = ({
   mode,
   userPreference,
 }: TeaLineProps): JSX.Element => {
-  console.log(userPreference);
   const {
     name,
     brand_time_s,
@@ -118,7 +117,7 @@ const TeaLine = ({
               <TemperatureIcon className="w-5 h-5 mr-1 fill-current text-textSecondary" />
               <p className="text-textPrimary">
                 {userPreference?.temperature
-                  ? `${formatTime(userPreference.temperature)}°`
+                  ? `${userPreference.temperature}°`
                   : '-'}
               </p>
             </div>

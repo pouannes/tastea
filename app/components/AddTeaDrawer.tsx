@@ -144,8 +144,6 @@ const AddTeaDrawer = ({
     }
   }, [open]);
 
-  console.log(open);
-
   return (
     <Drawer
       open={open}

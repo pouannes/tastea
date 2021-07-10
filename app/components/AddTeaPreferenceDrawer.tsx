@@ -58,6 +58,11 @@ const AddTeaPreference = ({
     };
   }, []);
 
+  const mode = useMemo(
+    () => (userPreference ? 'edit' : 'add'),
+    [userPreference]
+  );
+
   // handle submitting, either editing the tea or saving a new one
   const handleSave = async (
     values: typeof initialValues
@@ -67,22 +72,29 @@ const AddTeaPreference = ({
       time_s: values.time,
       temperature: values.temperature,
       rating: values.rating,
+      tea_id: editTea?.id,
+      user_id: loggedUser?.id,
     };
-    const { data, error } = await supabase
-      .from('teas')
-      .upsert(newPreference)
-      .eq('id', editTea?.id);
+
+    const { data, error } =
+      mode === 'add'
+        ? await supabase.from('preferences').insert([newPreference])
+        : await supabase
+            .from('preferences')
+            .update(newPreference)
+            .eq('id', editTea?.id);
     setLoading(false);
+    console.log(data);
     if (!error && !!data && data.length > 0) {
-      const newPreference = {};
-      // TODO modify this to work on mode in some way
-      //   setTeas((teas) =>
-      //     mode === 'add'
-      //       ? teas !== null
-      //         ? [...teas, tea]
-      //         : [tea]
-      //       : teas?.map((item) => (item.id === editTea?.id ? tea : item)) ?? []
-      //   );
+      setUserPreferences((preferences) =>
+        mode === 'add'
+          ? preferences !== null
+            ? [...preferences, data[0]]
+            : [data[0]]
+          : preferences?.map((item) =>
+              item.id === editTea?.id ? data[0] : item
+            ) ?? []
+      );
       handleClose();
       resetForm({ values: initialValues });
     }
@@ -125,8 +137,8 @@ const AddTeaPreference = ({
       title={
         <div>
           <p>
-            Edit {`${loggedUser?.first_name}'s`} preference:{' '}
-            <span className="text-accent">{editTea?.name}</span>
+            {mode === 'add' ? 'Add' : 'Edit'} {`${loggedUser?.first_name}'s`}{' '}
+            preference: <span className="text-accent">{editTea?.name}</span>
           </p>
           <p className="text-textSecondary">{editTea?.brand.name}</p>
         </div>
@@ -137,8 +149,7 @@ const AddTeaPreference = ({
           handleClose={handleClose}
           handleSave={handleSubmit}
           loading={loading}
-          // TODO
-          //   mode={mode}
+          mode={mode}
         />
       }
     >
