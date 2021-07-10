@@ -5,10 +5,15 @@ import TeaIconFilled from '@/public/tea-cup-filled.svg';
 
 export interface TeaRatingProps {
   value: number;
-  setValue: (value: number) => void;
+  setValue?: (value: number) => void;
+  readOnly?: boolean;
 }
 
-export const TeaRating = ({ value, setValue }: TeaRatingProps): JSX.Element => {
+export const TeaRating = ({
+  value,
+  setValue,
+  readOnly,
+}: TeaRatingProps): JSX.Element => {
   return (
     <div className="flex items-center">
       {new Array(5).fill(null).map((el, i) => (
@@ -16,8 +21,8 @@ export const TeaRating = ({ value, setValue }: TeaRatingProps): JSX.Element => {
           key={i}
           className={`w-10 h-10 flex items-center relative m-1 ${
             i < value ? 'text-accent' : 'text-textDisabled'
-          }`}
-          onClick={() => setValue(i + 1)}
+          } ${readOnly ? 'pointer-events-none' : ''}`}
+          onClick={() => setValue && setValue(i + 1)}
         >
           {i < Math.floor(value) ? (
             <FullCup />
