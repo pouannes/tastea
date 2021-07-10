@@ -15,7 +15,7 @@ export const TeaRating = ({ value, setValue }: TeaRatingProps): JSX.Element => {
         <button
           key={i}
           className={`w-10 h-10 flex items-center relative m-1 ${
-            i < value ? 'text-accent' : 'text-textSecondary'
+            i < value ? 'text-accent' : 'text-textDisabled'
           }`}
           onClick={() => setValue(i + 1)}
         >
@@ -69,7 +69,7 @@ const PartialCup = ({ value, ...props }: PartialCup): JSX.Element => {
         }}
       />
       <TeaIcon
-        className="absolute inset-0 z-0 w-full h-full  fill-[rgba(255,255,255,0.7)]"
+        className="absolute inset-0 z-0 w-full h-full  fill-[rgba(255,255,255,0.5)]"
         style={{
           clipPath: `inset(0 0 0 ${percentage}% )`,
         }}
