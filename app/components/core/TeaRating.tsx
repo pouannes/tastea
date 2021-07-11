@@ -51,8 +51,12 @@ export const TeaRating = ({
         precision
       );
 
-      setInternalValue(value - 0.5);
+      setInternalValue(Math.max(precision, value - precision));
     }
+  };
+
+  const handleMouseLeave: MouseEventHandler<HTMLDivElement> = () => {
+    setInternalValue(value);
   };
 
   return (
@@ -60,6 +64,7 @@ export const TeaRating = ({
       className="flex items-center w-min"
       ref={containerRef}
       onMouseMove={readOnly ? undefined : handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       onClick={() => setValue && setValue(internalValue)}
     >
       {new Array(5).fill(null).map((el, i) => (
@@ -113,7 +118,7 @@ const PartialCup = ({ value, ...props }: PartialCup): JSX.Element => {
     // @ts-ignore
     <div className="w-full h-full" {...props}>
       <TeaIconFilled
-        className="absolute inset-0 z-10 w-full h-full fill-current text-accent"
+        className="absolute inset-0 z-0 w-full h-full fill-current text-accent"
         style={{
           clipPath: `inset(0 ${100 - percentage}% 0 0)`,
         }}

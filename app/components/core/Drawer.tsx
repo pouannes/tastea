@@ -40,9 +40,9 @@ export const Drawer = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="absolute inset-0 transition-opacity bg-bgPaperSecondary bg-opacity-95" />
+            <Dialog.Overlay className="absolute inset-0 z-20 transition-opacity bg-bgPaperSecondary bg-opacity-95" />
           </Transition.Child>
-          <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
+          <div className="fixed inset-y-0 right-0 z-30 flex max-w-full pl-10">
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-300 sm:duration-500"
