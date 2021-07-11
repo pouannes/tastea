@@ -15,10 +15,13 @@ export const TagSelectionMenu = <T,>({
   onOptionClick,
 }: TagSelectionMenuProps<T>): JSX.Element => {
   return (
-    <div className="absolute w-full">
-      <Menu as="div">
+    <div className="relative -ml-3" style={{ width: 'calc(100% + 0.75rem)' }}>
+      <Menu as="div" className="w-full">
         {open && (
-          <div className="relative w-full py-1 mt-1 overflow-auto text-base rounded-md shadow-lg bg-bgPaper max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <div
+            className="absolute left-0 w-full py-1 mt-1 overflow-auto text-base rounded-md shadow-lg top-2 bg-bgPaper max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+            style={{ width: 'calc(100% + 0.75rem)' }}
+          >
             {options.map((option) => (
               <Menu.Item key={`${option.value}`}>
                 {({ active }) => (

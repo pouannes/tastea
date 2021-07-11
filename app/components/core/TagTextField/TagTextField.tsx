@@ -3,15 +3,17 @@ import React, {
   MutableRefObject,
   useState,
   useEffect,
+  ChangeEvent,
 } from 'react';
 
 import { tag } from '@/types/api';
 import { supabase } from '@/utils';
 import { TagSelectionMenu } from './TagSelectionMenu';
+import { Tag } from '../Tag';
 
 export interface TagTextFieldProps {
-  value: string;
-  onChange: React.EventHandler<SyntheticEvent>;
+  selectedTags: tag[];
+  setSelectedTags: (tag: tag | undefined) => void;
   name: string;
   placeholder?: string;
   label?: string;
@@ -24,8 +26,8 @@ export interface TagTextFieldProps {
 }
 
 export const TagTextField: React.FC<TagTextFieldProps> = ({
-  value,
-  onChange,
+  selectedTags,
+  setSelectedTags,
   name,
   placeholder,
   label,
@@ -36,7 +38,13 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
   inputClassName,
   inputRef,
 }) => {
+  const [value, setValue] = useState('');
   const [tags, setTags] = useState<tag[] | null>(null);
+  const [searchResults, setSearchResults] = useState([]);
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -45,6 +53,14 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
     };
     fetchTags();
   }, []);
+
+  const handleOptionClick = (tagId: number) => {
+    console.log(tagId);
+    setValue('');
+    if (tags) {
+      setSelectedTags(tags?.find((tag) => tag.id === tagId));
+    }
+  };
 
   return (
     <div className={className}>
@@ -56,24 +72,39 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
           {label} {required ? '*' : ''}
         </label>
       ) : null}
-      <div className="relative w-full mt-1 rounded-md shadow-sm">
+      <div
+        // The padding below are repeated in the TagSelectionMenu, careful if we change then
+        className={`relative max-w-full flex flex-wrap  h-auto mt-1 py-2 rounded-md shadow-sm  box-border pl-3 pr-3 ${
+          error ? 'border-red-400' : 'border-gray-500'
+        } focus:ring-accent focus:border-accent bg-bgPaper text-textPrimary sm:text-sm border`}
+        style={{ width: 'calc(100% - 1.5rem)' }}
+      >
+        <div className="flex flex-wrap items-center gap-2">
+          {selectedTags.map((tag) => (
+            <Tag key={tag.id}>{tag.name}</Tag>
+          ))}
+        </div>
         <input
           value={value}
           onChange={onChange}
           type="text"
           name={name}
           required={required}
-          className={`block w-full pl-3 pr-3 border-${
-            error ? 'red-400' : 'gray-500'
-          } rounded-md focus:ring-accent focus:border-accent bg-bgPaper text-textPrimary sm:text-sm ${inputClassName}`}
+          className={`block border-0 w-full bg-bgPaper text-textPrimary sm:text-sm  rounded-md min-w-[40px] ${inputClassName}`}
           placeholder={placeholder}
           ref={inputRef}
+          autoComplete="off"
         />
         {tags ? (
           <TagSelectionMenu
-            options={tags.map((tag) => ({ value: tag.id, label: tag.name }))}
+            options={tags
+              .filter(
+                (tag) =>
+                  !selectedTags.some((selectedTag) => selectedTag.id === tag.id)
+              )
+              .map((tag) => ({ value: tag.id, label: tag.name }))}
             open={value.length > 0}
-            onOptionClick={(value) => console.log(value)}
+            onOptionClick={handleOptionClick}
           />
         ) : undefined}
       </div>

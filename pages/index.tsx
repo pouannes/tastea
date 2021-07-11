@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, ChangeEvent } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,8 +9,16 @@ import AddTeaDrawer from '@/components/AddTeaDrawer';
 import AddTeaPreferenceDrawer from '@/components/AddTeaPreferenceDrawer';
 
 import UserSelect from '@/components/UserSelect';
-import { Button, TagTextField } from '@/components/core';
-import { tea, teaType, brand, fullTea, user, preference } from '@/types/api';
+import { Button, TagTextField, TextField } from '@/components/core';
+import {
+  tea,
+  teaType,
+  brand,
+  fullTea,
+  user,
+  preference,
+  tag,
+} from '@/types/api';
 
 interface HomeProps {
   teaTypes: teaType[];
@@ -59,7 +67,7 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
   const [editUserPreference, setEditUserPreference] =
     useState<editUserPreference>({ open: false });
 
-  const [tagValue, setTagValue] = useState('');
+  const [selectedTags, setSelectedTags] = useState<tag[]>([]);
 
   useEffect(() => {
     const fetchTeas = async () => {
@@ -116,10 +124,6 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
     [loggedUser?.id, userPreferences]
   );
 
-  const handleTagValueChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTagValue(e.target.value);
-  };
-
   return (
     <div className="pt-10 overflow-auto bg-bgDefault">
       <Head>
@@ -133,11 +137,16 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
             setLoggedUser={setLoggedUser}
           />
           <TagTextField
-            value={tagValue}
-            onChange={handleTagValueChange}
+            selectedTags={selectedTags}
+            setSelectedTags={(tag) =>
+              setSelectedTags((prevTags) =>
+                tag ? [...prevTags, tag] : prevTags
+              )
+            }
             name="tag"
             className="w-96"
           />
+          <TextField />
           <Button
             className="self-end"
             variant="accent"
