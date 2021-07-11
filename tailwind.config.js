@@ -21,7 +21,7 @@ module.exports = {
         textDisabled: 'rgba(255,255,255,0.5)',
       },
       gridTemplateColumns: {
-        teaLineLayoutMd: '350px 1fr auto',
+        teaLineLayoutMd: '380px 1fr auto',
         teaLineLayout: '1fr',
       },
       fontFamily: {

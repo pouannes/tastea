@@ -6,7 +6,9 @@ import {
   ClockIcon,
   SparklesIcon,
   TagIcon,
+  CollectionIcon,
 } from '@heroicons/react/outline';
+import _ from 'lodash';
 
 import { tea, preference } from '@/types/api';
 import { formatTime } from '@/utils';
@@ -43,7 +45,10 @@ const TeaLine = ({
     drinking_conditions,
     country,
     flavor,
+    type: { type },
   } = tea;
+
+  console.log(tea);
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   return (
@@ -56,9 +61,15 @@ const TeaLine = ({
               {brand.name}
             </p>
           </div>
-          {!!country || !!flavor ? (
+          {!!country || !!flavor || !!type ? (
             <div className="flex items-baseline justify-center w-full mt-2 sm:justify-start">
               <p className="flex items-center justify-center w-full sm:justify-start text-textPrimary">
+                {!!type ? (
+                  <span className="flex items-center mr-5">
+                    <CollectionIcon className="w-5 h-5 mr-2 text-textSecondary" />
+                    {_.startCase(type)}
+                  </span>
+                ) : null}
                 {!!country ? (
                   <span className="flex items-center mr-5">
                     <GlobeIcon className="w-5 h-5 mr-2 text-textSecondary" />
