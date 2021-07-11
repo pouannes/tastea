@@ -1,10 +1,12 @@
 import React, {
-  SyntheticEvent,
   MutableRefObject,
   useState,
   useEffect,
   ChangeEvent,
+  useRef,
 } from 'react';
+
+import { useMergeRefs } from 'rooks';
 
 import { tag } from '@/types/api';
 import { supabase } from '@/utils';
@@ -22,7 +24,7 @@ export interface TagTextFieldProps {
   helperText?: string;
   className?: string;
   inputClassName?: string;
-  inputRef?: MutableRefObject<HTMLInputElement | null> | undefined;
+  inputRef?: MutableRefObject<HTMLInputElement> | undefined;
 }
 
 export const TagTextField: React.FC<TagTextFieldProps> = ({
@@ -41,6 +43,17 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
   const [value, setValue] = useState('');
   const [tags, setTags] = useState<tag[] | null>(null);
   const [searchResults, setSearchResults] = useState([]);
+
+  const internalInputRef = useRef();
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const refs = useMergeRefs(
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    inputRef,
+    internalInputRef
+  ) as MutableRefObject<HTMLInputElement>;
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -74,26 +87,28 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
       ) : null}
       <div
         // The padding below are repeated in the TagSelectionMenu, careful if we change then
-        className={`relative max-w-full flex flex-wrap  h-auto mt-1 py-2 rounded-md shadow-sm  box-border pl-3 pr-3 ${
+        className={`relative items-center max-w-full flex flex-wrap gap-2 h-auto mt-1 py-2 rounded-md shadow-sm  box-border pl-3 pr-3 cursor-text ${
           error ? 'border-red-400' : 'border-gray-500'
         } focus:ring-accent focus:border-accent bg-bgPaper text-textPrimary sm:text-sm border`}
         style={{ width: 'calc(100% - 1.5rem)' }}
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        onClick={() => internalInputRef?.current?.focus()}
       >
-        <div className="flex flex-wrap items-center gap-2">
-          {selectedTags.map((tag) => (
-            <Tag key={tag.id}>{tag.name}</Tag>
-          ))}
-        </div>
+        {selectedTags.map((tag) => (
+          <Tag key={tag.id}>{tag.name}</Tag>
+        ))}
         <input
           value={value}
           onChange={onChange}
           type="text"
           name={name}
           required={required}
-          className={`block border-0 w-full bg-bgPaper text-textPrimary sm:text-sm  rounded-md min-w-[40px] ${inputClassName}`}
+          className={`border-0 flex-grow min-w-[40px] bg-bgPaper text-textPrimary sm:text-sm focus:ring-0  rounded-md  ${inputClassName}`}
           placeholder={placeholder}
-          ref={inputRef}
+          ref={refs}
           autoComplete="off"
+          size={1}
         />
         {tags ? (
           <TagSelectionMenu

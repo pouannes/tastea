@@ -146,7 +146,6 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
             name="tag"
             className="w-96"
           />
-          <TextField />
           <Button
             className="self-end"
             variant="accent"
