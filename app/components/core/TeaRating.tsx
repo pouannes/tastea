@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, MouseEventHandler, useRef } from 'react';
 
 import TeaIcon from '@/public/tea-cup.svg';
 import TeaIconFilled from '@/public/tea-cup-filled.svg';
@@ -10,29 +10,69 @@ export interface TeaRatingProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
+function getDecimalPrecision(num: number) {
+  const decimalPart = num.toString().split('.')[1];
+  return decimalPart ? decimalPart.length : 0;
+}
+
+function roundValueToPrecision(value: number, precision: number) {
+  if (value == null) {
+    return value;
+  }
+
+  const nearest = Math.round(value / precision) * precision;
+  return Number(nearest.toFixed(getDecimalPrecision(precision)));
+}
+
 export const TeaRating = ({
   value,
   setValue,
   readOnly,
   size = 'md',
 }: TeaRatingProps): JSX.Element => {
+  const [internalValue, setInternalValue] = useState(value);
+
   const dimensions =
     size === 'sm' ? 'w-6 h-6' : size === 'md' ? 'w-8 h-8' : 'w-10 h-10';
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove: MouseEventHandler<HTMLDivElement> = (event) => {
+    const max = 5;
+    const precision = 0.5;
+    if (containerRef.current) {
+      const rootNode = containerRef.current;
+      const firstChild = rootNode.firstChild as HTMLElement;
+      const { left } = rootNode.getBoundingClientRect();
+      const { width } = firstChild?.getBoundingClientRect();
+
+      const percent = (event.clientX - left) / (width * max);
+      const value = roundValueToPrecision(
+        max * percent + precision / 2,
+        precision
+      );
+
+      setInternalValue(value - 0.5);
+    }
+  };
 
   return (
-    <div className="flex items-center">
+    <div
+      className="flex items-center w-min"
+      ref={containerRef}
+      onMouseMove={readOnly ? undefined : handleMouseMove}
+      onClick={() => setValue && setValue(internalValue)}
+    >
       {new Array(5).fill(null).map((el, i) => (
         <button
           key={i}
           className={`${dimensions} flex items-center relative mr-1 ${
-            i < value ? 'text-accent' : 'text-textDisabled'
+            i < internalValue ? 'text-accent' : 'text-textDisabled'
           } ${readOnly ? 'pointer-events-none' : ''}`}
-          onClick={() => setValue && setValue(i + 1)}
         >
-          {i < Math.floor(value) ? (
+          {i < Math.floor(internalValue) ? (
             <FullCup />
-          ) : i === Math.floor(value) ? (
-            <PartialCup value={value} />
+          ) : i === Math.floor(internalValue) ? (
+            <PartialCup value={internalValue} />
           ) : (
             <EmptyCup />
           )}
