@@ -6,3 +6,4 @@ export * from './IconButton';
 export * from './ConfirmationDialog';
 export * from './Tag';
 export * from './TeaRating';
+export * from './TagTextField';

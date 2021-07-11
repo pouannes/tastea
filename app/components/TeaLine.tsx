@@ -48,8 +48,6 @@ const TeaLine = ({
     type: { type },
   } = tea;
 
-  console.log(tea);
-
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   return (
     <>
