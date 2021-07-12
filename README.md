@@ -1,34 +1,16 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a personal project built as a tool for me and my partner to keep track of our teas. We love our teas!
 
-## Getting Started
+It's also a way for me to learn, experiment and get better with different tools and technologies.
 
-First, run the development server:
+[The project is being hosted here by Vercel.](https://tastea.vercel.app/)
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Tool used
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Those are the tools I used:
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.tsx`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [React](https://reactjs.org/) and [Next.js](https://nextjs.org/) for the JS framework
+- [Supabase](https://supabase.io/) for the SQL-based backend
+- [Tailwind CSS](https://tailwindcss.com/) for my css (I also used a bit of [Headless UI](https://headlessui.dev/) components, by the creators of tailwindcss)
+- typescript (it's my first real typescript project)
+- [Formik](https://formik.org/) to handle form logic, and [yup](https://github.com/jquense/yup) for form schema validation
+- [Fuse.js](https://fusejs.io/) to handle the fuzzy search
