@@ -225,6 +225,24 @@ const AddTeaDrawer = ({
           label: _.startCase(tea.type),
         }))}
       />
+      <TextField
+        value={values.country}
+        onChange={handleChange}
+        error={touched.country && Boolean(errors.country)}
+        helperText={touched.country ? errors.country : undefined}
+        name="country"
+        label="Country of origin"
+        className="mb-5"
+      />
+      <TextField
+        value={values.flavor}
+        onChange={handleChange}
+        error={touched.flavor && Boolean(errors.flavor)}
+        helperText={touched.flavor ? errors.flavor : undefined}
+        name="flavor"
+        label="Flavor"
+        className="mb-5"
+      />
       <TagTextField
         selectedTags={tags.filter((tag) => values.tagIds.includes(tag.id))}
         setSelectedTags={(tags) =>
@@ -236,15 +254,6 @@ const AddTeaDrawer = ({
         name="tagIds"
         className="mb-5"
         label="Tags"
-      />
-      <TextField
-        value={values.flavor}
-        onChange={handleChange}
-        error={touched.flavor && Boolean(errors.flavor)}
-        helperText={touched.flavor ? errors.flavor : undefined}
-        name="flavor"
-        label="Flavor"
-        className="mb-5"
       />
       <TextField
         value={values.time}
@@ -265,15 +274,6 @@ const AddTeaDrawer = ({
         label="Brand-advised temperature"
         className="mb-5"
         required={true}
-      />
-      <TextField
-        value={values.country}
-        onChange={handleChange}
-        error={touched.country && Boolean(errors.country)}
-        helperText={touched.country ? errors.country : undefined}
-        name="country"
-        label="Country of origin"
-        className="mb-5"
       />
     </Drawer>
   );
