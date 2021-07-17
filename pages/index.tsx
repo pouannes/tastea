@@ -7,9 +7,9 @@ import { supabase } from '@/utils';
 import TeaLine from '@/components/TeaLine';
 import AddTeaDrawer from '@/components/AddTeaDrawer';
 import AddTeaPreferenceDrawer from '@/components/AddTeaPreferenceDrawer';
-
 import UserSelect from '@/components/UserSelect';
 import { Button, TagTextField } from '@/components/core';
+import { TagContextProvider } from 'app/contexts';
 import {
   tea,
   teaType,
@@ -24,6 +24,7 @@ interface HomeProps {
   teaTypes: teaType[];
   teaBrands: brand[];
   users: user[];
+  tags: tag[];
 }
 
 type editTeaClose = {
@@ -55,7 +56,7 @@ type editUserPreferenceOpen = {
 
 type editUserPreference = editUserPreferenceClose | editUserPreferenceOpen;
 
-const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
+const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
   // const [loading, setLoading] = useState(true);
   const [loggedUser, setLoggedUser] = useState<user | null>(null);
 
@@ -125,84 +126,88 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
   );
 
   return (
-    <div className="pt-10 overflow-auto bg-bgDefault">
-      <Head>
-        <title>Tastea</title> ===
-      </Head>
-      <div className="flex flex-col items-center justify-center w-5/6 h-auto m-auto ">
-        <div className="flex items-center justify-between w-full mb-6">
-          <UserSelect
-            users={users}
-            loggedUser={loggedUser}
-            setLoggedUser={setLoggedUser}
-          />
-          <TagTextField
-            selectedTags={selectedTags}
-            setSelectedTags={setSelectedTags}
-            name="tag"
-            className="w-96"
-          />
-          <Button
-            className="self-end"
-            variant="accent"
-            onClick={() => setEditTea({ open: true, mode: 'add' })}
-          >
-            Add tea
-          </Button>
+    <TagContextProvider tags={tags}>
+      <div className="pt-10 overflow-auto bg-bgDefault">
+        <Head>
+          <title>Tastea</title> ===
+        </Head>
+        <div className="flex flex-col items-center justify-center w-5/6 h-auto m-auto ">
+          <div className="flex items-center justify-between w-full mb-6">
+            <UserSelect
+              users={users}
+              loggedUser={loggedUser}
+              setLoggedUser={setLoggedUser}
+            />
+            <TagTextField
+              selectedTags={selectedTags}
+              setSelectedTags={setSelectedTags}
+              name="tag"
+              className="w-96"
+            />
+            <Button
+              className="self-end"
+              variant="accent"
+              onClick={() => setEditTea({ open: true, mode: 'add' })}
+            >
+              Add tea
+            </Button>
+          </div>
+          {teas
+            ? teas.map((tea) => (
+                <TeaLine
+                  key={uuidv4()}
+                  tea={tea}
+                  handleOpenEditDrawer={
+                    !loggedUser || userPreferences === null
+                      ? handleOpenEditDrawer
+                      : handleOpenPreferenceDrawer
+                  }
+                  handleDeleteTea={handleDeleteTea}
+                  mode={!!loggedUser ? 'user' : 'brand'}
+                  userPreference={
+                    userPreferences
+                      ? userPreferences.find(
+                          (preference) => preference.tea_id === tea.id
+                        )
+                      : undefined
+                  }
+                />
+              ))
+            : null}
         </div>
-        {teas
-          ? teas.map((tea) => (
-              <TeaLine
-                key={uuidv4()}
-                tea={tea}
-                handleOpenEditDrawer={
-                  !loggedUser || userPreferences === null
-                    ? handleOpenEditDrawer
-                    : handleOpenPreferenceDrawer
-                }
-                handleDeleteTea={handleDeleteTea}
-                mode={!!loggedUser ? 'user' : 'brand'}
-                userPreference={
-                  userPreferences
-                    ? userPreferences.find(
-                        (preference) => preference.tea_id === tea.id
-                      )
-                    : undefined
-                }
-              />
-            ))
-          : null}
+        <AddTeaDrawer
+          open={editTea.open}
+          handleClose={() => setEditTea({ open: false })}
+          teaTypes={teaTypes}
+          teaBrands={teaBrands}
+          setTeas={setTeas}
+          mode={editTea.open ? editTea.mode : undefined}
+          editTea={
+            editTea.open && editTea.mode === 'edit'
+              ? editTea.editTea
+              : undefined
+          }
+        />
+        <AddTeaPreferenceDrawer
+          open={editUserPreference.open}
+          loggedUser={loggedUser}
+          handleClose={() => setEditUserPreference({ open: false })}
+          setUserPreferences={setUserPreferences}
+          userPreference={
+            editUserPreference.open
+              ? userPreferences?.find(
+                  (preference) =>
+                    preference.tea_id === editUserPreference.editTea.id
+                )
+              : undefined
+          }
+          // mode={!!editTea ? (editTea === true ? 'add' : 'edit') : undefined}
+          editTea={
+            editUserPreference.open ? editUserPreference.editTea : undefined
+          }
+        />
       </div>
-      <AddTeaDrawer
-        open={editTea.open}
-        handleClose={() => setEditTea({ open: false })}
-        teaTypes={teaTypes}
-        teaBrands={teaBrands}
-        setTeas={setTeas}
-        mode={editTea.open ? editTea.mode : undefined}
-        editTea={
-          editTea.open && editTea.mode === 'edit' ? editTea.editTea : undefined
-        }
-      />
-      <AddTeaPreferenceDrawer
-        open={editUserPreference.open}
-        loggedUser={loggedUser}
-        handleClose={() => setEditUserPreference({ open: false })}
-        setUserPreferences={setUserPreferences}
-        userPreference={
-          editUserPreference.open
-            ? userPreferences?.find(
-                (preference) =>
-                  preference.tea_id === editUserPreference.editTea.id
-              )
-            : undefined
-        }
-        // mode={!!editTea ? (editTea === true ? 'add' : 'edit') : undefined}
-        editTea={
-          editUserPreference.open ? editUserPreference.editTea : undefined
-        }
-      />
-    </div>
+    </TagContextProvider>
   );
 };
 
@@ -217,11 +222,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
     .from('users')
     .select('id, first_name, last_name');
 
+  const { data: tags } = await supabase.from('tags').select('id, name');
+
   return {
     props: {
       teaTypes: tea_types,
       teaBrands: brands,
       users,
+      tags,
     },
   };
 };

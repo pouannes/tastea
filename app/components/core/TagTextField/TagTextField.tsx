@@ -12,9 +12,9 @@ import { useMergeRefs } from 'rooks';
 import Fuse from 'fuse.js';
 
 import { tag } from '@/types/api';
-import { supabase } from '@/utils';
 import { TagSelectionMenu } from './TagSelectionMenu';
 import { Tag } from '../Tag';
+import { useTagContext } from 'app/contexts';
 
 export interface TagTextFieldProps {
   selectedTags: tag[];
@@ -43,8 +43,9 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
   inputClassName,
   inputRef,
 }) => {
+  const tags = useTagContext();
+
   const [value, setValue] = useState('');
-  const [tags, setTags] = useState<tag[] | null>(null);
   const [searchResults, setSearchResults] = useState<tag[]>([]);
 
   const fuseRef = useRef<Fuse<tag> | null>(null);
@@ -70,23 +71,18 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
     [searchResults, selectedTags]
   );
 
+  // initialize Fuse
   useEffect(() => {
-    const fetchTags = async () => {
-      const { data } = await supabase.from('tags').select(`id, name`);
-
-      const fuseOptions = {
-        includeScore: true,
-        keys: ['name'],
-      };
-      if (Array.isArray(data) && data.length > 0) {
-        fuseRef.current = new Fuse(data, fuseOptions);
-      }
-
-      setTags(data);
+    const fuseOptions = {
+      includeScore: true,
+      keys: ['name'],
     };
-    fetchTags();
-  }, []);
+    if (Array.isArray(tags) && tags.length > 0) {
+      fuseRef.current = new Fuse(tags, fuseOptions);
+    }
+  }, [tags]);
 
+  // do the fuzzy search using Fuse
   useEffect(() => {
     if (fuseRef.current) {
       setSearchResults(
@@ -100,7 +96,6 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
   };
 
   const handleOptionClick = (tagId: number) => {
-    console.log(tagId);
     setValue('');
     if (tags && tags.length > 0) {
       const newTag = tags?.find((tag) => tag.id === tagId);
