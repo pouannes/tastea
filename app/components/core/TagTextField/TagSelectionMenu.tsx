@@ -19,7 +19,7 @@ export const TagSelectionMenu = <T,>({
       <Menu as="div" className="w-full">
         {open && (
           <div
-            className="absolute left-0 w-full py-1 mt-1 overflow-auto text-base rounded-md shadow-lg top-2 bg-bgPaper max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+            className="absolute left-0 w-full py-1 overflow-auto text-base rounded-md shadow-lg top-2 bg-bgPaper max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
             style={{ width: 'calc(100% + 0.75rem)' }}
           >
             {options.map((option) => (

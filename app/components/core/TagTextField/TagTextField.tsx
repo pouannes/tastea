@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 
 import { useMergeRefs } from 'rooks';
+import Fuse from 'fuse.js';
 
 import { tag } from '@/types/api';
 import { supabase } from '@/utils';
@@ -42,8 +43,9 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
 }) => {
   const [value, setValue] = useState('');
   const [tags, setTags] = useState<tag[] | null>(null);
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<tag[]>([]);
 
+  const fuseRef = useRef<Fuse<tag> | null>(null);
   const internalInputRef = useRef();
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -62,10 +64,27 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
   useEffect(() => {
     const fetchTags = async () => {
       const { data } = await supabase.from('tags').select(`id, name`);
+
+      const fuseOptions = {
+        includeScore: true,
+        keys: ['name'],
+      };
+      if (Array.isArray(data) && data.length > 0) {
+        fuseRef.current = new Fuse(data, fuseOptions);
+      }
+
       setTags(data);
     };
     fetchTags();
   }, []);
+
+  useEffect(() => {
+    if (fuseRef.current) {
+      setSearchResults(
+        fuseRef.current.search(value).map((result) => result.item)
+      );
+    }
+  }, [value]);
 
   const handleOptionClick = (tagId: number) => {
     console.log(tagId);
@@ -87,7 +106,7 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
       ) : null}
       <div
         // The padding below are repeated in the TagSelectionMenu, careful if we change then
-        className={`relative items-center max-w-full flex flex-wrap gap-2 h-auto mt-1 py-2 rounded-md shadow-sm  box-border pl-3 pr-3 cursor-text ${
+        className={`relative items-center max-w-full h-full inline-flex flex-wrap rounded-md shadow-sm  box-border pl-3 pr-3 cursor-text ${
           error ? 'border-red-400' : 'border-gray-500'
         } focus:ring-accent focus:border-accent bg-bgPaper text-textPrimary sm:text-sm border`}
         style={{ width: 'calc(100% - 1.5rem)' }}
@@ -96,7 +115,9 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
         onClick={() => internalInputRef?.current?.focus()}
       >
         {selectedTags.map((tag) => (
-          <Tag key={tag.id}>{tag.name}</Tag>
+          <Tag key={tag.id} className="m-1">
+            {tag.name}
+          </Tag>
         ))}
         <input
           value={value}
@@ -112,7 +133,7 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
         />
         {tags ? (
           <TagSelectionMenu
-            options={tags
+            options={searchResults
               .filter(
                 (tag) =>
                   !selectedTags.some((selectedTag) => selectedTag.id === tag.id)
