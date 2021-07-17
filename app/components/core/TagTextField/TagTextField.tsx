@@ -160,7 +160,7 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
         {tags ? (
           <TagSelectionMenu
             options={tagOptions}
-            open={value.length > 0}
+            open={searchResults.length > 0}
             onOptionClick={handleOptionClick}
           />
         ) : undefined}
