@@ -22,12 +22,12 @@ export const TagSelectionMenu = <T,>({
             className="absolute left-0 w-full py-1 overflow-auto text-base rounded-md shadow-lg top-2 bg-bgPaper max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
             style={{ width: 'calc(100% + 0.75rem)' }}
           >
-            {options.map((option) => (
+            {options.map((option, optionIdx) => (
               <Menu.Item key={`${option.value}`}>
                 {({ active }) => (
                   <button
                     className={`${
-                      active
+                      active || optionIdx === 0
                         ? 'text-textPrimary bg-bgPaperSecondary'
                         : 'text-textSecondary'
                     }

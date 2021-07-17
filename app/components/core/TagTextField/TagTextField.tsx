@@ -3,7 +3,9 @@ import React, {
   useState,
   useEffect,
   ChangeEvent,
+  KeyboardEvent,
   useRef,
+  useMemo,
 } from 'react';
 
 import { useMergeRefs } from 'rooks';
@@ -57,9 +59,16 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
     internalInputRef
   ) as MutableRefObject<HTMLInputElement>;
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
+  const tagOptions = useMemo(
+    () =>
+      searchResults
+        .filter(
+          (tag) =>
+            !selectedTags.some((selectedTag) => selectedTag.id === tag.id)
+        )
+        .map((tag) => ({ value: tag.id, label: tag.name })),
+    [searchResults, selectedTags]
+  );
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -86,11 +95,21 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
     }
   }, [value]);
 
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
+
   const handleOptionClick = (tagId: number) => {
     console.log(tagId);
     setValue('');
     if (tags) {
       setSelectedTags(tags?.find((tag) => tag.id === tagId));
+    }
+  };
+
+  const handleEnter = (e: KeyboardEvent) => {
+    if (e.key === 'Enter' && tagOptions?.length > 0) {
+      handleOptionClick(tagOptions[0].value);
     }
   };
 
@@ -130,15 +149,11 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
           ref={refs}
           autoComplete="off"
           size={1}
+          onKeyDown={handleEnter}
         />
         {tags ? (
           <TagSelectionMenu
-            options={searchResults
-              .filter(
-                (tag) =>
-                  !selectedTags.some((selectedTag) => selectedTag.id === tag.id)
-              )
-              .map((tag) => ({ value: tag.id, label: tag.name }))}
+            options={tagOptions}
             open={value.length > 0}
             onOptionClick={handleOptionClick}
           />
