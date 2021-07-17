@@ -31,7 +31,6 @@ const validationSchema = yup.object({
   name: yup.string().required('Tea name is required'),
   brand: yup.string().required('Tea brand is required'),
   type: yup.string().required('Tea type is required'),
-  flavor: yup.string(),
   temperature: yup
     .number()
     .typeError('Temperature must be a number')
@@ -73,7 +72,6 @@ const AddTeaDrawer = ({
           name: '',
           brand: teaBrands[0].name,
           type: teaTypes[0].type,
-          flavor: '',
           time: '',
           temperature: '',
           country: '',
@@ -86,7 +84,6 @@ const AddTeaDrawer = ({
           time: String(editTea?.brand_time_s) ?? '',
           temperature: editTea?.brand_temperature ?? '',
           country: editTea?.country ?? '',
-          flavor: editTea?.flavor ?? '',
           tagIds: editTea?.tag_ids ?? [],
         };
   }, [editTea, teaBrands, teaTypes, mode]);
@@ -104,7 +101,6 @@ const AddTeaDrawer = ({
         brand_time_s: values.time,
         brand_temperature: values.temperature,
         country: values.country,
-        flavor: values.flavor,
         tag_ids: values.tagIds,
       };
       const { data, error } =
@@ -238,15 +234,6 @@ const AddTeaDrawer = ({
         helperText={touched.country ? errors.country : undefined}
         name="country"
         label="Country of origin"
-        className="mb-5"
-      />
-      <TextField
-        value={values.flavor}
-        onChange={handleChange}
-        error={touched.flavor && Boolean(errors.flavor)}
-        helperText={touched.flavor ? errors.flavor : undefined}
-        name="flavor"
-        label="Flavor"
         className="mb-5"
       />
       <TagTextField

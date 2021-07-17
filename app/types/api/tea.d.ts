@@ -9,6 +9,5 @@ export default interface tea {
   brand: brand;
   type: teaType;
   country?: string;
-  flavor?: string;
   tag_ids: number[];
 }

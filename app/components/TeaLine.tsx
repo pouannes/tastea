@@ -4,7 +4,6 @@ import { PencilAltIcon, TrashIcon } from '@heroicons/react/solid';
 import {
   GlobeIcon,
   ClockIcon,
-  SparklesIcon,
   TagIcon,
   CollectionIcon,
 } from '@heroicons/react/outline';
@@ -44,7 +43,6 @@ const TeaLine = ({
     brand_temperature,
     brand,
     country,
-    flavor,
     tag_ids,
     type: { type },
   } = tea;
@@ -62,7 +60,7 @@ const TeaLine = ({
               {brand.name}
             </p>
           </div>
-          {!!country || !!flavor || !!type ? (
+          {!!country || !!type ? (
             <div className="flex items-baseline justify-center w-full mt-2 sm:justify-start">
               <p className="flex items-center justify-center w-full sm:justify-start text-textPrimary">
                 {!!type ? (
@@ -75,12 +73,6 @@ const TeaLine = ({
                   <span className="flex items-center mr-5">
                     <GlobeIcon className="w-5 h-5 mr-2 text-textSecondary" />
                     {country}
-                  </span>
-                ) : null}
-                {!!flavor ? (
-                  <span className="flex items-center mr-5">
-                    <SparklesIcon className="w-5 h-5 mr-2 text-textSecondary" />
-                    {flavor}
                   </span>
                 ) : null}
               </p>
