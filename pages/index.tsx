@@ -9,7 +9,7 @@ import AddTeaDrawer from '@/components/AddTeaDrawer';
 import AddTeaPreferenceDrawer from '@/components/AddTeaPreferenceDrawer';
 
 import UserSelect from '@/components/UserSelect';
-import { Button, TagTextField, TextField } from '@/components/core';
+import { Button, TagTextField } from '@/components/core';
 import {
   tea,
   teaType,
@@ -138,11 +138,7 @@ const Home = ({ teaTypes, teaBrands, users }: HomeProps): JSX.Element => {
           />
           <TagTextField
             selectedTags={selectedTags}
-            setSelectedTags={(tag) =>
-              setSelectedTags((prevTags) =>
-                tag ? [...prevTags, tag] : prevTags
-              )
-            }
+            setSelectedTags={setSelectedTags}
             name="tag"
             className="w-96"
           />

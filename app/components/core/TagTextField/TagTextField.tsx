@@ -18,7 +18,7 @@ import { Tag } from '../Tag';
 
 export interface TagTextFieldProps {
   selectedTags: tag[];
-  setSelectedTags: (tag: tag | undefined) => void;
+  setSelectedTags: (selectedTags: tag[]) => void;
   name: string;
   placeholder?: string;
   label?: string;
@@ -102,8 +102,11 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
   const handleOptionClick = (tagId: number) => {
     console.log(tagId);
     setValue('');
-    if (tags) {
-      setSelectedTags(tags?.find((tag) => tag.id === tagId));
+    if (tags && tags.length > 0) {
+      const newTag = tags?.find((tag) => tag.id === tagId);
+      if (newTag) {
+        setSelectedTags([...selectedTags, newTag]);
+      }
     }
   };
 
@@ -111,6 +114,10 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
     if (e.key === 'Enter' && tagOptions?.length > 0) {
       handleOptionClick(tagOptions[0].value);
     }
+  };
+
+  const handleDeleteTag = (tagId: number) => {
+    setSelectedTags(selectedTags?.filter((tag) => tag.id !== tagId) ?? []);
   };
 
   return (
@@ -134,7 +141,12 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
         onClick={() => internalInputRef?.current?.focus()}
       >
         {selectedTags.map((tag) => (
-          <Tag key={tag.id} className="m-1">
+          <Tag
+            key={tag.id}
+            className="m-1"
+            canDelete={true}
+            onDelete={() => handleDeleteTag(tag.id)}
+          >
             {tag.name}
           </Tag>
         ))}

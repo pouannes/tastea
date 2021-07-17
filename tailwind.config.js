@@ -12,6 +12,8 @@ module.exports = {
         accent: '#0991FF',
         bgAccent: '#0991FF',
         accentDark: '#154770',
+        // really gotta work on better naming haha
+        accentDarkLight: '#1A5789',
         bgDefault: '#202020',
         bgPaper: '#303030',
         bgPaperSecondary: '#3c3c3c',
