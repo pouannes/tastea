@@ -116,7 +116,7 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
   };
 
   return (
-    <div className={className}>
+    <div className={`w-full ${className}`}>
       {label ? (
         <label
           htmlFor={name}
@@ -127,10 +127,9 @@ export const TagTextField: React.FC<TagTextFieldProps> = ({
       ) : null}
       <div
         // The padding below are repeated in the TagSelectionMenu, careful if we change then
-        className={`relative items-center max-w-full h-full inline-flex flex-wrap rounded-md shadow-sm  box-border pl-3 pr-3 cursor-text ${
+        className={`relative mt-1 w-full items-center max-w-full h-full inline-flex flex-wrap rounded-md shadow-sm  box-border pl-1 pr-1 cursor-text ${
           error ? 'border-red-400' : 'border-gray-500'
         } focus:ring-accent focus:border-accent bg-bgPaper text-textPrimary sm:text-sm border`}
-        style={{ width: 'calc(100% - 1.5rem)' }}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         onClick={() => internalInputRef?.current?.focus()}

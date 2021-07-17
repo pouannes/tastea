@@ -8,7 +8,7 @@ import TeaLine from '@/components/TeaLine';
 import AddTeaDrawer from '@/components/AddTeaDrawer';
 import AddTeaPreferenceDrawer from '@/components/AddTeaPreferenceDrawer';
 import UserSelect from '@/components/UserSelect';
-import { Button, TagTextField } from '@/components/core';
+import { Button } from '@/components/core';
 import { TagContextProvider } from 'app/contexts';
 import {
   tea,
@@ -67,8 +67,6 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
   );
   const [editUserPreference, setEditUserPreference] =
     useState<editUserPreference>({ open: false });
-
-  const [selectedTags, setSelectedTags] = useState<tag[]>([]);
 
   useEffect(() => {
     const fetchTeas = async () => {
@@ -138,12 +136,6 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
               users={users}
               loggedUser={loggedUser}
               setLoggedUser={setLoggedUser}
-            />
-            <TagTextField
-              selectedTags={selectedTags}
-              setSelectedTags={setSelectedTags}
-              name="tag"
-              className="w-96"
             />
             <Button
               className="self-end"

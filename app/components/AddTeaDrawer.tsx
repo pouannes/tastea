@@ -213,7 +213,9 @@ const AddTeaDrawer = ({
         value={values.type}
         onChange={(value) => setFieldValue('type', value)}
         error={touched.type && Boolean(errors.type)}
-        helperText={touched.type ? String(errors.type) : undefined}
+        helperText={
+          touched.type && Boolean(errors.type) ? String(errors.type) : undefined
+        }
         label="Type"
         name="type"
         className="mb-5"
