@@ -19,6 +19,7 @@ import {
   preference,
   tag,
 } from '@/types/api';
+import Teammelier from '@/components/Teammelier';
 
 interface HomeProps {
   teaTypes: teaType[];
@@ -67,6 +68,7 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
   );
   const [editUserPreference, setEditUserPreference] =
     useState<editUserPreference>({ open: false });
+  const [teammelierOpen, setTeammelierOpen] = useState(false);
 
   useEffect(() => {
     const fetchTeas = async () => {
@@ -131,7 +133,14 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
           <title>Tastea</title> ===
         </Head>
         <div className="flex flex-col items-center justify-center w-5/6 h-auto m-auto ">
-          <div className="flex items-center justify-between w-full mb-6">
+          <Button
+            variant="accent"
+            onClick={() => setTeammelierOpen(true)}
+            className="self-start mb-5"
+          >
+            Open Teammelier
+          </Button>
+          <div className="flex flex-wrap items-center justify-between w-full gap-2 mb-6">
             <UserSelect
               users={users}
               loggedUser={loggedUser}
@@ -200,6 +209,10 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
           }
         />
       </div>
+      <Teammelier
+        open={teammelierOpen}
+        handleClose={() => setTeammelierOpen(false)}
+      />
     </TagContextProvider>
   );
 };
