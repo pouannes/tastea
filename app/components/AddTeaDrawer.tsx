@@ -14,6 +14,7 @@ import {
 import { tea, teaType, brand, fullTea } from '@/types/api';
 import { supabase } from '@/utils';
 import { useTagContext } from 'app/contexts';
+import useActionOnCtrlEnter from '@/hooks';
 
 type mode = 'edit' | 'add';
 interface AddTeaDrawerProps {
@@ -94,39 +95,42 @@ const AddTeaDrawer = ({
   const handleSave = async (
     values: typeof initialValues
   ): Promise<tea[] | null> => {
-    setLoading(true);
-    const newTea = {
-      name: values.name,
-      brand_id: teaBrands.find((brand) => brand.name === values.brand)?.id,
-      tea_type_id: teaTypes.find((type) => type.type === values.type)?.id,
-      brand_time_s: values.time,
-      brand_temperature: values.temperature,
-      country: values.country,
-      flavor: values.flavor,
-      tag_ids: values.tagIds,
-    };
-    const { data, error } =
-      mode === 'add'
-        ? await supabase.from('teas').insert([newTea])
-        : await supabase.from('teas').update(newTea).eq('id', editTea?.id);
-    setLoading(false);
-    if (!error && !!data && data.length > 0) {
-      const tea = {
-        ...data[0],
-        type: { type: values.type },
-        brand: { name: values.brand },
+    if (open) {
+      setLoading(true);
+      const newTea = {
+        name: values.name,
+        brand_id: teaBrands.find((brand) => brand.name === values.brand)?.id,
+        tea_type_id: teaTypes.find((type) => type.type === values.type)?.id,
+        brand_time_s: values.time,
+        brand_temperature: values.temperature,
+        country: values.country,
+        flavor: values.flavor,
+        tag_ids: values.tagIds,
       };
-      setTeas((teas) =>
+      const { data, error } =
         mode === 'add'
-          ? teas !== null
-            ? [...teas, tea]
-            : [tea]
-          : teas?.map((item) => (item.id === editTea?.id ? tea : item)) ?? []
-      );
-      handleClose();
-      resetForm({ values: initialValues });
+          ? await supabase.from('teas').insert([newTea])
+          : await supabase.from('teas').update(newTea).eq('id', editTea?.id);
+      setLoading(false);
+      if (!error && !!data && data.length > 0) {
+        const tea = {
+          ...data[0],
+          type: { type: values.type },
+          brand: { name: values.brand },
+        };
+        setTeas((teas) =>
+          mode === 'add'
+            ? teas !== null
+              ? [...teas, tea]
+              : [tea]
+            : teas?.map((item) => (item.id === editTea?.id ? tea : item)) ?? []
+        );
+        handleClose();
+        resetForm({ values: initialValues });
+      }
+      return data;
     }
-    return data;
+    return null;
   };
 
   const {
@@ -157,6 +161,8 @@ const AddTeaDrawer = ({
       hasInitialized.current = false;
     }
   }, [open]);
+
+  useActionOnCtrlEnter(handleSubmit);
 
   return (
     <Drawer

@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import { TextField, Drawer, Button, TeaRating } from '@/components/core';
 import { tea, user, fullTea, preference } from '@/types/api';
 import { supabase } from '@/utils';
+import useActionOnCtrlEnter from '@/hooks';
 
 type mode = 'edit' | 'add';
 interface AddTeaPreferenceProps {
@@ -67,39 +68,42 @@ const AddTeaPreference = ({
   const handleSave = async (
     values: typeof initialValues
   ): Promise<tea[] | null> => {
-    setLoading(true);
-    const newPreference = {
-      time_s: values.time.length > 0 ? values.time : undefined,
-      temperature:
-        values.temperature.length > 0 ? values.temperature : undefined,
-      rating: values.rating,
-      tea_id: editTea?.id,
-      user_id: loggedUser?.id,
-    };
+    if (open) {
+      setLoading(true);
+      const newPreference = {
+        time_s: values.time.length > 0 ? values.time : undefined,
+        temperature:
+          values.temperature.length > 0 ? values.temperature : undefined,
+        rating: values.rating,
+        tea_id: editTea?.id,
+        user_id: loggedUser?.id,
+      };
 
-    const { data, error } =
-      mode === 'add'
-        ? await supabase.from('preferences').insert([newPreference])
-        : await supabase
-            .from('preferences')
-            .update(newPreference)
-            .eq('id', userPreference?.id);
-    setLoading(false);
-    console.log(data);
-    if (!error && !!data && data.length > 0) {
-      setUserPreferences((preferences) =>
+      const { data, error } =
         mode === 'add'
-          ? preferences !== null
-            ? [...preferences, data[0]]
-            : [data[0]]
-          : preferences?.map((item) =>
-              item.id === userPreference?.id ? data[0] : item
-            ) ?? []
-      );
-      handleClose();
-      resetForm({ values: initialValues });
+          ? await supabase.from('preferences').insert([newPreference])
+          : await supabase
+              .from('preferences')
+              .update(newPreference)
+              .eq('id', userPreference?.id);
+      setLoading(false);
+      console.log(data);
+      if (!error && !!data && data.length > 0) {
+        setUserPreferences((preferences) =>
+          mode === 'add'
+            ? preferences !== null
+              ? [...preferences, data[0]]
+              : [data[0]]
+            : preferences?.map((item) =>
+                item.id === userPreference?.id ? data[0] : item
+              ) ?? []
+        );
+        handleClose();
+        resetForm({ values: initialValues });
+      }
+      return data;
     }
-    return data;
+    return null;
   };
 
   const {
@@ -130,6 +134,8 @@ const AddTeaPreference = ({
       hasInitialized.current = false;
     }
   }, [open]);
+
+  useActionOnCtrlEnter(handleSubmit);
 
   return (
     <Drawer
