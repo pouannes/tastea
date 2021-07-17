@@ -19,6 +19,7 @@ import {
   TeaRating,
 } from '@/components/core';
 import TemperatureIcon from '@/public/temperature.svg';
+import { useTagContext } from 'app/contexts';
 
 type mode = 'brand' | 'user';
 
@@ -42,11 +43,13 @@ const TeaLine = ({
     brand_time_s,
     brand_temperature,
     brand,
-    drinking_conditions,
     country,
     flavor,
+    tag_ids,
     type: { type },
   } = tea;
+
+  const tags = useTagContext();
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   return (
@@ -84,11 +87,20 @@ const TeaLine = ({
             </div>
           ) : null}
 
-          {drinking_conditions ? (
-            <span className="flex items-center justify-center mt-3 mr-5 text-sm sm:justify-start text-textPrimary">
-              <TagIcon className="w-5 h-5 mr-2 text-textSecondary" />
-              <Tag>{drinking_conditions}</Tag>
-            </span>
+          {tag_ids?.length > 0 ? (
+            <div className="flex justify-start mt-3 mr-5 text-sm sm:justify-start text-textPrimary">
+              <TagIcon className="w-5 h-5 max-w-[1.25rem] min-w-[1.2rem] max-h-5 text-textSecondary my-2" />
+              <div className="flex flex-wrap ml-2 item-center">
+                {tag_ids.map((tagId) => {
+                  const tag = tags.find((tag) => tag.id === tagId);
+                  return tag ? (
+                    <Tag key={tagId} className="m-1">
+                      {tag.name}
+                    </Tag>
+                  ) : null;
+                })}
+              </div>
+            </div>
           ) : null}
         </div>
         {mode === 'brand' ? (

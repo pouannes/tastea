@@ -1,13 +1,13 @@
 import { XIcon } from '@heroicons/react/outline';
 
 type TagPropsNormal = {
-  className: string;
+  className?: string;
   children: JSX.Element | JSX.Element[] | string;
   canDelete?: false;
 };
 
 type TagPropsCanDelete = {
-  className: string;
+  className?: string;
   children: JSX.Element | JSX.Element[] | string;
   canDelete?: true;
   onDelete: () => void;

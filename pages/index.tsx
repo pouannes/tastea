@@ -78,6 +78,7 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
                    type:tea_type_id (id, type)`);
 
         setTeas(data);
+        console.log(data);
       } catch (error) {}
     };
 

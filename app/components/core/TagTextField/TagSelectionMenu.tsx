@@ -15,7 +15,10 @@ export const TagSelectionMenu = <T,>({
   onOptionClick,
 }: TagSelectionMenuProps<T>): JSX.Element => {
   return (
-    <div className="relative -ml-3" style={{ width: 'calc(100% + 0.75rem)' }}>
+    <div
+      className="relative z-10 -ml-3"
+      style={{ width: 'calc(100% + 0.75rem)' }}
+    >
       <Menu as="div" className="w-full">
         {open && (
           <div

@@ -4,9 +4,16 @@ import _ from 'lodash';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-import { TextField, Select, Drawer, Button } from '@/components/core';
+import {
+  TextField,
+  Select,
+  Drawer,
+  Button,
+  TagTextField,
+} from '@/components/core';
 import { tea, teaType, brand, fullTea } from '@/types/api';
 import { supabase } from '@/utils';
+import { useTagContext } from 'app/contexts';
 
 type mode = 'edit' | 'add';
 interface AddTeaDrawerProps {
@@ -37,7 +44,12 @@ const validationSchema = yup.object({
     .max(600, 'Time can not be above 10 minutes')
     .required('Tea brewing time is required'),
   country: yup.string(),
-  drinkingConditions: yup.string(),
+  tag: yup.array().of(
+    yup.object().shape({
+      id: yup.number(),
+      name: yup.string(),
+    })
+  ),
 });
 
 const AddTeaDrawer = ({
@@ -49,6 +61,8 @@ const AddTeaDrawer = ({
   mode,
   editTea,
 }: AddTeaDrawerProps): JSX.Element => {
+  const tags = useTagContext();
+
   const nameInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
 
@@ -62,7 +76,7 @@ const AddTeaDrawer = ({
           time: '',
           temperature: '',
           country: '',
-          drinkingConditions: '',
+          tagIds: [],
         }
       : {
           name: editTea?.name ?? '',
@@ -71,8 +85,8 @@ const AddTeaDrawer = ({
           time: String(editTea?.brand_time_s) ?? '',
           temperature: editTea?.brand_temperature ?? '',
           country: editTea?.country ?? '',
-          drinkingConditions: editTea?.drinking_conditions ?? '',
           flavor: editTea?.flavor ?? '',
+          tagIds: editTea?.tag_ids ?? [],
         };
   }, [editTea, teaBrands, teaTypes, mode]);
 
@@ -88,8 +102,8 @@ const AddTeaDrawer = ({
       brand_time_s: values.time,
       brand_temperature: values.temperature,
       country: values.country,
-      drinking_conditions: values.drinkingConditions,
       flavor: values.flavor,
+      tag_ids: values.tagIds,
     };
     const { data, error } =
       mode === 'add'
@@ -209,6 +223,18 @@ const AddTeaDrawer = ({
           label: _.startCase(tea.type),
         }))}
       />
+      <TagTextField
+        selectedTags={tags.filter((tag) => values.tagIds.includes(tag.id))}
+        setSelectedTags={(tags) =>
+          setFieldValue(
+            'tagIds',
+            tags.map((tag) => tag.id)
+          )
+        }
+        name="tagIds"
+        className="mb-5"
+        label="Tags"
+      />
       <TextField
         value={values.flavor}
         onChange={handleChange}
@@ -226,6 +252,7 @@ const AddTeaDrawer = ({
         name="time"
         label="Brand-advised brewing time (in seconds)"
         className="mb-5"
+        required={true}
       />
       <TextField
         value={values.temperature}
@@ -235,6 +262,7 @@ const AddTeaDrawer = ({
         name="temperature"
         label="Brand-advised temperature"
         className="mb-5"
+        required={true}
       />
       <TextField
         value={values.country}
@@ -243,17 +271,6 @@ const AddTeaDrawer = ({
         helperText={touched.country ? errors.country : undefined}
         name="country"
         label="Country of origin"
-        className="mb-5"
-      />
-      <TextField
-        value={values.drinkingConditions}
-        onChange={handleChange}
-        error={touched.drinkingConditions && Boolean(errors.drinkingConditions)}
-        helperText={
-          touched.drinkingConditions ? errors.drinkingConditions : undefined
-        }
-        name="drinkingConditions"
-        label="Drinking conditions"
         className="mb-5"
       />
     </Drawer>
