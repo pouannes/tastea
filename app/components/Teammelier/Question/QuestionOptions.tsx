@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import Option from './Option';
 
 type option<T> = {
@@ -12,13 +14,16 @@ interface QuestionOptionsProps<T> {
 const QuestionOptions = <T,>({
   options,
 }: QuestionOptionsProps<T>): JSX.Element => {
+  const [selected, setSelected] = useState<T | null>(null);
+
   return (
-    <div className="flex flex-wrap justify-start alignItems">
+    <div className="grid justify-start w-full grid-cols-2 gap-4 mt-8 align-item">
       {options.map((option) => (
         <Option
           label={option.label}
           key={String(option.value)}
-          onClick={() => console.log(option.value)}
+          onClick={() => setSelected(option.value)}
+          selected={selected === option.value}
         />
       ))}
     </div>
