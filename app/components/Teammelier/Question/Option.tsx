@@ -14,8 +14,10 @@ const Option = ({ label, onClick, selected }: OptionProps): JSX.Element => {
       onClick={onClick}
       color="accent"
       variant="outlined"
-      className={` w-full border-accentLight text-accentLight hover:bg-accentVeryDark ${
-        selected ? 'ring-1 ring-accent  bg-accentVeryDark' : ''
+      className={`w-full  ${
+        selected
+          ? 'border-accentLight ring-1 ring-accentLight text-accentLight bg-accentVeryDark'
+          : 'border-textSecondary text-textSecondary hover:bg-bgPaper'
       }`}
     >
       {label}
