@@ -228,7 +228,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     .from('users')
     .select('id, first_name, last_name');
 
-  const { data: tags } = await supabase.from('tags').select('id, name');
+  const { data: tags } = await supabase.from('tags').select('id, name, type');
 
   return {
     props: {
