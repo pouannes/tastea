@@ -1,20 +1,20 @@
 import LoadingSpinner from '@/public/loading-spinner.svg';
 
-type variant = 'accent';
+type color = 'accent';
 export interface ButtonProps extends React.ComponentPropsWithoutRef<'button'> {
-  variant?: variant;
+  color?: color;
   className?: string;
   loading?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = ({
   children,
-  variant,
+  color,
   className,
   loading,
   ...otherProps
 }) => {
-  const backgroundColor = variant === 'accent' ? `bg-accent` : 'bg-bgPaper';
+  const backgroundColor = color === 'accent' ? `bg-accent` : 'bg-bgPaper';
   return (
     <button
       {...otherProps}

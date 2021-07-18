@@ -134,7 +134,7 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
         </Head>
         <div className="flex flex-col items-center justify-center w-5/6 h-auto m-auto ">
           <Button
-            variant="accent"
+            color="accent"
             onClick={() => setTeammelierOpen(true)}
             className="self-start mb-5"
           >
@@ -148,7 +148,7 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
             />
             <Button
               className="self-end"
-              variant="accent"
+              color="accent"
               onClick={() => setEditTea({ open: true, mode: 'add' })}
             >
               Add tea

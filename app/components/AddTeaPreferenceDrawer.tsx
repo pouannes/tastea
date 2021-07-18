@@ -207,7 +207,7 @@ const DrawerFooter: React.FC<DrawerFooterProps> = ({
         Cancel
       </Button>
       <Button
-        variant="accent"
+        color="accent"
         onClick={handleSave}
         loading={loading}
         type="submit"
