@@ -4,33 +4,19 @@ import TeammelierTransition from './TeammelierTransition';
 import Question, { QuestionTitle } from './Question';
 import QuestionOptions from './Question/QuestionOptions';
 
+type option = {
+  label: string;
+  value: string | number;
+};
+
+type step = {
+  title: string;
+  options: option[];
+};
 interface TeammelierStepperProps {
   currentStepIdx: number;
-  steps: string[];
+  steps: step[];
 }
-
-const mockOptions = [
-  {
-    label: 'Andrea Bocelli',
-    value: 1,
-  },
-  {
-    label: 'Salvador Dali',
-    value: 2,
-  },
-  {
-    label: 'René Magritte',
-    value: 3,
-  },
-  {
-    label: 'Grant Wood',
-    value: 4,
-  },
-  {
-    label: 'Frida Kahlo',
-    value: 5,
-  },
-];
 
 const TeammelierStepper = ({
   currentStepIdx,
@@ -40,21 +26,20 @@ const TeammelierStepper = ({
 
   return (
     <div>
-      <Question>
-        <QuestionTitle>What is this first question, I wonder?</QuestionTitle>
-        <QuestionOptions options={mockOptions} />
-      </Question>
-      {/* {steps.map((step, stepIdx) => (
+      {steps.map((step, stepIdx) => (
         <TeammelierTransition
-          key={step}
+          key={step.title}
           show={currentStepIdx === stepIdx}
           reverse={
             typeof previousStep === 'number' && previousStep > currentStepIdx
           }
         >
-          <p>{step}</p>
+          <Question>
+            <QuestionTitle>{step.title}</QuestionTitle>
+            <QuestionOptions options={step.options} />
+          </Question>
         </TeammelierTransition>
-      ))} */}
+      ))}
     </div>
   );
 };
