@@ -36,18 +36,28 @@ const Teammelier = ({ open, handleClose }: TeammelierProps): JSX.Element => {
           </Transition.Child>
 
           {/* content */}
-          <div className="relative inset-0 z-30 flex items-center justify-center w-full h-full text-textPrimary">
-            <div className="absolute z-40 top-4 right-4">
-              <IconButton
-                onClick={handleClose}
-                srName="Close panel"
-                className="w-10 h-10 "
-              >
-                <CloseIcon />
-              </IconButton>
+          <Transition.Child
+            as={Fragment}
+            enter="transform transition duration-[400ms]"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transform duration-200 transition ease-in-out"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="relative inset-0 z-30 flex items-center justify-center w-full h-full text-textPrimary">
+              <div className="absolute z-40 top-4 right-4">
+                <IconButton
+                  onClick={handleClose}
+                  srName="Close panel"
+                  className="w-10 h-10 "
+                >
+                  <CloseIcon />
+                </IconButton>
+              </div>
+              <TeammelierContent />
             </div>
-            <TeammelierContent />
-          </div>
+          </Transition.Child>
         </div>
       </Dialog>
     </Transition.Root>
