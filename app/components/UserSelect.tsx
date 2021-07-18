@@ -19,7 +19,7 @@ const UserSelect = ({
         <Button
           key={user.id}
           className="mr-2 transition duration-300 ease-in-out"
-          variant={loggedUser?.id === user.id ? 'accent' : undefined}
+          color={loggedUser?.id === user.id ? 'accent' : undefined}
           onClick={() =>
             loggedUser?.id === user.id
               ? setLoggedUser(null)
