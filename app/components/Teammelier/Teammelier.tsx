@@ -4,6 +4,7 @@ import { Transition, Dialog } from '@headlessui/react';
 
 import CloseIcon from '@/public/close.svg';
 import { IconButton } from '@/components/core';
+import TeammelierContent from './TeammelierContent';
 
 interface TeammelierProps {
   open: boolean;
@@ -45,7 +46,7 @@ const Teammelier = ({ open, handleClose }: TeammelierProps): JSX.Element => {
                 <CloseIcon />
               </IconButton>
             </div>
-            <p>Im the teammelier</p>
+            <TeammelierContent />
           </div>
         </div>
       </Dialog>
