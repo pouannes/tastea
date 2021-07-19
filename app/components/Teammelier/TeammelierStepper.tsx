@@ -1,12 +1,12 @@
 import { usePrevious } from 'rooks';
 import TeammelierTransition from './TeammelierTransition';
 
-import Question, { QuestionTitle } from './Question';
+import Question, { QuestionSubmitButton, QuestionTitle } from './Question';
 import QuestionOptions from './Question/QuestionOptions';
 
 type option = {
   label: string;
-  value: string | number;
+  value: number;
 };
 
 type step = {
@@ -16,11 +16,13 @@ type step = {
 interface TeammelierStepperProps {
   currentStepIdx: number;
   steps: step[];
+  handleNextStep: () => void;
 }
 
 const TeammelierStepper = ({
   currentStepIdx,
   steps,
+  handleNextStep,
 }: TeammelierStepperProps): JSX.Element => {
   const previousStep = usePrevious(currentStepIdx);
 
@@ -37,6 +39,7 @@ const TeammelierStepper = ({
           <Question>
             <QuestionTitle>{step.title}</QuestionTitle>
             <QuestionOptions options={step.options} />
+            <QuestionSubmitButton handleNextStep={handleNextStep} />
           </Question>
         </TeammelierTransition>
       ))}

@@ -15,12 +15,13 @@ const QuestionOptions = ({ options }: QuestionOptionsProps): JSX.Element => {
 
   return (
     <div className="grid justify-start w-full grid-cols-2 gap-4 mt-8 align-item">
-      {options.map((option) => (
+      {options.map((option, optionIdx) => (
         <Option
           label={option.label}
           key={String(option.value)}
           onClick={() => toggleOption(option.value)}
           selected={selectedOptions.includes(option.value)}
+          index={optionIdx}
         />
       ))}
     </div>

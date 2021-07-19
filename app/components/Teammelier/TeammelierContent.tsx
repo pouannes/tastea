@@ -18,12 +18,16 @@ const TeammelierContent = (): JSX.Element => {
     setStep((prev) => Math.min(teammelierContent.length - 1, prev + 1));
 
   useKey(['ArrowUp'], handlePreviousStep);
-  useKey(['ArrowDown'], handleNextStep);
+  useKey(['ArrowDown', 'Enter'], handleNextStep);
 
   return (
     <TeammelierContextProvider>
       <div className="relative inset-0 flex items-center justify-center w-full h-full">
-        <TeammelierStepper currentStepIdx={step} steps={teammelierContent} />
+        <TeammelierStepper
+          currentStepIdx={step}
+          steps={teammelierContent}
+          handleNextStep={handleNextStep}
+        />
 
         <div className="absolute flex items-center bottom-5 right-5">
           <IconButton onClick={handlePreviousStep} className="w-10 h-10 mr-2">

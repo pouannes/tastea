@@ -4,7 +4,7 @@ import { useTagContext } from 'app/contexts';
 
 type option = {
   label: string;
-  value: number | string;
+  value: number;
 };
 
 type question = {
