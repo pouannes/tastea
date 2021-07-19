@@ -1,28 +1,26 @@
-import { MouseEventHandler } from 'react';
-
 import { Button } from '@/components/core';
 import { useKey } from 'rooks';
 
 type OptionProps = {
   label: string;
-  onClick: MouseEventHandler;
+  handleClick: () => void;
   selected?: boolean;
   index: number;
 };
 
 const Option = ({
   label,
-  onClick,
+  handleClick,
   selected,
   index,
 }: OptionProps): JSX.Element => {
   const key = (index + 10).toString(36);
 
-  useKey([key, key.toUpperCase()], () => onClick);
+  useKey([key, key.toUpperCase()], handleClick);
 
   return (
     <Button
-      onClick={onClick}
+      onClick={handleClick}
       color="accent"
       variant="outlined"
       className={`w-full pl-4 transition ${

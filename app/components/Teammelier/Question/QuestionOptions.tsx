@@ -19,7 +19,7 @@ const QuestionOptions = ({ options }: QuestionOptionsProps): JSX.Element => {
         <Option
           label={option.label}
           key={String(option.value)}
-          onClick={() => toggleOption(option.value)}
+          handleClick={() => toggleOption(option.value)}
           selected={selectedOptions.includes(option.value)}
           index={optionIdx}
         />
