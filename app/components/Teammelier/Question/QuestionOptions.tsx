@@ -1,20 +1,17 @@
-import { useState } from 'react';
-
+import { useTeammelierContext } from '../teammelier-context';
 import Option from './Option';
 
-type option<T> = {
+type option = {
   label: string;
-  value: T;
+  value: number;
 };
 
-interface QuestionOptionsProps<T> {
-  options: option<T>[];
+interface QuestionOptionsProps {
+  options: option[];
 }
 
-const QuestionOptions = <T,>({
-  options,
-}: QuestionOptionsProps<T>): JSX.Element => {
-  const [selected, setSelected] = useState<T | null>(null);
+const QuestionOptions = ({ options }: QuestionOptionsProps): JSX.Element => {
+  const { selectedOptions, toggleOption } = useTeammelierContext();
 
   return (
     <div className="grid justify-start w-full grid-cols-2 gap-4 mt-8 align-item">
@@ -22,8 +19,8 @@ const QuestionOptions = <T,>({
         <Option
           label={option.label}
           key={String(option.value)}
-          onClick={() => setSelected(option.value)}
-          selected={selected === option.value}
+          onClick={() => toggleOption(option.value)}
+          selected={selectedOptions.includes(option.value)}
         />
       ))}
     </div>
