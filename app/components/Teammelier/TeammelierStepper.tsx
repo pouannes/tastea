@@ -25,7 +25,7 @@ const TeammelierStepper = ({
   const previousStep = usePrevious(currentStepIdx);
 
   return (
-    <div>
+    <div className="relative">
       {steps.map((step, stepIdx) => (
         <TeammelierTransition
           key={step.title}
