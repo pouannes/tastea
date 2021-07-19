@@ -132,7 +132,7 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
         <Head>
           <title>Tastea</title> ===
         </Head>
-        <div className="flex flex-col items-center justify-center w-5/6 h-auto m-auto ">
+        <div className="flex flex-col items-center justify-center w-5/6 h-auto max-w-5xl m-auto ">
           <Button
             color="accent"
             onClick={() => setTeammelierOpen(true)}
