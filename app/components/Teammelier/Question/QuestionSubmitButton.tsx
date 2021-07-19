@@ -12,7 +12,8 @@ const QuestionSubmitButton = ({
       <Button
         onClick={handleNextStep}
         color="accent"
-        className="px-3 mr-3 text-sm"
+        className="px-3 mr-3 text-sm focus:ring-offset-bgPaper"
+        tabIndex={0}
       >
         OK
       </Button>

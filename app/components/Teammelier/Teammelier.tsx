@@ -50,7 +50,8 @@ const Teammelier = ({ open, handleClose }: TeammelierProps): JSX.Element => {
                 <IconButton
                   onClick={handleClose}
                   srName="Close panel"
-                  className="w-10 h-10 "
+                  className="w-10 h-10"
+                  tabIndex={-1}
                 >
                   <CloseIcon />
                 </IconButton>

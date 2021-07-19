@@ -23,6 +23,7 @@ const Option = ({
       onClick={handleClick}
       color="accent"
       variant="outlined"
+      tabIndex={-1}
       className={`w-full pl-4 transition ${
         selected
           ? 'border-accentLight ring-1 ring-accentLight text-accentLight bg-accentVeryDark'

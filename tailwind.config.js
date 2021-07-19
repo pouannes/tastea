@@ -35,9 +35,9 @@ module.exports = {
   },
   variants: {
     extend: {
-      ringColor: ['hover'],
-      ringWidth: ['hover'],
-      outline: ['hover'],
+      ringColor: ['hover', 'focus-visible', 'focus'],
+      ringWidth: ['hover', 'focus-visible', 'focus'],
+      outline: ['hover', 'focus'],
     },
   },
   plugins: [require('@tailwindcss/forms')],
