@@ -7,7 +7,7 @@ interface QuestionProps {
 const Question = forwardRef<HTMLDivElement, QuestionProps>(
   ({ children }, ref) => {
     return (
-      <div ref={ref} className="w-[700px]">
+      <div ref={ref} className="w-[700px] ">
         {children}
       </div>
     );

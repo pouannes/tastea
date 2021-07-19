@@ -23,7 +23,7 @@ const TeammelierContent = (): JSX.Element => {
       <TeammelierStepper currentStepIdx={step} steps={teammelierContent} />
 
       <div className="absolute flex items-center bottom-5 right-5">
-        <IconButton onClick={handlePreviousStep} className="w-10 h-10">
+        <IconButton onClick={handlePreviousStep} className="w-10 h-10 mr-2">
           <ChevronUpIcon />
         </IconButton>
         <IconButton onClick={handleNextStep} className="w-10 h-10">

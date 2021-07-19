@@ -13,26 +13,19 @@ const TeammelierTransition = ({
   reverse,
   children,
 }: TeammelierTransitionProps): JSX.Element => {
-  const startState = 'translate-y-[60vh] opacity-0';
-  const normalStateStart = 'translate-y-[-50%] opacity-100';
-
-  const normalStateLeave = 'translate-y-[50%] opacity-100';
-  const leaveState = 'translate-y-[-60vh] opacity-0';
+  const startState = 'translate-y-[50vh] opacity-0';
+  const normalState = 'translate-y-0 opacity-100';
+  const leaveState = 'translate-y-[-50vh] opacity-0';
 
   return (
     <Transition
       as={Fragment}
       show={show}
-      enter={`transform transition ease-out duration-1000 sm:duration-400 ${
-        reverse ? leaveState : startState
-      }`}
+      enter="transform transition ease-in duration-500 sm:duration-400"
       enterFrom={reverse ? leaveState : startState}
-      enterTo={reverse ? normalStateLeave : normalStateStart}
-      entered={'translate-y-0'}
-      leave={`transform transition ease-out duration-1000 sm:duration-400 ${
-        reverse ? startState : leaveState
-      }`}
-      leaveFrom={reverse ? normalStateStart : normalStateLeave}
+      enterTo={normalState}
+      leave="transform transition ease-in duration-500 sm:duration-400"
+      leaveFrom={normalState}
       leaveTo={reverse ? startState : leaveState}
     >
       {children}
