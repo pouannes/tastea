@@ -5,6 +5,7 @@ import { Transition, Dialog } from '@headlessui/react';
 import CloseIcon from '@/public/close.svg';
 import { IconButton } from '@/components/core';
 import TeammelierContent from './TeammelierContent';
+import { useKey } from 'rooks';
 
 interface TeammelierProps {
   open: boolean;
@@ -12,6 +13,7 @@ interface TeammelierProps {
 }
 
 const Teammelier = ({ open, handleClose }: TeammelierProps): JSX.Element => {
+  useKey(['Escape'], handleClose);
   return (
     <Transition.Root as={Fragment} show={open}>
       <Dialog
