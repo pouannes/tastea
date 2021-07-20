@@ -111,19 +111,19 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
 
   return (
     <TagContextProvider tags={tags}>
-      <div className="pt-10 overflow-auto bg-bgDefault">
+      <div className="relative flex bg-bgDefault">
+        <StickySideMenu
+          users={users}
+          loggedUser={loggedUser}
+          setLoggedUser={setLoggedUser}
+          setTeammelierOpen={setTeammelierOpen}
+          setEditTea={setEditTea}
+        />
         <Head>
           <title>Tastea</title> ===
         </Head>
-        <div className="flex flex-col items-center justify-center w-5/6 h-auto max-w-5xl m-auto ">
-          <StickySideMenu
-            users={users}
-            loggedUser={loggedUser}
-            setLoggedUser={setLoggedUser}
-            setTeammelierOpen={setTeammelierOpen}
-            setEditTea={setEditTea}
-          />
 
+        <div className="flex flex-col items-center justify-center w-5/6 h-auto max-w-2xl pt-10 m-auto overflow-auto ">
           {teas
             ? teas.map((tea) => (
                 <TeaLine
@@ -178,11 +178,11 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
             editUserPreference.open ? editUserPreference.editTea : undefined
           }
         />
+        <Teammelier
+          open={teammelierOpen}
+          handleClose={() => setTeammelierOpen(false)}
+        />
       </div>
-      <Teammelier
-        open={teammelierOpen}
-        handleClose={() => setTeammelierOpen(false)}
-      />
     </TagContextProvider>
   );
 };

@@ -13,22 +13,25 @@ const UserSelect = ({
   setLoggedUser,
 }: UserSelectProps): JSX.Element => {
   return (
-    <div className="flex items-center">
+    <div className="flex flex-col items-start">
       <p className="mr-4 text-textSecondary">Selected user:</p>
-      {users?.map((user) => (
-        <Button
-          key={user.id}
-          className="mr-2 transition duration-300 ease-in-out"
-          color={loggedUser?.id === user.id ? 'accent' : undefined}
-          onClick={() =>
-            loggedUser?.id === user.id
-              ? setLoggedUser(null)
-              : setLoggedUser(user)
-          }
-        >
-          {user.first_name}
-        </Button>
-      ))}
+      <div className="flex flex-col items-center justify-between gap-3 mt-2">
+        {users?.map((user) => (
+          <Button
+            key={user.id}
+            variant={loggedUser?.id === user.id ? 'contained' : 'outlined'}
+            className="w-32 px-4 transition duration-300 ease-in-out"
+            color={'accent'}
+            onClick={() =>
+              loggedUser?.id === user.id
+                ? setLoggedUser(null)
+                : setLoggedUser(user)
+            }
+          >
+            {user.first_name}
+          </Button>
+        ))}
+      </div>
     </div>
   );
 };

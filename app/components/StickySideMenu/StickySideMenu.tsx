@@ -19,7 +19,7 @@ export const StickySideMenu = ({
   setEditTea,
 }: StickySideMenuProps): JSX.Element => {
   return (
-    <div className="w-full">
+    <div className="fixed flex flex-col p-5 rounded-lg left-8 top-[52px] w-60 bg-bgPaper">
       <Button
         color="accent"
         onClick={() => setTeammelierOpen(true)}
@@ -27,20 +27,19 @@ export const StickySideMenu = ({
       >
         Open Teammelier
       </Button>
-      <div className="flex flex-wrap items-center justify-between w-full gap-2 mb-6">
-        <UserSelect
-          users={users}
-          loggedUser={loggedUser}
-          setLoggedUser={setLoggedUser}
-        />
-        <Button
-          className="self-end"
-          color="accent"
-          onClick={() => setEditTea({ open: true, mode: 'add' })}
-        >
-          Add tea
-        </Button>
-      </div>
+
+      <UserSelect
+        users={users}
+        loggedUser={loggedUser}
+        setLoggedUser={setLoggedUser}
+      />
+      <Button
+        className="self-start mt-5"
+        color="accent"
+        onClick={() => setEditTea({ open: true, mode: 'add' })}
+      >
+        Add tea
+      </Button>
     </div>
   );
 };

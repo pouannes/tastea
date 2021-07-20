@@ -63,7 +63,7 @@ const OutlinedButton = ({
   return (
     <button
       {...otherProps}
-      className={`border ${borderColor} ${textColor} px-8 py-2  rounded-md  flex items-center relative ${className}`}
+      className={` border ${borderColor} ${textColor} px-8 py-2  rounded-md  flex items-center relative ${className}`}
     >
       {children}
     </button>
