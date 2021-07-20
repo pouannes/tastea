@@ -7,8 +7,6 @@ import { supabase } from '@/utils';
 import TeaLine from '@/components/TeaLine';
 import AddTeaDrawer from '@/components/AddTeaDrawer';
 import AddTeaPreferenceDrawer from '@/components/AddTeaPreferenceDrawer';
-import UserSelect from '@/components/UserSelect';
-import { Button } from '@/components/core';
 import { TagContextProvider } from 'app/contexts';
 import {
   tea,
@@ -20,6 +18,8 @@ import {
   tag,
 } from '@/types/api';
 import Teammelier from '@/components/Teammelier';
+import { editTea } from '@/types/general';
+import StickySideMenu from '@/components/StickySideMenu';
 
 interface HomeProps {
   teaTypes: teaType[];
@@ -27,23 +27,6 @@ interface HomeProps {
   users: user[];
   tags: tag[];
 }
-
-type editTeaClose = {
-  open: false;
-};
-
-type editTeaOpenAdd = {
-  open: true;
-  mode: 'add';
-};
-
-type editTeaOpenEdit = {
-  open: true;
-  mode: 'edit';
-  editTea: fullTea;
-};
-
-type editTea = editTeaClose | editTeaOpenAdd | editTeaOpenEdit;
 
 type editUserPreferenceClose = {
   open: false;
@@ -133,27 +116,14 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
           <title>Tastea</title> ===
         </Head>
         <div className="flex flex-col items-center justify-center w-5/6 h-auto max-w-5xl m-auto ">
-          <Button
-            color="accent"
-            onClick={() => setTeammelierOpen(true)}
-            className="self-start mb-5"
-          >
-            Open Teammelier
-          </Button>
-          <div className="flex flex-wrap items-center justify-between w-full gap-2 mb-6">
-            <UserSelect
-              users={users}
-              loggedUser={loggedUser}
-              setLoggedUser={setLoggedUser}
-            />
-            <Button
-              className="self-end"
-              color="accent"
-              onClick={() => setEditTea({ open: true, mode: 'add' })}
-            >
-              Add tea
-            </Button>
-          </div>
+          <StickySideMenu
+            users={users}
+            loggedUser={loggedUser}
+            setLoggedUser={setLoggedUser}
+            setTeammelierOpen={setTeammelierOpen}
+            setEditTea={setEditTea}
+          />
+
           {teas
             ? teas.map((tea) => (
                 <TeaLine
