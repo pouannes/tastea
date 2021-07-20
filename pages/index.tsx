@@ -111,8 +111,8 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
 
   return (
     <TagContextProvider tags={tags}>
-      <div className="h-screen scrollbar scrollbar-track-transparent scrollbar-thumb-bgPaper scrollbar-thumb-rounded-md scrollbar-thin">
-        <div className="relative flex justify-center h-auto gap-12 pt-10 m-auto bg-bgDefault ">
+      <div className="h-screen scrollbar scrollbar-track-transparent scrollbar-thumb-bgPaper scrollbar-thumb-rounded-md scrollbar-thin bg-bgDefault">
+        <div className="relative flex justify-center h-auto gap-12 pt-10 m-auto mx-10 ">
           <StickySideMenu
             users={users}
             loggedUser={loggedUser}
@@ -124,7 +124,7 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
             <title>Tastea</title> ===
           </Head>
 
-          <div className="flex flex-col w-5/6 max-w-3xl ">
+          <div className="flex flex-col w-full max-w-3xl ">
             {teas
               ? teas.map((tea) => (
                   <TeaLine
