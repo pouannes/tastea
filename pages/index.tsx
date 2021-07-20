@@ -121,7 +121,8 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
             setEditTea={setEditTea}
           />
           <Head>
-            <title>Tastea</title> ===
+            <title>Tastea</title>
+            <link rel="shortcut icon" href="/favicon.svg" />
           </Head>
 
           <div className="flex flex-col w-full max-w-3xl ">
