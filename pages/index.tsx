@@ -111,7 +111,7 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
 
   return (
     <TagContextProvider tags={tags}>
-      <div className="relative flex bg-bgDefault">
+      <div className="relative flex justify-center gap-12 pt-10 m-auto bg-bgDefault">
         <StickySideMenu
           users={users}
           loggedUser={loggedUser}
@@ -123,7 +123,7 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
           <title>Tastea</title> ===
         </Head>
 
-        <div className="flex flex-col items-center justify-center w-5/6 h-auto max-w-2xl pt-10 m-auto overflow-auto ">
+        <div className="flex flex-col items-center justify-center w-5/6 h-auto max-w-2xl overflow-auto ">
           {teas
             ? teas.map((tea) => (
                 <TeaLine
