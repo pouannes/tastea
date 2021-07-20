@@ -34,11 +34,12 @@ module.exports = {
     },
   },
   variants: {
+    scrollbar: ['rounded'],
     extend: {
       ringColor: ['hover', 'focus-visible', 'focus'],
       ringWidth: ['hover', 'focus-visible', 'focus'],
       outline: ['hover', 'focus'],
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [require('@tailwindcss/forms'), require('tailwind-scrollbar')],
 };

@@ -111,77 +111,79 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
 
   return (
     <TagContextProvider tags={tags}>
-      <div className="relative flex justify-center gap-12 pt-10 m-auto bg-bgDefault">
-        <StickySideMenu
-          users={users}
-          loggedUser={loggedUser}
-          setLoggedUser={setLoggedUser}
-          setTeammelierOpen={setTeammelierOpen}
-          setEditTea={setEditTea}
-        />
-        <Head>
-          <title>Tastea</title> ===
-        </Head>
+      <div className="h-screen scrollbar scrollbar-track-transparent scrollbar-thumb-bgPaper scrollbar-thumb-rounded-md scrollbar-thin">
+        <div className="relative flex justify-center h-auto gap-12 pt-10 m-auto bg-bgDefault ">
+          <StickySideMenu
+            users={users}
+            loggedUser={loggedUser}
+            setLoggedUser={setLoggedUser}
+            setTeammelierOpen={setTeammelierOpen}
+            setEditTea={setEditTea}
+          />
+          <Head>
+            <title>Tastea</title> ===
+          </Head>
 
-        <div className="flex flex-col items-center justify-center w-5/6 h-auto max-w-2xl overflow-auto ">
-          {teas
-            ? teas.map((tea) => (
-                <TeaLine
-                  key={uuidv4()}
-                  tea={tea}
-                  handleOpenEditDrawer={
-                    !loggedUser || userPreferences === null
-                      ? handleOpenEditDrawer
-                      : handleOpenPreferenceDrawer
-                  }
-                  handleDeleteTea={handleDeleteTea}
-                  mode={!!loggedUser ? 'user' : 'brand'}
-                  userPreference={
-                    userPreferences
-                      ? userPreferences.find(
-                          (preference) => preference.tea_id === tea.id
-                        )
-                      : undefined
-                  }
-                />
-              ))
-            : null}
+          <div className="flex flex-col w-5/6 max-w-3xl ">
+            {teas
+              ? teas.map((tea) => (
+                  <TeaLine
+                    key={uuidv4()}
+                    tea={tea}
+                    handleOpenEditDrawer={
+                      !loggedUser || userPreferences === null
+                        ? handleOpenEditDrawer
+                        : handleOpenPreferenceDrawer
+                    }
+                    handleDeleteTea={handleDeleteTea}
+                    mode={!!loggedUser ? 'user' : 'brand'}
+                    userPreference={
+                      userPreferences
+                        ? userPreferences.find(
+                            (preference) => preference.tea_id === tea.id
+                          )
+                        : undefined
+                    }
+                  />
+                ))
+              : null}
+          </div>
+          <AddTeaDrawer
+            open={editTea.open}
+            handleClose={() => setEditTea({ open: false })}
+            teaTypes={teaTypes}
+            teaBrands={teaBrands}
+            setTeas={setTeas}
+            mode={editTea.open ? editTea.mode : undefined}
+            editTea={
+              editTea.open && editTea.mode === 'edit'
+                ? editTea.editTea
+                : undefined
+            }
+          />
+          <AddTeaPreferenceDrawer
+            open={editUserPreference.open}
+            loggedUser={loggedUser}
+            handleClose={() => setEditUserPreference({ open: false })}
+            setUserPreferences={setUserPreferences}
+            userPreference={
+              editUserPreference.open
+                ? userPreferences?.find(
+                    (preference) =>
+                      preference.tea_id === editUserPreference.editTea.id
+                  )
+                : undefined
+            }
+            // mode={!!editTea ? (editTea === true ? 'add' : 'edit') : undefined}
+            editTea={
+              editUserPreference.open ? editUserPreference.editTea : undefined
+            }
+          />
+          <Teammelier
+            open={teammelierOpen}
+            handleClose={() => setTeammelierOpen(false)}
+          />
         </div>
-        <AddTeaDrawer
-          open={editTea.open}
-          handleClose={() => setEditTea({ open: false })}
-          teaTypes={teaTypes}
-          teaBrands={teaBrands}
-          setTeas={setTeas}
-          mode={editTea.open ? editTea.mode : undefined}
-          editTea={
-            editTea.open && editTea.mode === 'edit'
-              ? editTea.editTea
-              : undefined
-          }
-        />
-        <AddTeaPreferenceDrawer
-          open={editUserPreference.open}
-          loggedUser={loggedUser}
-          handleClose={() => setEditUserPreference({ open: false })}
-          setUserPreferences={setUserPreferences}
-          userPreference={
-            editUserPreference.open
-              ? userPreferences?.find(
-                  (preference) =>
-                    preference.tea_id === editUserPreference.editTea.id
-                )
-              : undefined
-          }
-          // mode={!!editTea ? (editTea === true ? 'add' : 'edit') : undefined}
-          editTea={
-            editUserPreference.open ? editUserPreference.editTea : undefined
-          }
-        />
-        <Teammelier
-          open={teammelierOpen}
-          handleClose={() => setTeammelierOpen(false)}
-        />
       </div>
     </TagContextProvider>
   );

@@ -19,7 +19,7 @@ export const StickySideMenu = ({
   setEditTea,
 }: StickySideMenuProps): JSX.Element => {
   return (
-    <div className="">
+    <div className="h-auto">
       <div className="sticky left-0 flex flex-col p-5 rounded-lg mt-7 top-10 w-60 bg-bgPaper">
         <Button
           color="accent"
