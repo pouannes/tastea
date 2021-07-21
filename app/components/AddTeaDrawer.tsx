@@ -13,7 +13,7 @@ import {
 } from '@/components/core';
 import { tea, teaType, brand, fullTea } from '@/types/api';
 import { supabase } from '@/utils';
-import { useTagContext } from 'app/contexts';
+import { useTagContext, useTeasContext } from 'app/contexts';
 import useActionOnCtrlEnter from '@/hooks';
 
 type mode = 'edit' | 'add';
@@ -22,7 +22,6 @@ interface AddTeaDrawerProps {
   handleClose: () => void;
   teaTypes: teaType[];
   teaBrands: brand[];
-  setTeas: React.Dispatch<React.SetStateAction<tea[] | null>>;
   mode?: mode;
   editTea?: fullTea;
 }
@@ -57,10 +56,10 @@ const AddTeaDrawer = ({
   handleClose,
   teaTypes,
   teaBrands,
-  setTeas,
   mode,
   editTea,
 }: AddTeaDrawerProps): JSX.Element => {
+  const { triggerFetchTeas } = useTeasContext();
   const tags = useTagContext();
 
   const nameInputRef = useRef(null);
@@ -109,18 +108,8 @@ const AddTeaDrawer = ({
           : await supabase.from('teas').update(newTea).eq('id', editTea?.id);
       setLoading(false);
       if (!error && !!data && data.length > 0) {
-        const tea = {
-          ...data[0],
-          type: { type: values.type },
-          brand: { name: values.brand },
-        };
-        setTeas((teas) =>
-          mode === 'add'
-            ? teas !== null
-              ? [...teas, tea]
-              : [tea]
-            : teas?.map((item) => (item.id === editTea?.id ? tea : item)) ?? []
-        );
+        triggerFetchTeas();
+
         handleClose();
         resetForm({ values: initialValues });
       }

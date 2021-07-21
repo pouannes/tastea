@@ -32,7 +32,11 @@ export interface TeammelierContextProviderProps {
   children: JSX.Element | JSX.Element[];
 }
 
-import React from 'react';
+const options = {
+  includeScore: true,
+  // Search in `author` and in `tags` array
+  keys: ['author', 'tags'],
+};
 
 const TeammelierContextProvider = ({
   children,

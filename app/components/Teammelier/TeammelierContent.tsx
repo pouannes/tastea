@@ -5,11 +5,11 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid';
 import { IconButton } from '../core';
 import TeammelierStepper from './TeammelierStepper';
 import { useKey } from 'rooks';
-import useTeammelierContent from './useTeammelierContent';
+import useTeammelierLogic from './useTeammelierLogic';
 import { TeammelierContextProvider } from './teammelier-context';
 
 const TeammelierContent = (): JSX.Element => {
-  const teammelierContent = useTeammelierContent();
+  const teammelierContent = useTeammelierLogic();
 
   const [step, setStep] = useState(0);
 
@@ -19,6 +19,8 @@ const TeammelierContent = (): JSX.Element => {
 
   useKey(['ArrowUp'], handlePreviousStep);
   useKey(['ArrowDown', 'Enter'], handleNextStep);
+
+  console.log(teammelierContent);
 
   return (
     <TeammelierContextProvider>

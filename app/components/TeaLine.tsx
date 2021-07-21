@@ -18,14 +18,13 @@ import {
   TeaRating,
 } from '@/components/core';
 import TemperatureIcon from '@/public/temperature.svg';
-import { useTagContext } from 'app/contexts';
+import { useTagContext, useTeasContext } from 'app/contexts';
 
 type mode = 'brand' | 'user';
 
 interface TeaLineProps {
   tea: tea;
   handleOpenEditDrawer: (tea: tea) => void;
-  handleDeleteTea: (tea: tea) => void;
   mode: mode;
   userPreference: preference | undefined;
 }
@@ -33,7 +32,6 @@ interface TeaLineProps {
 const TeaLine = ({
   tea,
   handleOpenEditDrawer,
-  handleDeleteTea,
   mode,
   userPreference,
 }: TeaLineProps): JSX.Element => {
@@ -48,6 +46,7 @@ const TeaLine = ({
     type: { type },
   } = tea;
   const tags = useTagContext();
+  const { triggerFetchTeas } = useTeasContext();
 
   const [avgRating, setAvgRating] = useState<number | null>(null);
 
@@ -55,6 +54,13 @@ const TeaLine = ({
     mode === 'brand' ? brand_temperature : userPreference?.temperature;
   const time = mode === 'brand' ? brand_time_s : userPreference?.time_s;
   const rating = mode === 'brand' ? avgRating : userPreference?.rating;
+
+  const handleDeleteTea = async (tea: tea) => {
+    const { error } = await supabase.from('teas').delete().eq('id', tea.id);
+    if (!error) {
+      triggerFetchTeas();
+    }
+  };
 
   useEffect(() => {
     const fetchAverageRatings = async () => {

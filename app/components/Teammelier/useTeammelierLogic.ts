@@ -16,7 +16,7 @@ type TeammelierContent = question[];
 
 const tagTypes = ['time', 'weather', 'taste', 'blend', 'flavor'];
 
-const useTeammelierContent = (): TeammelierContent => {
+const useTeammelierLogic = (): TeammelierContent => {
   const tags = useTagContext();
 
   const content = useMemo(() => {
@@ -39,4 +39,4 @@ const useTeammelierContent = (): TeammelierContent => {
   return content;
 };
 
-export default useTeammelierContent;
+export default useTeammelierLogic;
