@@ -14,7 +14,7 @@ const QuestionOptions = ({ options }: QuestionOptionsProps): JSX.Element => {
   const { selectedOptions, toggleOption } = useTeammelierContext();
 
   return (
-    <div className="grid justify-start grid-cols-1 gap-4 mt-8 w-72 sm:w-96 md:w-[600px] sm:grid-cols-2 align-item">
+    <div className="grid justify-start grid-cols-1 gap-4 mt-8 w-72 sm:w-[550px] md:w-[600px] sm:grid-cols-2 align-item">
       {options.map((option, optionIdx) => (
         <Option
           label={option.label}

@@ -31,7 +31,7 @@ const Option = ({
       }`}
     >
       <span
-        className={`flex items-center justify-center transition px-2 mr-3 text-sm leading-6 align-middle border rounded  ${
+        className={`hidden sm:flex items-center justify-center transition px-2 mr-3 text-sm leading-6 align-middle border rounded  ${
           selected
             ? 'border-accentLight bg-accentVeryDark'
             : 'border-textSecondary '
