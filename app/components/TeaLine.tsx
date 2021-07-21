@@ -51,6 +51,11 @@ const TeaLine = ({
 
   const [avgRating, setAvgRating] = useState<number | null>(null);
 
+  const temperature =
+    mode === 'brand' ? brand_temperature : userPreference?.temperature;
+  const time = mode === 'brand' ? brand_time_s : userPreference?.time_s;
+  const rating = mode === 'brand' ? avgRating : userPreference?.rating;
+
   useEffect(() => {
     const fetchAverageRatings = async () => {
       const { data } = await supabase
@@ -114,55 +119,32 @@ const TeaLine = ({
             </div>
           ) : null}
         </div>
-        {mode === 'brand' ? (
-          <div className="flex items-center justify-between">
-            <div className="flex items-center justify-center w-full h-full">
-              {avgRating ? (
-                <TeaRating value={avgRating} size="sm" readOnly />
-              ) : (
-                <p className={'text-textSecondary italic'}>No Rating</p>
-              )}
-            </div>
-            <div className="flex items-center justify-center w-full h-full">
-              <ClockIcon className="w-5 h-5 mr-1 text-textSecondary" />
-              <p className="text-textPrimary"> {formatTime(brand_time_s)}</p>
-            </div>
 
-            <div className="flex items-center justify-center w-full h-full">
-              <TemperatureIcon className="w-5 h-5 mr-1 fill-current text-textSecondary" />
-              <p className="text-textPrimary">{brand_temperature}°</p>
-            </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center justify-center w-full h-full">
+            {rating ? (
+              <TeaRating value={rating} size="sm" readOnly />
+            ) : (
+              <p className={'text-textSecondary italic'}>No Rating</p>
+            )}
           </div>
-        ) : (
-          <div className="flex items-center justify-between">
-            <div className="flex items-center justify-center w-full h-full">
-              {userPreference?.rating ? (
-                <TeaRating value={userPreference.rating} size="sm" readOnly />
-              ) : (
-                <p className={'text-textSecondary italic'}>No Rating</p>
-              )}
-            </div>
-            <div className="flex items-center justify-center w-full h-full">
-              <ClockIcon className="w-5 h-5 mr-1 text-textSecondary" />
-              {
-                <p className="text-textPrimary">
-                  {userPreference?.time_s
-                    ? formatTime(userPreference.time_s)
-                    : '-'}
-                </p>
-              }
-            </div>
 
-            <div className="flex items-center justify-center w-full h-full">
-              <TemperatureIcon className="w-5 h-5 mr-1 fill-current text-textSecondary" />
+          <div className="flex items-center justify-center w-full h-full">
+            <ClockIcon className="w-5 h-5 mr-1 text-textSecondary" />
+            {
               <p className="text-textPrimary">
-                {userPreference?.temperature
-                  ? `${userPreference.temperature}°`
-                  : '-'}
+                {time ? formatTime(time) : '-'}
               </p>
-            </div>
+            }
           </div>
-        )}
+
+          <div className="flex items-center justify-center w-full h-full">
+            <TemperatureIcon className="w-5 h-5 mr-1 fill-current text-textSecondary" />
+            <p className="text-textPrimary">
+              {temperature ? `${temperature}°` : '-'}
+            </p>
+          </div>
+        </div>
 
         <div className="flex items-center justify-center w-full h-full sm:justify-end">
           <IconButton
