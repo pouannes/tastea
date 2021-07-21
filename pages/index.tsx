@@ -111,7 +111,7 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
 
   return (
     <TagContextProvider tags={tags}>
-      <div className="h-screen scrollbar scrollbar-track-transparent scrollbar-thumb-bgPaper scrollbar-thumb-rounded-md scrollbar-thin bg-bgDefault">
+      <div className="h-screen scrollbar scrollbar-track-transparent scrollbar-thumb-bgPaper scrollbar-thumb-rounded-md scrollbar-thin bg-bgDefault hover:scrollbar-thumb-bgPaperSecondary">
         <div className="relative flex justify-center h-auto gap-12 pt-10 m-auto mx-10 ">
           <StickySideMenu
             users={users}
