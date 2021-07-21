@@ -3,11 +3,7 @@ interface QuestionTitleProps {
 }
 
 const QuestionTitle = ({ children }: QuestionTitleProps): JSX.Element => {
-  return (
-    <div>
-      <p className="text-2xl">{children}</p>
-    </div>
-  );
+  return <p className="w-auto text-2xl">{children}</p>;
 };
 
 export default QuestionTitle;

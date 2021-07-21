@@ -1,14 +1,9 @@
 import { Button } from '../core';
 import UserSelect from '../UserSelect';
-import { user } from '@/types/api';
-import { editTea } from '@/types/general';
+import { StickySideMenuProps } from './StickySideMenu';
 
-export interface MenuContentProps {
-  users: user[];
-  loggedUser: user | null;
-  setLoggedUser: (user: user | null) => void;
-  setTeammelierOpen: (value: boolean) => void;
-  setEditTea: (value: editTea) => void;
+interface MenuContentProps extends StickySideMenuProps {
+  handleMenuClose: () => void;
 }
 
 export const MenuContent = ({
@@ -17,14 +12,16 @@ export const MenuContent = ({
   setLoggedUser,
   setTeammelierOpen,
   setEditTea,
+  handleMenuClose,
 }: MenuContentProps): JSX.Element => {
+  const handleTeammelierOpen = () => {
+    setTeammelierOpen(true);
+    handleMenuClose();
+  };
+
   return (
     <>
-      <Button
-        color="accent"
-        onClick={() => setTeammelierOpen(true)}
-        className="mb-5"
-      >
+      <Button color="accent" onClick={handleTeammelierOpen} className="mb-5">
         Open Teammelier
       </Button>
 

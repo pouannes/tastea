@@ -24,7 +24,7 @@ const Option = ({
       color="accent"
       variant="outlined"
       tabIndex={-1}
-      className={`w-full pl-4 transition ${
+      className={`min-w-min pl-4 transition ${
         selected
           ? 'border-accentLight ring-1 ring-accentLight text-accentLight bg-accentVeryDark'
           : 'border-textSecondary text-textSecondary hover:bg-bgPaper'

@@ -1,11 +1,18 @@
 import { Fragment, useState } from 'react';
 
 import { ChevronDownIcon, MenuIcon, XIcon } from '@heroicons/react/solid';
-
-import MenuContent, { MenuContentProps } from './MenuContent';
 import { Transition } from '@headlessui/react';
 
-type StickySideMenuProps = MenuContentProps;
+import MenuContent from './MenuContent';
+import { user } from '@/types/api';
+import { editTea } from '@/types/general';
+export interface StickySideMenuProps {
+  users: user[];
+  loggedUser: user | null;
+  setLoggedUser: (user: user | null) => void;
+  setTeammelierOpen: (value: boolean) => void;
+  setEditTea: (value: editTea) => void;
+}
 
 export const StickySideMenu = (props: StickySideMenuProps): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,7 +22,7 @@ export const StickySideMenu = (props: StickySideMenuProps): JSX.Element => {
       {/* in md + screens */}
       <div className="hidden h-auto md:block">
         <div className="sticky left-0 flex flex-col p-5 rounded-lg mt-7 top-10 w-60 bg-bgPaper">
-          <MenuContent {...props} />
+          <MenuContent {...props} handleMenuClose={() => setIsOpen(false)} />
         </div>
       </div>
 
@@ -37,7 +44,7 @@ export const StickySideMenu = (props: StickySideMenuProps): JSX.Element => {
           >
             <ChevronDownIcon className="w-6 h-6" />
           </div>
-          <MenuContent {...props} />
+          <MenuContent {...props} handleMenuClose={() => setIsOpen(false)} />
         </div>
       </Transition>
 
