@@ -19,11 +19,11 @@ export const MenuContent = ({
   setEditTea,
 }: MenuContentProps): JSX.Element => {
   return (
-    <div className="sticky left-0 flex flex-col p-5 rounded-lg mt-7 top-10 w-60 bg-bgPaper">
+    <>
       <Button
         color="accent"
         onClick={() => setTeammelierOpen(true)}
-        className="self-start mb-5"
+        className="mb-5"
       >
         Open Teammelier
       </Button>
@@ -34,13 +34,13 @@ export const MenuContent = ({
         setLoggedUser={setLoggedUser}
       />
       <Button
-        className="self-start mt-5"
+        className="mt-5"
         color="accent"
         onClick={() => setEditTea({ open: true, mode: 'add' })}
       >
         Add tea
       </Button>
-    </div>
+    </>
   );
 };
 
