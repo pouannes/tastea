@@ -63,7 +63,7 @@ const TeaLine = ({
         setAvgRating(parseFloat((average / data.length).toFixed(2)));
       }
     };
-    if (mode === 'brand' && avgRating === null) {
+    if (mode === 'brand') {
       fetchAverageRatings();
     }
   }, [id, mode, avgRating]);

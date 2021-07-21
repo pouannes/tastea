@@ -70,7 +70,7 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
     const fetchPreferences = async () => {
       const { data } = await supabase
         .from('preferences')
-        .select(`id, tea_id, time_s, temperature, rating`)
+        .select(`id, tea_id, time_s, temperature, rating, user_id`)
         .eq('user_id', loggedUser?.id);
       setUserPreferences(data);
     };

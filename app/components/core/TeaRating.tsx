@@ -1,7 +1,8 @@
-import React, { useState, MouseEventHandler, useRef } from 'react';
+import React, { useState, MouseEventHandler, useRef, useEffect } from 'react';
 
 import TeaIcon from '@/public/tea-cup.svg';
 import TeaIconFilled from '@/public/tea-cup-filled.svg';
+import { usePrevious } from 'rooks';
 
 export interface TeaRatingProps {
   value: number;
@@ -46,18 +47,25 @@ export const TeaRating = ({
       const { width } = firstChild?.getBoundingClientRect();
 
       const percent = (event.clientX - left) / (width * max);
-      const value = roundValueToPrecision(
+      const roundedValue = roundValueToPrecision(
         max * percent + precision / 2,
         precision
       );
 
-      setInternalValue(Math.max(precision, value - precision));
+      setInternalValue(Math.max(precision, roundedValue - precision));
     }
   };
 
   const handleMouseLeave: MouseEventHandler<HTMLDivElement> = () => {
     setInternalValue(value);
   };
+
+  const previousValue = usePrevious(value);
+  useEffect(() => {
+    if (value !== previousValue) {
+      setInternalValue(value);
+    }
+  }, [previousValue, value]);
 
   return (
     <div
