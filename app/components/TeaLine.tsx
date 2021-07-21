@@ -120,8 +120,8 @@ const TeaLine = ({
           ) : null}
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center justify-center w-full h-full">
+        <div className="flex flex-wrap items-center justify-start gap-2">
+          <div className="flex items-center justify-center m-auto">
             {rating ? (
               <TeaRating value={rating} size="sm" readOnly />
             ) : (
@@ -129,20 +129,22 @@ const TeaLine = ({
             )}
           </div>
 
-          <div className="flex items-center justify-center w-full h-full">
-            <ClockIcon className="w-5 h-5 mr-1 text-textSecondary" />
-            {
-              <p className="text-textPrimary">
-                {time ? formatTime(time) : '-'}
-              </p>
-            }
-          </div>
+          <div className="flex items-center justify-around flex-grow">
+            <div className="flex items-center justify-center ">
+              <ClockIcon className="w-5 h-5 mr-1 text-textSecondary" />
+              {
+                <p className="text-textPrimary">
+                  {time ? formatTime(time) : '-'}
+                </p>
+              }
+            </div>
 
-          <div className="flex items-center justify-center w-full h-full">
-            <TemperatureIcon className="w-5 h-5 mr-1 fill-current text-textSecondary" />
-            <p className="text-textPrimary">
-              {temperature ? `${temperature}°` : '-'}
-            </p>
+            <div className="flex items-center justify-center ">
+              <TemperatureIcon className="w-5 h-5 mr-1 fill-current text-textSecondary" />
+              <p className="text-textPrimary">
+                {temperature ? `${temperature}°` : '-'}
+              </p>
+            </div>
           </div>
         </div>
 
