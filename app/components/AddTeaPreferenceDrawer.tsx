@@ -87,7 +87,6 @@ const AddTeaPreference = ({
               .update(newPreference)
               .eq('id', userPreference?.id);
       setLoading(false);
-      console.log(data);
       if (!error && !!data && data.length > 0) {
         setUserPreferences((preferences) =>
           mode === 'add'

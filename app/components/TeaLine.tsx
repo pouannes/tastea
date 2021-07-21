@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { PencilAltIcon, TrashIcon } from '@heroicons/react/solid';
 import {
@@ -10,7 +10,7 @@ import {
 import _ from 'lodash';
 
 import { tea, preference } from '@/types/api';
-import { formatTime } from '@/utils';
+import { formatTime, supabase } from '@/utils';
 import {
   IconButton,
   ConfirmationDialog,
@@ -38,6 +38,7 @@ const TeaLine = ({
   userPreference,
 }: TeaLineProps): JSX.Element => {
   const {
+    id,
     name,
     brand_time_s,
     brand_temperature,
@@ -46,8 +47,26 @@ const TeaLine = ({
     tag_ids,
     type: { type },
   } = tea;
-
   const tags = useTagContext();
+
+  const [avgRating, setAvgRating] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchAverageRatings = async () => {
+      const { data } = await supabase
+        .from('preferences')
+        .select('rating')
+        .eq('tea_id', id);
+
+      if (data && data?.length > 0) {
+        const average = data.reduce((acc, curr) => acc + curr.rating, 0);
+        setAvgRating(parseFloat((average / data.length).toFixed(2)));
+      }
+    };
+    if (mode === 'brand' && avgRating === null) {
+      fetchAverageRatings();
+    }
+  }, [id, mode, avgRating]);
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   return (
@@ -97,6 +116,13 @@ const TeaLine = ({
         </div>
         {mode === 'brand' ? (
           <div className="flex items-center justify-between">
+            <div className="flex items-center justify-center w-full h-full">
+              {avgRating ? (
+                <TeaRating value={avgRating} size="sm" readOnly />
+              ) : (
+                <p className={'text-textSecondary italic'}>No Rating</p>
+              )}
+            </div>
             <div className="flex items-center justify-center w-full h-full">
               <ClockIcon className="w-5 h-5 mr-1 text-textSecondary" />
               <p className="text-textPrimary"> {formatTime(brand_time_s)}</p>

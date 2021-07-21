@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
-import { v4 as uuidv4 } from 'uuid';
 
 import { supabase } from '@/utils';
 import TeaLine from '@/components/TeaLine';
@@ -61,7 +60,6 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
                    type:tea_type_id (id, type)`);
 
         setTeas(data);
-        console.log(data);
       } catch (error) {}
     };
 
@@ -129,7 +127,7 @@ const Home = ({ teaTypes, teaBrands, users, tags }: HomeProps): JSX.Element => {
             {teas
               ? teas.map((tea) => (
                   <TeaLine
-                    key={uuidv4()}
+                    key={tea.id}
                     tea={tea}
                     handleOpenEditDrawer={
                       !loggedUser || userPreferences === null
