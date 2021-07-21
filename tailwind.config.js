@@ -26,6 +26,8 @@ module.exports = {
       },
       gridTemplateColumns: {
         teaLineLayoutMd: '380px 1fr auto',
+        teaLineLayoutSm: '290px 1fr auto',
+
         teaLineLayout: '1fr',
       },
       fontFamily: {
