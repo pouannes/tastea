@@ -32,10 +32,10 @@ export const StickySideMenu = (props: StickySideMenuProps): JSX.Element => {
       >
         <div className="fixed bottom-0 z-10 flex flex-col items-center p-5 pt-0 -translate-x-1/2 border-2 border-b-0 rounded-t-lg left-1/2 md:hidden bg-bgPaper border-accent">
           <div
-            className="flex w-full h-6 m-2 rounded align-items text-textSecondary hover:bg-bgPaperSecondary"
+            className="flex justify-center w-full py-1 my-2 rounded align-items text-textSecondary hover:bg-bgPaperSecondary"
             onClick={() => setIsOpen(false)}
           >
-            <ChevronDownIcon />
+            <ChevronDownIcon className="w-6 h-6" />
           </div>
           <MenuContent {...props} />
         </div>
