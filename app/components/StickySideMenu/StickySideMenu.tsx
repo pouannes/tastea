@@ -2,57 +2,21 @@ import { useState } from 'react';
 
 import { MenuIcon, XIcon } from '@heroicons/react/solid';
 
-import { Button } from '../core';
-import UserSelect from '../UserSelect';
-import { user } from '@/types/api';
-import { editTea } from '@/types/general';
+import MenuContent, { MenuContentProps } from './MenuContent';
 
-interface StickySideMenuProps {
-  users: user[];
-  loggedUser: user | null;
-  setLoggedUser: (user: user | null) => void;
-  setTeammelierOpen: (value: boolean) => void;
-  setEditTea: (value: editTea) => void;
-}
+type StickySideMenuProps = MenuContentProps;
 
-export const StickySideMenu = ({
-  users,
-  loggedUser,
-  setLoggedUser,
-  setTeammelierOpen,
-  setEditTea,
-}: StickySideMenuProps): JSX.Element => {
+export const StickySideMenu = (props: StickySideMenuProps): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      {/* in lg+ screens */}
+      {/* in lg + screens */}
       <div className="hidden h-auto lg:block">
-        <div className="sticky left-0 flex flex-col p-5 rounded-lg mt-7 top-10 w-60 bg-bgPaper">
-          <Button
-            color="accent"
-            onClick={() => setTeammelierOpen(true)}
-            className="self-start mb-5"
-          >
-            Open Teammelier
-          </Button>
-
-          <UserSelect
-            users={users}
-            loggedUser={loggedUser}
-            setLoggedUser={setLoggedUser}
-          />
-          <Button
-            className="self-start mt-5"
-            color="accent"
-            onClick={() => setEditTea({ open: true, mode: 'add' })}
-          >
-            Add tea
-          </Button>
-        </div>
+        <MenuContent {...props} />
       </div>
 
-      {/* In lg- screens */}
+      {/* In lg - screens */}
       <button
         className="fixed z-50 flex items-center justify-center w-16 h-16 rounded-full focus:outline-none bottom-8 right-8 bg-accentVeryDark text-accent lg:hidden"
         onClick={() => setIsOpen((prev) => !prev)}

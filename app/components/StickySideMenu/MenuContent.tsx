@@ -1,0 +1,47 @@
+import { Button } from '../core';
+import UserSelect from '../UserSelect';
+import { user } from '@/types/api';
+import { editTea } from '@/types/general';
+
+export interface MenuContentProps {
+  users: user[];
+  loggedUser: user | null;
+  setLoggedUser: (user: user | null) => void;
+  setTeammelierOpen: (value: boolean) => void;
+  setEditTea: (value: editTea) => void;
+}
+
+export const MenuContent = ({
+  users,
+  loggedUser,
+  setLoggedUser,
+  setTeammelierOpen,
+  setEditTea,
+}: MenuContentProps): JSX.Element => {
+  return (
+    <div className="sticky left-0 flex flex-col p-5 rounded-lg mt-7 top-10 w-60 bg-bgPaper">
+      <Button
+        color="accent"
+        onClick={() => setTeammelierOpen(true)}
+        className="self-start mb-5"
+      >
+        Open Teammelier
+      </Button>
+
+      <UserSelect
+        users={users}
+        loggedUser={loggedUser}
+        setLoggedUser={setLoggedUser}
+      />
+      <Button
+        className="self-start mt-5"
+        color="accent"
+        onClick={() => setEditTea({ open: true, mode: 'add' })}
+      >
+        Add tea
+      </Button>
+    </div>
+  );
+};
+
+export default MenuContent;
