@@ -21,7 +21,7 @@ export const StickySideMenu = (props: StickySideMenuProps): JSX.Element => {
     <>
       {/* in md + screens */}
       <div className="hidden h-auto md:block">
-        <div className="sticky left-0 flex flex-col p-5 rounded-lg mt-7 top-10 w-60 bg-bgPaper">
+        <div className="sticky left-0 flex flex-col p-5 rounded-lg top-10 w-60 bg-bgPaper">
           <MenuContent {...props} handleMenuClose={() => setIsOpen(false)} />
         </div>
       </div>
