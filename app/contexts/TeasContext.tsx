@@ -1,16 +1,34 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+} from 'react';
 
-import { tea } from '@/types/api';
+import { tag, tea } from '@/types/api';
 import { supabase } from '@/utils';
+import { useTagContext } from './TagContext';
+
+interface fullTeas extends tea {
+  tags: tag[];
+}
 
 type teaContextType = {
-  teas: tea[];
+  teas: fullTeas[];
   triggerFetchTeas: () => void;
+  searchTeas: fullTeas[];
+  setSearchTeas: (teas: fullTeas[]) => void;
 };
 
 const teaContext = createContext<teaContextType>({
   teas: [],
   triggerFetchTeas: () => {
+    return;
+  },
+  searchTeas: [],
+  setSearchTeas: () => {
     return;
   },
 });
@@ -34,7 +52,28 @@ const TeasContextProvider = ({
   teas = [],
   children,
 }: TeasContextProviderProps): JSX.Element => {
+  const tags = useTagContext();
+
   const [internalTeas, setInternalTeas] = useState(teas);
+  const fullTeas = useMemo(
+    () =>
+      internalTeas.map((tea) => ({
+        ...tea,
+        tags: tags.filter((tag) => tea.tag_ids.includes(tag.id)),
+      })),
+    [tags, internalTeas]
+  );
+
+  const [searchTeas, setSearchTeas] = useState(fullTeas);
+
+  // always have searchTeas data in sync with fullTeas
+  useEffect(() => {
+    setSearchTeas((teas) =>
+      teas.map(
+        (tea) => fullTeas.find((fullTea) => tea.id === fullTea.id) ?? tea
+      )
+    );
+  }, [fullTeas]);
 
   const triggerFetchTeas = useCallback(async () => {
     // TODO: the 'as' call should probably be replaced with something better
@@ -46,7 +85,9 @@ const TeasContextProvider = ({
   }, []);
 
   return (
-    <teaContext.Provider value={{ teas: internalTeas, triggerFetchTeas }}>
+    <teaContext.Provider
+      value={{ teas: fullTeas, triggerFetchTeas, searchTeas, setSearchTeas }}
+    >
       {children}
     </teaContext.Provider>
   );

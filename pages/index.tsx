@@ -91,8 +91,8 @@ const Home = ({
   );
 
   return (
-    <TeasContextProvider teas={teas}>
-      <TagContextProvider tags={tags}>
+    <TagContextProvider tags={tags}>
+      <TeasContextProvider teas={teas}>
         <div className="h-screen scrollbar scrollbar-track-transparent scrollbar-thumb-bgPaper scrollbar-thumb-rounded-md scrollbar-thin bg-bgDefault hover:scrollbar-thumb-bgPaperSecondary">
           <div className="relative flex justify-center h-auto gap-12 pt-10 m-auto mx-10 ">
             <StickySideMenu
@@ -150,8 +150,8 @@ const Home = ({
             />
           </div>
         </div>
-      </TagContextProvider>
-    </TeasContextProvider>
+      </TeasContextProvider>
+    </TagContextProvider>
   );
 };
 
