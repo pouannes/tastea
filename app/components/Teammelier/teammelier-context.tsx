@@ -1,4 +1,13 @@
-import { useContext, createContext, useState, useCallback } from 'react';
+import {
+  useContext,
+  createContext,
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+} from 'react';
+import Fuse from 'fuse.js';
+import { useTagContext, useTeasContext } from '@/contexts';
 
 type teammelierContextProps = {
   selectedOptions: number[];
@@ -35,13 +44,36 @@ export interface TeammelierContextProviderProps {
 const options = {
   includeScore: true,
   // Search in `author` and in `tags` array
-  keys: ['author', 'tags'],
+  keys: ['name', 'tags', 'brand.name', 'type.type'],
 };
 
 const TeammelierContextProvider = ({
   children,
 }: TeammelierContextProviderProps): JSX.Element => {
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
+  const { teas } = useTeasContext();
+  const tags = useTagContext();
+
+  const fuseRef = useRef(
+    new Fuse(
+      teas.map((tea) => ({
+        ...tea,
+        tags: tags
+          .filter((tag) => tea.tag_ids.includes(tag.id))
+          .map((tag) => tag.name),
+      })),
+      options
+    )
+  );
+
+  useEffect(() => {
+    const selectedTagNames = selectedOptions.map(
+      (tagId) => `="${tags.find((tag) => tag.id === tagId)?.name}"`
+    );
+    console.log('searching string: ', selectedTagNames.join(' '));
+
+    console.log(fuseRef.current.search(selectedTagNames.join(' ')));
+  }, [selectedOptions, tags]);
 
   const toggleOption = useCallback(
     (value) =>

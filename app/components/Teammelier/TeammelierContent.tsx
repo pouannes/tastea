@@ -20,8 +20,6 @@ const TeammelierContent = (): JSX.Element => {
   useKey(['ArrowUp'], handlePreviousStep);
   useKey(['ArrowDown', 'Enter'], handleNextStep);
 
-  console.log(teammelierContent);
-
   return (
     <TeammelierContextProvider>
       <div className="relative inset-0 flex items-center justify-center w-full h-full">
