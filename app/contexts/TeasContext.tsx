@@ -76,13 +76,17 @@ const TeasContextProvider = ({
   }, [fullTeas]);
 
   const triggerFetchTeas = useCallback(async () => {
-    // TODO: the 'as' call should probably be replaced with something better
     const { data: teas } = (await supabase.from('teas').select(`*,
     brand:brand_id (id, name),
     type:tea_type_id (id, type)`)) as { data: tea[] };
 
     setInternalTeas(teas);
   }, []);
+
+  // update teas on first render since they might be stale
+  useEffect(() => {
+    triggerFetchTeas();
+  }, [triggerFetchTeas]);
 
   return (
     <teaContext.Provider

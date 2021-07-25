@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 
 import { supabase } from '@/utils';
 import AddTeaDrawer from '@/components/AddTeaDrawer';
@@ -157,7 +157,7 @@ const Home = ({
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const { data: teas } = await supabase
     .from('teas')
     .select(
