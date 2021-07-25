@@ -93,7 +93,16 @@ const Home = ({
   return (
     <TagContextProvider tags={tags}>
       <TeasContextProvider teas={teas}>
-        <div className="h-screen scrollbar scrollbar-track-transparent scrollbar-thumb-bgPaper scrollbar-thumb-rounded-md scrollbar-thin bg-bgDefault hover:scrollbar-thumb-bgPaperSecondary">
+        <a
+          href="#main"
+          className="absolute left-0 z-50 p-2 bg-transparent skip-link -top-20 text-txtPrimary"
+        >
+          Skip to main
+        </a>
+        <div
+          className="h-screen scrollbar scrollbar-track-transparent scrollbar-thumb-bgPaper scrollbar-thumb-rounded-md scrollbar-thin bg-bgDefault hover:scrollbar-thumb-bgPaperSecondary"
+          id="main"
+        >
           <div className="relative flex justify-center h-auto gap-12 pt-4 m-auto mx-4 md:pt-10 md:mx-10 ">
             <StickySideMenu
               users={users}
