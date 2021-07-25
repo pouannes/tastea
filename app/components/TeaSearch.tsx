@@ -20,7 +20,7 @@ type Filter = {
 
 const options = {
   includeScore: true,
-  // Search in `author` and in `tags` array
+  threshold: 0.5,
   keys: ['name'],
 };
 
@@ -47,6 +47,7 @@ const TeaSearch = ({ teaBrands, teaTypes }: TeaSearchProps): JSX.Element => {
       if (searchString === '') {
         setSearchTeas(teas);
       } else {
+        console.log(fuseRef.current.search(searchString));
         setSearchTeas(
           fuseRef.current
             .search(searchString)
