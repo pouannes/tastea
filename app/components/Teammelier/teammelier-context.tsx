@@ -8,11 +8,17 @@ import {
 } from 'react';
 import Fuse from 'fuse.js';
 import { useTagContext, useTeasContext } from '@/contexts';
+import { tea } from '@/types/api';
+
+interface teaResult extends tea {
+  tags: string[];
+}
 
 type teammelierContextProps = {
   selectedOptions: number[];
   setSelectedOptions: (optionValues: number[]) => void;
   toggleOption: (value: number) => void;
+  searchSelectedOptions: (addition?: number) => Fuse.FuseResult<teaResult>[];
 };
 
 const teammelierContext = createContext<teammelierContextProps>({
@@ -23,6 +29,7 @@ const teammelierContext = createContext<teammelierContextProps>({
   toggleOption: () => {
     return null;
   },
+  searchSelectedOptions: () => [],
 });
 
 const useTeammelierContext = (): teammelierContextProps => {
@@ -66,14 +73,24 @@ const TeammelierContextProvider = ({
     )
   );
 
-  useEffect(() => {
-    const selectedTagNames = selectedOptions.map(
-      (tagId) => `="${tags.find((tag) => tag.id === tagId)?.name}"`
-    );
-    console.log('searching string: ', selectedTagNames.join(' '));
+  const searchSelectedOptions = useCallback(
+    (addition = null) => {
+      const options = addition
+        ? [...selectedOptions, addition]
+        : selectedOptions;
+      const selectedTagNames = options.map(
+        (tagId) => `="${tags.find((tag) => tag.id === tagId)?.name}"`
+      );
 
-    console.log(fuseRef.current.search(selectedTagNames.join(' ')));
-  }, [selectedOptions, tags]);
+      return fuseRef.current.search(selectedTagNames.join(' '));
+    },
+    [selectedOptions, tags]
+  );
+
+  useEffect(() => {
+    const res = searchSelectedOptions();
+    console.log(res);
+  }, [selectedOptions, searchSelectedOptions]);
 
   const toggleOption = useCallback(
     (value) =>
@@ -87,7 +104,12 @@ const TeammelierContextProvider = ({
 
   return (
     <teammelierContext.Provider
-      value={{ selectedOptions, setSelectedOptions, toggleOption }}
+      value={{
+        selectedOptions,
+        setSelectedOptions,
+        toggleOption,
+        searchSelectedOptions,
+      }}
     >
       {children}
     </teammelierContext.Provider>

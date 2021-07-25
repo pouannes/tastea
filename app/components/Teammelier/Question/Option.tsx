@@ -6,6 +6,7 @@ type OptionProps = {
   handleClick: () => void;
   selected?: boolean;
   index: number;
+  disabled: boolean;
 };
 
 const Option = ({
@@ -13,6 +14,7 @@ const Option = ({
   handleClick,
   selected,
   index,
+  disabled,
 }: OptionProps): JSX.Element => {
   const key = (index + 10).toString(36);
 
@@ -25,14 +27,19 @@ const Option = ({
       variant="outlined"
       tabIndex={-1}
       className={`min-w-min pl-4 transition ${
-        selected
+        disabled
+          ? 'border-textDisabled text-textDisabled cursor-default'
+          : selected
           ? 'border-accentLight ring-1 ring-accentLight text-accentLight bg-accentVeryDark'
           : 'border-textSecondary text-textSecondary hover:bg-bgPaper'
       }`}
+      disabled={disabled}
     >
       <span
         className={`hidden sm:flex items-center justify-center transition px-2 mr-3 text-sm leading-6 align-middle border rounded  ${
-          selected
+          disabled
+            ? 'border-textDisabled'
+            : selected
             ? 'border-accentLight bg-accentVeryDark'
             : 'border-textSecondary '
         }`}

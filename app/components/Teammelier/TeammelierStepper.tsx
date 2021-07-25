@@ -39,7 +39,10 @@ const TeammelierStepper = ({
           <Question>
             <QuestionTitle>{step.title}</QuestionTitle>
             <QuestionOptions options={step.options} />
-            <QuestionSubmitButton handleNextStep={handleNextStep} />
+            <QuestionSubmitButton
+              handleNextStep={handleNextStep}
+              isLast={stepIdx === steps.length - 1}
+            />
           </Question>
         </TeammelierTransition>
       ))}
