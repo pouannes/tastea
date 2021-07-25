@@ -19,7 +19,7 @@ const Teammelier = ({ open, handleClose }: TeammelierProps): JSX.Element => {
       <Dialog
         as="div"
         static
-        className="fixed inset-0 overflow-hidden"
+        className="fixed inset-0 z-20 overflow-hidden"
         open={open}
         onClose={handleClose}
       >
