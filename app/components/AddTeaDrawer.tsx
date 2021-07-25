@@ -10,6 +10,7 @@ import {
   Drawer,
   Button,
   TagTextField,
+  Checkbox,
 } from '@/components/core';
 import { tea, teaType, brand, fullTea } from '@/types/api';
 import { supabase } from '@/utils';
@@ -49,6 +50,8 @@ const validationSchema = yup.object({
       name: yup.string(),
     })
   ),
+  url: yup.string().url(),
+  isInStock: yup.bool(),
 });
 
 const AddTeaDrawer = ({
@@ -75,6 +78,8 @@ const AddTeaDrawer = ({
           temperature: '',
           country: '',
           tagIds: [],
+          url: '',
+          isInStock: false,
         }
       : {
           name: editTea?.name ?? '',
@@ -84,6 +89,8 @@ const AddTeaDrawer = ({
           temperature: editTea?.brand_temperature ?? '',
           country: editTea?.country ?? '',
           tagIds: editTea?.tag_ids ?? [],
+          url: editTea?.product_url ?? '',
+          isInStock: editTea?.is_in_stock ?? false,
         };
   }, [editTea, teaBrands, teaTypes, mode]);
 
@@ -101,6 +108,8 @@ const AddTeaDrawer = ({
         brand_temperature: values.temperature,
         country: values.country,
         tag_ids: values.tagIds,
+        product_url: values.url,
+        is_in_stock: values.isInStock,
       };
       const { data, error } =
         mode === 'add'
@@ -256,6 +265,22 @@ const AddTeaDrawer = ({
         label="Brand-advised temperature"
         className="mb-5"
         required={true}
+      />
+      <TextField
+        value={values.url}
+        onChange={handleChange}
+        error={touched.url && Boolean(errors.url)}
+        helperText={touched.url ? errors.url : undefined}
+        name="url"
+        label="Product url"
+        className="mb-5"
+        required={true}
+      />
+      <Checkbox
+        checked={values.isInStock}
+        toggleCheck={() => setFieldValue('isInStock', !values.isInStock)}
+        name="isInStock"
+        label="Is this tea in stock?"
       />
     </Drawer>
   );

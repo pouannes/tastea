@@ -10,4 +10,6 @@ export default interface tea {
   type: teaType;
   country?: string;
   tag_ids: number[];
+  product_url: string;
+  is_in_stock: boolean;
 }

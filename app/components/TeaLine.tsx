@@ -43,6 +43,7 @@ const TeaLine = ({
     brand,
     country,
     tag_ids,
+    product_url,
     type: { type },
   } = tea;
   const tags = useTagContext();
@@ -85,7 +86,18 @@ const TeaLine = ({
       <div className="grid w-full px-2 py-3 my-3 rounded-md grid-cols-teaLineLayout sm:grid-cols-teaLineLayoutSm lg:grid-cols-teaLineLayoutMd hover:bg-bgPaper">
         <div className="flex flex-col w-full mb-3">
           <div className="flex items-baseline justify-center w-full sm:justify-start">
-            <p className="text-lg text-center text-accent">{name}</p>
+            {product_url ? (
+              <a
+                className={`text-lg text-center text-accent hover:underline`}
+                href={product_url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {name}
+              </a>
+            ) : (
+              <p className="text-lg text-center text-accent">{name}</p>
+            )}
             <p className="ml-2 text-base text-center text-textSecondary">
               {brand.name}
             </p>

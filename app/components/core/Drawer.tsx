@@ -62,7 +62,7 @@ export const Drawer = ({
                       <CloseIcon />
                     </IconButton>
                   </div>
-                  <div className="relative flex-1 px-4 mt-6 sm:px-6">
+                  <div className="relative flex-1 px-4 py-4 overflow-y-auto sm:px-6">
                     {children}
                   </div>
                   {Footer ? Footer : null}
