@@ -76,9 +76,14 @@ const TeasContextProvider = ({
   }, [fullTeas]);
 
   const triggerFetchTeas = useCallback(async () => {
-    const { data: teas } = (await supabase.from('teas').select(`*,
+    const { data: teas } = (await supabase
+      .from('teas')
+      .select(
+        `*,
     brand:brand_id (id, name),
-    type:tea_type_id (id, type)`)) as { data: tea[] };
+    type:tea_type_id (id, type)`
+      )
+      .order('name')) as { data: tea[] };
 
     setInternalTeas(teas);
   }, []);
