@@ -21,7 +21,7 @@ type Filter = {
 const options = {
   includeScore: true,
   // Search in `author` and in `tags` array
-  keys: ['name', 'tags.name', 'brand.name', 'type.type'],
+  keys: ['name'],
 };
 
 const TeaSearch = ({ teaBrands, teaTypes }: TeaSearchProps): JSX.Element => {
