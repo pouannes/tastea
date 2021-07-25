@@ -105,6 +105,10 @@ const Home = ({
             <Head>
               <title>Tastea</title>
               <link rel="shortcut icon" href="/favicon.svg" />
+              <meta
+                name="description"
+                content="Matilda's and Pierre's tea list"
+              />
             </Head>
 
             <TeaList

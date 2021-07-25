@@ -81,6 +81,7 @@ export const TeaRating = ({
           className={`${dimensions} flex items-center relative mr-1 ${
             i < internalValue ? 'text-accent' : 'text-textDisabled'
           } ${readOnly ? 'pointer-events-none' : ''}`}
+          aria-label={`rating-${i + 1}`}
         >
           {i < Math.floor(internalValue) ? (
             <FullCup />

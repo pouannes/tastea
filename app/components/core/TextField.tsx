@@ -49,6 +49,7 @@ export const TextField: React.FC<TextFieldProps> = ({
           } rounded-md focus:ring-accent focus:border-accent bg-bgPaper text-textPrimary sm:text-sm ${inputClassName}`}
           placeholder={placeholder}
           ref={inputRef}
+          aria-label={name}
         />
       </div>
       {helperText ? (
