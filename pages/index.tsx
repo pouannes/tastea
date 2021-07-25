@@ -156,9 +156,14 @@ const Home = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const { data: teas } = await supabase.from('teas').select(`*,
+  const { data: teas } = await supabase
+    .from('teas')
+    .select(
+      `*,
   brand:brand_id (id, name),
-  type:tea_type_id (id, type)`);
+  type:tea_type_id (id, type)`
+    )
+    .order('name');
 
   const { data: tea_types } = await supabase
     .from('tea_types')
