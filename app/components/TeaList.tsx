@@ -1,5 +1,5 @@
 import { useTeasContext } from '@/contexts';
-import { preference, tea, user } from '@/types/api';
+import { preference, tea, user, teaType, brand } from '@/types/api';
 import TeaLine from './TeaLine';
 import TeaSearch from './TeaSearch';
 
@@ -8,6 +8,8 @@ type TeaListProps = {
   userPreferences: preference[] | null;
   handleOpenEditDrawer: (tea: tea) => void;
   handleOpenPreferenceDrawer: (tea: tea) => void;
+  teaTypes: teaType[];
+  teaBrands: brand[];
 };
 
 const TeaList = ({
@@ -15,11 +17,13 @@ const TeaList = ({
   userPreferences,
   handleOpenEditDrawer,
   handleOpenPreferenceDrawer,
+  teaTypes,
+  teaBrands,
 }: TeaListProps): JSX.Element => {
   const { searchTeas } = useTeasContext();
   return (
     <div className="flex flex-col w-full max-w-3xl ">
-      <TeaSearch />
+      <TeaSearch teaTypes={teaTypes} teaBrands={teaBrands} />
       {searchTeas
         ? searchTeas.map((tea) => (
             <TeaLine

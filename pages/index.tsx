@@ -112,6 +112,8 @@ const Home = ({
               userPreferences={userPreferences}
               handleOpenEditDrawer={handleOpenEditDrawer}
               handleOpenPreferenceDrawer={handleOpenPreferenceDrawer}
+              teaTypes={teaTypes}
+              teaBrands={teaBrands}
             />
             <AddTeaDrawer
               open={editTea.open}

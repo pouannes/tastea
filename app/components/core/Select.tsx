@@ -7,7 +7,7 @@ type option<T> = {
   label: string;
 };
 
-interface SelectProps<T> {
+type SelectProps<T> = {
   options: option<T>[];
   value: T;
   onChange: (value: T) => void;
@@ -17,7 +17,7 @@ interface SelectProps<T> {
   required?: boolean;
   error?: boolean;
   helperText?: string;
-}
+};
 
 const Select = <T,>({
   options,
@@ -40,7 +40,7 @@ const Select = <T,>({
         ) : null}
         <Listbox.Button
           name={name}
-          className={`relative w-full py-2 pl-3 pr-10 mt-1 text-left rounded-md shadow-sm cursor-pointer focus:ring-accent focus:border-accent bg-bgPaper sm:text-sm text-textPrimary border border-gray-500 border-${
+          className={`relative w-full py-2 pl-3 pr-10 mt-1 text-left rounded-md shadow-sm cursor-pointer focus:ring-accent focus:border-accent bg-bgPaper sm:text-sm text-textPrimary border h-[38px] border-gray-500 border-${
             error ? 'red-400' : 'gray-500'
           }`}
         >
@@ -79,7 +79,7 @@ const Select = <T,>({
                       ? 'text-textPrimary bg-bgPaperSecondary'
                       : 'text-textSecondary'
                   }
-                              cursor-pointer select-none relative py-2 pl-10 pr-4`
+                              cursor-pointer select-none relative py-2 pl-10 pr-4 h-9`
                 }
                 value={option.value}
               >
