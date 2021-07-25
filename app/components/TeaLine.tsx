@@ -143,7 +143,7 @@ const TeaLine = ({
             {rating ? (
               <TeaRating value={rating} size="sm" readOnly />
             ) : (
-              <p className={'text-textSecondary italic'}>No Rating</p>
+              <p className={'text-textSecondary italic w-[140px]'}>No Rating</p>
             )}
           </div>
 
