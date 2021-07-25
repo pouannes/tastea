@@ -24,27 +24,31 @@ const TeaList = ({
   return (
     <div className="flex flex-col w-full max-w-3xl ">
       <TeaSearch teaTypes={teaTypes} teaBrands={teaBrands} />
-      {searchTeas
-        ? searchTeas.map((tea) => (
-            <TeaLine
-              key={tea.id}
-              tea={tea}
-              handleOpenEditDrawer={
-                !loggedUser || userPreferences === null
-                  ? handleOpenEditDrawer
-                  : handleOpenPreferenceDrawer
-              }
-              mode={!!loggedUser ? 'user' : 'brand'}
-              userPreference={
-                userPreferences
-                  ? userPreferences.find(
-                      (preference) => preference.tea_id === tea.id
-                    )
-                  : undefined
-              }
-            />
-          ))
-        : null}
+      {searchTeas && searchTeas.length > 0 ? (
+        searchTeas.map((tea) => (
+          <TeaLine
+            key={tea.id}
+            tea={tea}
+            handleOpenEditDrawer={
+              !loggedUser || userPreferences === null
+                ? handleOpenEditDrawer
+                : handleOpenPreferenceDrawer
+            }
+            mode={!!loggedUser ? 'user' : 'brand'}
+            userPreference={
+              userPreferences
+                ? userPreferences.find(
+                    (preference) => preference.tea_id === tea.id
+                  )
+                : undefined
+            }
+          />
+        ))
+      ) : (
+        <div className="flex items-center justify-center w-full h-40">
+          <p className="text-2xl text-textSecondary">No results</p>
+        </div>
+      )}
     </div>
   );
 };
