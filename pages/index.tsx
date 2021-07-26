@@ -1,10 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
 import { GetStaticProps } from 'next';
+import dynamic from 'next/dynamic';
 
+const AddTeaDrawer = dynamic(() => import('@/components/AddTeaDrawer'));
+const AddTeaPreferenceDrawer = dynamic(
+  () => import('@/components/AddTeaPreferenceDrawer')
+);
+const Teammelier = dynamic(() => import('@/components/Teammelier'));
+const StickySideMenu = dynamic(() => import('@/components/StickySideMenu'));
+import TeaList from '@/components/TeaList';
 import { supabase } from '@/utils';
-import AddTeaDrawer from '@/components/AddTeaDrawer';
-import AddTeaPreferenceDrawer from '@/components/AddTeaPreferenceDrawer';
 import { TagContextProvider, TeasContextProvider } from 'app/contexts';
 import {
   tea,
@@ -15,10 +21,7 @@ import {
   preference,
   tag,
 } from '@/types/api';
-import Teammelier from '@/components/Teammelier';
 import { editTea } from '@/types/general';
-import StickySideMenu from '@/components/StickySideMenu';
-import TeaList from '@/components/TeaList';
 
 interface HomeProps {
   teas: tea[];
