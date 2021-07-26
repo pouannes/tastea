@@ -38,13 +38,13 @@ const ContainedButton = ({
   const backgroundColor = color === 'accent' ? `bg-accent` : 'bg-bgPaper';
   const focusRing =
     color === 'accent'
-      ? 'focus:outline-none focus:ring-2 focus:ring-offset-bgPaper focus:ring-offset-2 focus:ring-accent'
-      : 'focus:outline-none';
+      ? 'focus:outline-none focus:ring-2 focus:ring-offset-bgPaper focus:ring-offset-2 focus:ring-accent text-bgDefault'
+      : 'focus:outline-none text-textPrimary';
 
   return (
     <button
       {...otherProps}
-      className={`${backgroundColor} ${focusRing} px-8 py-2  rounded-md text-textPrimary flex items-center relative  ${className}`}
+      className={`${backgroundColor} ${focusRing} px-8 py-2  rounded-md flex items-center relative  ${className}`}
     >
       {children}
     </button>
